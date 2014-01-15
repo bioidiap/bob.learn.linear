@@ -271,10 +271,6 @@ static PyObject* PyBobLearnLinearMachine_RichCompare (PyBobLearnLinearMachineObj
 
 }
 
-static PyMethodDef PyBobLearnLinearMachine_methods[] = {
-  {0} /* Sentinel */
-};
-
 /**
     .add_property("activation", &bob::machine::LinearMachine::getActivation, &bob::machine::LinearMachine::setActivation, "The activation function - by default, the identity function. The output provided by the activation function is passed, unchanged, to the user.")
 **/
@@ -644,6 +640,157 @@ PyObject* PyBobLearnLinearMachine_Str(PyBobLearnLinearMachineObject* self) {
 
 }
 
+PyDoc_STRVAR(s_forward_str, "forward");
+PyDoc_STRVAR(s_forward_doc,
+"o.forward(input [, output]) -> array\n\
+\n\
+Projects ``input`` through its internal weights and biases. If\n\
+``output`` is provided, place output there instead of allocating\n\
+a new array.\n\
+\n\
+The ``input`` (and ``output``) arrays can be either 1D or 2D\n\
+64-bit float arrays. If one provides a 1D array, the ``output``\n\
+array, if provided, should also be 1D, matching the output size\n\
+of this machine. If one provides a 2D array, it is considered a\n\
+set of vertically stacked 1D arrays (one input per row) and a\n\
+2D array is produced or expected in ``output``. The ``output``\n\
+array in this case shall have the same number of rows as the\n\
+``input`` array and as many columns as the output size for this\n\
+machine.\n\
+\n\
+.. note::\n\
+\n\
+   This method only accepts 64-bit float arrays as input or\n\
+   output.\n\
+\n");
+
+static PyObject* PyBobLearnLinearMachine_forward
+(PyBobLearnLinearMachineObject* self, PyObject* args, PyObject* kwds) {
+
+  static const char* const_kwlist[] = {"input", "output", 0};
+  static char** kwlist = const_cast<char**>(const_kwlist);
+
+  PyBlitzArrayObject* input = 0;
+  PyBlitzArrayObject* output = 0;
+
+  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O&|O&", kwlist,
+        &PyBlitzArray_Converter, &input,
+        &PyBlitzArray_OutputConverter, &output
+        )) return 0;
+
+  //protects acquired resources through this scope
+  auto input_ = make_safe(input);
+  auto output_ = make_xsafe(output);
+
+  if (input->type_num != NPY_FLOAT64) {
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit float arrays for input array `input'", s_linear_str);
+    return 0;
+  }
+
+  if (output && output->type_num != NPY_FLOAT64) {
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit float arrays for output array `output'", s_linear_str);
+    return 0;
+  }
+
+  if (input->ndim < 1 || input->ndim > 2) {
+    PyErr_Format(PyExc_TypeError, "`%s' only accepts 1 or 2-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", s_linear_str, input->ndim);
+    return 0;
+  }
+
+  if (output && input->ndim != output->ndim) {
+    PyErr_Format(PyExc_RuntimeError, "Input and output arrays should have matching number of dimensions, but input array `input' has %" PY_FORMAT_SIZE_T "d dimensions while output array `output' has %" PY_FORMAT_SIZE_T "d dimensions", input->ndim, output->ndim);
+    return 0;
+  }
+
+  if (input->ndim == 1) {
+    if (input->shape[0] != (Py_ssize_t)self->machine->inputSize()) {
+      PyErr_Format(PyExc_RuntimeError, "1D `input' array should have %" PY_FORMAT_SIZE_T "d elements matching `%s' input size, not %" PY_FORMAT_SIZE_T "d elements", self->machine->inputSize(), s_linear_str, input->shape[0]);
+      return 0;
+    }
+    if (output && output->shape[0] != (Py_ssize_t)self->machine->outputSize()) {
+      PyErr_Format(PyExc_RuntimeError, "1D `output' array should have %" PY_FORMAT_SIZE_T "d elements matching `%s' output size, not %" PY_FORMAT_SIZE_T "d elements", self->machine->outputSize(), s_linear_str, output->shape[0]);
+      return 0;
+    }
+  }
+  else {
+    if (input->shape[1] != (Py_ssize_t)self->machine->inputSize()) {
+      PyErr_Format(PyExc_RuntimeError, "2D `input' array should have %" PY_FORMAT_SIZE_T "d columns, matching `%s' input size, not %" PY_FORMAT_SIZE_T "d elements", self->machine->inputSize(), s_linear_str, input->shape[1]);
+      return 0;
+    }
+    if (output && output->shape[1] != (Py_ssize_t)self->machine->outputSize()) {
+      PyErr_Format(PyExc_RuntimeError, "2D `output' array should have %" PY_FORMAT_SIZE_T "d columns matching `%s' output size, not %" PY_FORMAT_SIZE_T "d elements", self->machine->outputSize(), s_linear_str, output->shape[1]);
+      return 0;
+    }
+    if (output && input->shape[0] != output->shape[0]) {
+      PyErr_Format(PyExc_RuntimeError, "2D `output' array should have %" PY_FORMAT_SIZE_T "d rows matching `input' size, not %" PY_FORMAT_SIZE_T "d rows", input->shape[0], output->shape[0]);
+      return 0;
+    }
+  }
+
+  /** if ``output`` was not pre-allocated, do it now **/
+  if (!output) {
+    Py_ssize_t osize[2];
+    if (input->ndim == 1) {
+      osize[0] = self->machine->outputSize();
+    }
+    else {
+      osize[0] = input->shape[0];
+      osize[1] = self->machine->outputSize();
+    }
+    output = (PyBlitzArrayObject*)PyBlitzArray_SimpleNew(NPY_FLOAT64, input->ndim, osize);
+    output_ = make_safe(output);
+  }
+
+  /** all basic checks are done, can call the machine now **/
+  try {
+    if (input->ndim == 1) {
+      self->machine->forward_(*PyBlitzArrayCxx_AsBlitz<double,1>(input),
+          *PyBlitzArrayCxx_AsBlitz<double,1>(output));
+    }
+    else {
+      auto bzin = PyBlitzArrayCxx_AsBlitz<double,2>(input);
+      auto bzout = PyBlitzArrayCxx_AsBlitz<double,2>(output);
+      blitz::Range all = blitz::Range::all();
+      for (int k=0; k<bzin->extent(0); ++k) {
+        blitz::Array<double,1> i_ = (*bzin)(k, all);
+        blitz::Array<double,1> o_ = (*bzout)(k, all);
+        self->machine->forward_(i_, o_); ///< no need to re-check
+      }
+    }
+  }
+  catch (std::exception& e) {
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+    return 0;
+  }
+  catch (...) {
+    PyErr_Format(PyExc_RuntimeError, "%s cannot forward data: unknown exception caught", s_linear_str);
+    return 0;
+  }
+
+  Py_INCREF(output);
+  return PyBlitzArray_NUMPY_WRAP(reinterpret_cast<PyObject*>(output));
+
+}
+
+/***
+void bind_machine_linear() {
+    .def("is_similar_to", &bob::machine::LinearMachine::is_similar_to, (arg("self"), arg("other"), arg("r_epsilon")=1e-5, arg("a_epsilon")=1e-8), "Compares this LinearMachine with the 'other' one to be approximately the same.")
+    .def("load", &bob::machine::LinearMachine::load, (arg("self"), arg("config")), "Loads the weights and biases from a configuration file. Both weights and biases have their dimensionalities checked between each other for consistency.")
+    .def("save", &bob::machine::LinearMachine::save, (arg("self"), arg("config")), "Saves the weights and biases to a configuration file.")
+    .def("resize", &bob::machine::LinearMachine::resize, (arg("self"), arg("input"), arg("output")), "Resizes the machine. If either the input or output increases in size, the weights and other factors should be considered uninitialized. If the size is preserved or reduced, already initialized values will not be changed.\n\nTip: Use this method to force data compression. All will work out given most relevant factors to be preserved are organized on the top of the weight matrix. In this way, reducing the system size will supress less relevant projections.")
+}
+***/
+
+static PyMethodDef PyBobLearnLinearMachine_methods[] = {
+  {
+    s_forward_str,
+    (PyCFunction)PyBobLearnLinearMachine_forward,
+    METH_VARARGS|METH_KEYWORDS,
+    s_forward_doc
+  },
+  {0} /* Sentinel */
+};
+
 PyTypeObject PyBobLearnLinearMachine_Type = {
     PyObject_HEAD_INIT(0)
     0,                                                /* ob_size */
@@ -660,7 +807,7 @@ PyTypeObject PyBobLearnLinearMachine_Type = {
     0,                                                /* tp_as_sequence */
     0,                                                /* tp_as_mapping */
     0,                                                /* tp_hash */
-    0, //(ternaryfunc)PyBobLearnLinearMachine_call,        /* tp_call */
+    (ternaryfunc)PyBobLearnLinearMachine_forward,     /* tp_call */
     (reprfunc)PyBobLearnLinearMachine_Str,            /* tp_str */
     0,                                                /* tp_getattro */
     0,                                                /* tp_setattro */
@@ -685,79 +832,3 @@ PyTypeObject PyBobLearnLinearMachine_Type = {
     0,                                                /* tp_alloc */
     0,                                                /* tp_new */
 };
-
-/******
-static object forward(const bob::machine::LinearMachine& m,
-  bob::python::const_ndarray input)
-{
-  const bob::core::array::typeinfo& info = input.type();
-
-  switch(info.nd) {
-    case 1:
-      {
-        bob::python::ndarray output(bob::core::array::t_float64, m.outputSize());
-        blitz::Array<double,1> output_ = output.bz<double,1>();
-        m.forward(input.bz<double,1>(), output_);
-        return output.self();
-      }
-    case 2:
-      {
-        bob::python::ndarray output(bob::core::array::t_float64, info.shape[0], m.outputSize());
-        blitz::Array<double,2> input_ = input.bz<double,2>();
-        blitz::Array<double,2> output_ = output.bz<double,2>();
-        blitz::Range all = blitz::Range::all();
-        for (size_t k=0; k<info.shape[0]; ++k) {
-          blitz::Array<double,1> i_ = input_(k,all);
-          blitz::Array<double,1> o_ = output_(k,all);
-          m.forward(i_, o_);
-        }
-        return output.self();
-      }
-    default:
-      PYTHON_ERROR(TypeError, "cannot forward arrays with "  SIZE_T_FMT " dimensions (only with 1 or 2 dimensions).", info.nd);
-  }
-}
-
-static void forward2(const bob::machine::LinearMachine& m,
-    bob::python::const_ndarray input, bob::python::ndarray output)
-{
-  const bob::core::array::typeinfo& info = input.type();
-
-  switch(info.nd) {
-    case 1:
-      {
-        blitz::Array<double,1> output_ = output.bz<double,1>();
-        m.forward(input.bz<double,1>(), output_);
-      }
-      break;
-    case 2:
-      {
-        blitz::Array<double,2> input_ = input.bz<double,2>();
-        blitz::Array<double,2> output_ = output.bz<double,2>();
-        blitz::Range all = blitz::Range::all();
-        for (size_t k=0; k<info.shape[0]; ++k) {
-          blitz::Array<double,1> i_ = input_(k,all);
-          blitz::Array<double,1> o_ = output_(k,all);
-          m.forward(i_, o_);
-        }
-      }
-      break;
-    default:
-      PYTHON_ERROR(TypeError, "cannot forward arrays with "  SIZE_T_FMT " dimensions (only with 1 or 2 dimensions).", info.nd);
-  }
-}
-***/
-
-/***
-void bind_machine_linear() {
-    .def("is_similar_to", &bob::machine::LinearMachine::is_similar_to, (arg("self"), arg("other"), arg("r_epsilon")=1e-5, arg("a_epsilon")=1e-8), "Compares this LinearMachine with the 'other' one to be approximately the same.")
-    .def("load", &bob::machine::LinearMachine::load, (arg("self"), arg("config")), "Loads the weights and biases from a configuration file. Both weights and biases have their dimensionalities checked between each other for consistency.")
-    .def("save", &bob::machine::LinearMachine::save, (arg("self"), arg("config")), "Saves the weights and biases to a configuration file.")
-    .def("resize", &bob::machine::LinearMachine::resize, (arg("self"), arg("input"), arg("output")), "Resizes the machine. If either the input or output increases in size, the weights and other factors should be considered uninitialized. If the size is preserved or reduced, already initialized values will not be changed.\n\nTip: Use this method to force data compression. All will work out given most relevant factors to be preserved are organized on the top of the weight matrix. In this way, reducing the system size will supress less relevant projections.")
-    .def("__call__", &forward2, (arg("self"), arg("input"), arg("output")), "Projects the input to the weights and biases and saves results on the output")
-    .def("forward", &forward2, (arg("self"), arg("input"), arg("output")), "Projects the input to the weights and biases and saves results on the output")
-    .def("__call__", &forward, (arg("self"), arg("input")), "Projects the input to the weights and biases and returns the output. This method implies in copying out the output data and is, therefore, less efficient as its counterpart that sets the output given as parameter. If you have to do a tight loop, consider using that variant instead of this one.")
-    .def("forward", &forward, (arg("self"), arg("input")), "Projects the input to the weights and biases and returns the output. This method implies in copying out the output data and is, therefore, less efficient as its counterpart that sets the output given as parameter. If you have to do a tight loop, consider using that variant instead of this one.")
-    ;
-}
-***/
