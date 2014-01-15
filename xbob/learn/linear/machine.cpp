@@ -214,7 +214,7 @@ static int PyBobLearnLinearMachine_init(PyBobLearnLinearMachineObject* self,
           return PyBobLearnLinearMachine_init_sizes(self, args, kwds);
         }
 
-        if (PyBobMachineActivation_Check(arg)) {
+        if (PyBobLearnLinearMachine_Check(arg)) {
           return PyBobLearnLinearMachine_init_copy(self, args, kwds);
         }
 
@@ -528,6 +528,122 @@ static PyGetSetDef PyBobLearnLinearMachine_getseters[] = {
     {0}  /* Sentinel */
 };
 
+PyObject* PyBobLearnLinearMachine_Repr(PyBobLearnLinearMachineObject* self) {
+
+  /**
+   * Expected output:
+   *
+   * <xbob.learn.linear.Machine float64@(3, 2) [act: f(z) = tanh(z)]>
+   */
+
+  using bob::machine::IdentityActivation;
+
+  static const std::string identity_str = IdentityActivation().str();
+
+  auto weights = make_safe(PyBobLearnLinearMachine_getWeights(self, 0));
+  if (!weights) return 0;
+  auto dtype = make_safe(PyObject_GetAttrString(weights.get(), "dtype"));
+  auto dtype_str = make_safe(PyObject_Unicode(dtype.get()));
+  auto shape = make_safe(PyObject_GetAttrString(weights.get(), "shape"));
+  auto shape_str = make_safe(PyObject_Str(shape.get()));
+
+  PyObject* retval = 0;
+
+  if (self->machine->getActivation()->str() == identity_str) {
+    retval = PyUnicode_FromFormat("<%s %U@%U>",
+        s_linear_str, dtype_str.get(), shape_str.get());
+  }
+
+  else {
+    retval = PyUnicode_FromFormat("<%s %s@%s [act: %s]>",
+        s_linear_str, dtype_str.get(), shape_str.get(),
+        self->machine->getActivation()->str().c_str());
+  }
+
+#if PYTHON_VERSION_HEX < 0x03000000
+  if (!retval) return 0;
+  PyObject* tmp = PyObject_Str(retval);
+  Py_DECREF(retval);
+  retval = tmp;
+#endif
+
+  return retval;
+
+}
+
+PyObject* PyBobLearnLinearMachine_Str(PyBobLearnLinearMachineObject* self) {
+
+  /**
+   * Expected output:
+   *
+   * xbob.learn.linear.Machine (float64) 3 inputs, 2 outputs [act: f(z) = C*z]
+   *  subtract: [ 0.   0.5  0.5]
+   *  divide: [ 0.5  1.   1. ]
+   *  bias: [ 0.3 -3. ]
+   *  [[ 0.4  0.1]
+   *  [ 0.4  0.2]
+   *  [ 0.2  0.7]]
+   */
+
+  using bob::machine::IdentityActivation;
+
+  static const std::string identity_str = IdentityActivation().str();
+
+  std::shared_ptr<PyObject> act;
+  if (self->machine->getActivation()->str() != identity_str) {
+    act = make_safe(PyUnicode_FromFormat(" [act: %s]",
+          self->machine->getActivation()->str().c_str()));
+  }
+  else act = make_safe(PyUnicode_FromString(""));
+
+  std::shared_ptr<PyObject> sub;
+  if (blitz::any(self->machine->getInputSubtraction())) {
+    auto t = make_safe(PyBobLearnLinearMachine_getInputSubtraction(self, 0));
+    auto t_str = make_safe(PyObject_Unicode(t.get()));
+    sub = make_safe(PyUnicode_FromFormat("\n subtract: %U", t_str.get()));
+  }
+  else sub = make_safe(PyUnicode_FromString(""));
+
+  std::shared_ptr<PyObject> div;
+  if (blitz::any(self->machine->getInputDivision())) {
+    auto t = make_safe(PyBobLearnLinearMachine_getInputDivision(self, 0));
+    auto t_str = make_safe(PyObject_Unicode(t.get()));
+    div = make_safe(PyUnicode_FromFormat("\n divide: %U", t_str.get()));
+  }
+  else div = make_safe(PyUnicode_FromString(""));
+
+  std::shared_ptr<PyObject> bias;
+  if (blitz::any(self->machine->getBiases())) {
+    auto t = make_safe(PyBobLearnLinearMachine_getBiases(self, 0));
+    auto t_str = make_safe(PyObject_Unicode(t.get()));
+    bias = make_safe(PyUnicode_FromFormat("\n bias: %U", t_str.get()));
+  }
+  else bias = make_safe(PyUnicode_FromString(""));
+
+  auto weights = make_safe(PyBobLearnLinearMachine_getWeights(self, 0));
+  if (!weights) return 0;
+  auto weights_str = make_safe(PyObject_Unicode(weights.get()));
+  auto dtype = make_safe(PyObject_GetAttrString(weights.get(), "dtype"));
+  auto dtype_str = make_safe(PyObject_Unicode(dtype.get()));
+  auto shape = make_safe(PyObject_GetAttrString(weights.get(), "shape"));
+
+  PyObject* retval = PyUnicode_FromFormat("%s (%U) %" PY_FORMAT_SIZE_T "d inputs, %" PY_FORMAT_SIZE_T "d outputs%U%U%U%U\n %U",
+    s_linear_str, dtype_str.get(),
+    PyNumber_AsSsize_t(PyTuple_GET_ITEM(shape.get(), 0), PyExc_OverflowError),
+    PyNumber_AsSsize_t(PyTuple_GET_ITEM(shape.get(), 1), PyExc_OverflowError),
+    act.get(), sub.get(), div.get(), bias.get(), weights_str.get());
+
+#if PYTHON_VERSION_HEX < 0x03000000
+  if (!retval) return 0;
+  PyObject* tmp = PyObject_Str(retval);
+  Py_DECREF(retval);
+  retval = tmp;
+#endif
+
+  return retval;
+
+}
+
 PyTypeObject PyBobLearnLinearMachine_Type = {
     PyObject_HEAD_INIT(0)
     0,                                                /* ob_size */
@@ -539,13 +655,13 @@ PyTypeObject PyBobLearnLinearMachine_Type = {
     0,                                                /* tp_getattr */
     0,                                                /* tp_setattr */
     0,                                                /* tp_compare */
-    0,                                                /* tp_repr */
+    (reprfunc)PyBobLearnLinearMachine_Repr,           /* tp_repr */
     0,                                                /* tp_as_number */
     0,                                                /* tp_as_sequence */
     0,                                                /* tp_as_mapping */
     0,                                                /* tp_hash */
     0, //(ternaryfunc)PyBobLearnLinearMachine_call,        /* tp_call */
-    0,                                                /* tp_str */
+    (reprfunc)PyBobLearnLinearMachine_Str,            /* tp_str */
     0,                                                /* tp_getattro */
     0,                                                /* tp_setattro */
     0,                                                /* tp_as_buffer */

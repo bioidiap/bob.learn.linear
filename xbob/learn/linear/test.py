@@ -27,7 +27,7 @@ MACHINE = F('linear-test.hdf5')
 def test_initialization():
 
   # Two inputs and 1 output
-  m = LinearMachine(2,1)
+  m = Machine(2,1)
   assert (m.weights == 0.0).all()
   nose.tools.eq_( m.weights.shape, (2,1) )
   assert (m.biases == 0.0).all()
@@ -35,7 +35,7 @@ def test_initialization():
 
   # Start by providing the data
   w = numpy.array([[0.4, 0.1], [0.4, 0.2], [0.2, 0.7]], 'float64')
-  m = LinearMachine(w)
+  m = Machine(w)
   b = numpy.array([0.3, -3.0], 'float64')
   isub = numpy.array([0., 0.5, 0.5], 'float64')
   idiv = numpy.array([0.5, 1.0, 1.0], 'float64')
@@ -55,13 +55,13 @@ def test_initialization():
 
   # Start by reading data from a file
   c = HDF5File(MACHINE)
-  m = LinearMachine(c)
+  m = Machine(c)
   assert (m.weights == w).all()
   assert (m.biases == b). all()
 
   # Makes sure we cannot stuff incompatible data
   w = numpy.array([[0.4, 0.4, 0.2], [0.1, 0.2, 0.7]], 'float64')
-  m = LinearMachine(w)
+  m = Machine(w)
   b = numpy.array([0.3, -3.0, 2.7, -18, 52], 'float64') #wrong
   nose.tools.assert_raises(RuntimeError, setattr, m, 'biases', b)
   nose.tools.assert_raises(RuntimeError, setattr, m, 'input_subtract', b)
@@ -71,7 +71,7 @@ def test_correctness():
 
   # Tests the correctness of a linear machine
   c = HDF5File(MACHINE)
-  m = LinearMachine(c)
+  m = Machine(c)
 
   def presumed(ivalue):
     """Calculates, by hand, the presumed output given the input"""
@@ -109,7 +109,7 @@ def test_user_allocation():
 
   # Tests the correctness of a linear machine
   c = HDF5File(MACHINE)
-  m = LinearMachine(c)
+  m = Machine(c)
 
   def presumed(ivalue):
     """Calculates, by hand, the presumed output given the input"""
@@ -158,45 +158,45 @@ def test_comparisons():
   idiv1 = numpy.array([0.5, 1.0, 1.0], 'float64')
   idiv2 = numpy.array([1.5, 1.0, 1.0], 'float64')
 
-  # Creates LinearMachine's
-  m1 = LinearMachine(w1)
+  # Creates Machine's
+  m1 = Machine(w1)
   m1.input_subtract = isub1
   m1.input_divide = idiv1
   m1.biases = b1
   m1.activation = HyperbolicTangent()
 
-  m1b = LinearMachine(m1)
-  m1c = LinearMachine(w1)
+  m1b = Machine(m1)
+  m1c = Machine(w1)
   m1c.input_subtract = isub1
   m1c.input_divide = idiv1
   m1c.biases = b1
   m1c.activation = HyperbolicTangent()
 
-  m2 = LinearMachine(w2)
+  m2 = Machine(w2)
   m2.input_subtract = isub1
   m2.input_divide = idiv1
   m2.biases = b1
   m2.activation = HyperbolicTangent()
 
-  m3 = LinearMachine(w1)
+  m3 = Machine(w1)
   m3.input_subtract = isub2
   m3.input_divide = idiv1
   m3.biases = b1
   m3.activation = HyperbolicTangent()
 
-  m4 = LinearMachine(w1)
+  m4 = Machine(w1)
   m4.input_subtract = isub1
   m4.input_divide = idiv2
   m4.biases = b1
   m4.activation = HyperbolicTangent()
 
-  m5 = LinearMachine(w1)
+  m5 = Machine(w1)
   m5.input_subtract = isub1
   m5.input_divide = idiv1
   m5.biases = b2
   m5.activation = HyperbolicTangent()
 
-  m6 = LinearMachine(w1)
+  m6 = Machine(w1)
   m6.input_subtract = isub1
   m6.input_divide = idiv1
   m6.biases = b1

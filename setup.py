@@ -7,6 +7,7 @@ from setuptools import setup, find_packages, dist
 dist.Distribution(dict(setup_requires=['xbob.blitz', 'xbob.io', 'xbob.learn.activation']))
 from xbob.blitz.extension import Extension
 import xbob.io
+import xbob.learn.activation
 
 import os
 package_dir = os.path.dirname(os.path.realpath(__file__))

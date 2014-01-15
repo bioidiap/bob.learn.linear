@@ -9,8 +9,7 @@
 #define XBOB_LEARN_LINEAR_H
 
 #include <Python.h>
-#include <xbob.machine/config.h>
-#include <bob/machine/Activation.h>
+#include <xbob.learn.linear/config.h>
 #include <bob/machine/LinearMachine.h>
 
 #define XBOB_LEARN_LINEAR_MODULE_PREFIX xbob.learn.linear
