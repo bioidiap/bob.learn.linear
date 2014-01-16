@@ -340,7 +340,7 @@ The user may provide or not an object of type\n\
 method. If provided, machine should have the correct number of\n\
 inputs and outputs matching, respectively, the number of columns\n\
 in the input data array ``X`` and the output of the method\n\
-:py:method:`xbob.learn.linear.PCATrainer.output_size` (see\n\
+:py:meth:`xbob.learn.linear.PCATrainer.output_size` (see\n\
 help).\n\
 \n\
 The input data matrix :math:`X` should correspond to a 64-bit\n\

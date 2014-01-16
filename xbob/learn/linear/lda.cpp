@@ -331,7 +331,7 @@ The user may provide or not an object of type\n\
 method. If provided, machine should have the correct number of\n\
 inputs and outputs matching, respectively, the number of columns\n\
 in the input data arrays ``X`` and the output of the method\n\
-:py:method:`xbob.learn.linear.FisherLDATrainer.output_size` (see\n\
+:py:meth:`xbob.learn.linear.FisherLDATrainer.output_size` (see\n\
 help).\n\
 \n\
 The value of ``X`` should be a sequence over as many 2D 64-bit\n\

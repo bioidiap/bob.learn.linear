@@ -55,11 +55,11 @@ in double-precision. Here is how to use a
   array([ 0.55,  0.55])
 
 As was shown in the above example, the way to pass data through a machine is to
-call its ``xbob.learn.linear.Machine.__call__()`` operator.
+call its :py:meth:`xbob.learn.linear.Machine.__call__()` operator.
 
 The first thing to notice about machines is that they can be stored and
 retrieved in HDF5 files (for more details in manipulating HDF5 files, please
-consult the documentation for :py:module:`xbob.io`. To save the before metioned
+consult the documentation for :py:mod:`xbob.io`. To save the before metioned
 machine to a file, just use the machine's
 :py:meth:`xbob.learn.linear.Machine.save`` command. Because several machines
 can be stored on the same :py:class:`xbob.io.HDF5File`, we let the user open
@@ -215,3 +215,5 @@ for **PCA**. This is shown below.
 
 
 .. Place here your external references
+.. [1] http://en.wikipedia.org/wiki/Principal_component_analysis
+.. [2] http://en.wikipedia.org/wiki/Linear_discriminant_analysis
