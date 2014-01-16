@@ -988,6 +988,30 @@ static PyMethodDef PyBobLearnLinearMachine_methods[] = {
   {0} /* Sentinel */
 };
 
+static PyObject* PyBobLearnLinearMachine_new
+(PyTypeObject* type, PyObject*, PyObject*) {
+
+  /* Allocates the python object itself */
+  PyBobLearnLinearMachineObject* self =
+    (PyBobLearnLinearMachineObject*)type->tp_alloc(type, 0);
+
+  self->cxx = 0;
+
+  return reinterpret_cast<PyObject*>(self);
+
+}
+
+PyObject* PyBobLearnLinearMachine_NewFromSize
+(Py_ssize_t input, Py_ssize_t output) {
+
+  PyBobLearnLinearMachineObject* retval = (PyBobLearnLinearMachineObject*)PyBobLearnLinearMachine_new(&PyBobLearnLinearMachine_Type, 0, 0);
+
+  retval->cxx = new bob::machine::LinearMachine(input, output);
+
+  return reinterpret_cast<PyObject*>(retval);
+
+}
+
 PyTypeObject PyBobLearnLinearMachine_Type = {
     PyObject_HEAD_INIT(0)
     0,                                                /* ob_size */
@@ -1027,5 +1051,5 @@ PyTypeObject PyBobLearnLinearMachine_Type = {
     0,                                                /* tp_dictoffset */
     (initproc)PyBobLearnLinearMachine_init,           /* tp_init */
     0,                                                /* tp_alloc */
-    0,                                                /* tp_new */
+    PyBobLearnLinearMachine_new,                      /* tp_new */
 };

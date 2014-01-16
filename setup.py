@@ -19,7 +19,7 @@ include_dirs = [
     xbob.learn.activation.get_include()
     ]
 
-packages = ['bob-machine >= 1.3']
+packages = ['bob-machine >= 1.3', 'bob-trainer >= 1.3']
 version = '2.0.0a0'
 
 setup(
@@ -53,6 +53,7 @@ setup(
       Extension("xbob.learn.linear._library",
         [
           "xbob/learn/linear/machine.cpp",
+          "xbob/learn/linear/pca.cpp",
           "xbob/learn/linear/main.cpp",
           ],
         packages = packages,

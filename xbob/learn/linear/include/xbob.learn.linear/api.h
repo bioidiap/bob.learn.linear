@@ -11,6 +11,7 @@
 #include <Python.h>
 #include <xbob.learn.linear/config.h>
 #include <bob/machine/LinearMachine.h>
+#include <bob/trainer/PCATrainer.h>
 
 #define XBOB_LEARN_LINEAR_MODULE_PREFIX xbob.learn.linear
 #define XBOB_LEARN_LINEAR_MODULE_NAME _library
@@ -42,8 +43,28 @@ typedef struct {
 #define PyBobLearnLinearMachine_Check_RET int
 #define PyBobLearnLinearMachine_Check_PROTO (PyObject* o)
 
+#define PyBobLearnLinearMachine_NewFromSize_NUM 3
+#define PyBobLearnLinearMachine_NewFromSize_RET PyObject*
+#define PyBobLearnLinearMachine_NewFromSize_PROTO (Py_ssize_t i, Py_ssize_t o)
+
+/*********************************************
+ * Bindings for xbob.learn.linear.PCATrainer *
+ *********************************************/
+
+typedef struct {
+  PyObject_HEAD
+  bob::trainer::PCATrainer* cxx;
+} PyBobLearnLinearPCATrainerObject;
+
+#define PyBobLearnLinearPCATrainer_Type_NUM 4
+#define PyBobLearnLinearPCATrainer_Type_TYPE PyTypeObject
+
+#define PyBobLearnLinearPCATrainer_Check_NUM 5
+#define PyBobLearnLinearPCATrainer_Check_RET int
+#define PyBobLearnLinearPCATrainer_Check_PROTO (PyObject* o)
+
 /* Total number of C API pointers */
-#define PyXbobLearnLinear_API_pointers 3
+#define PyXbobLearnLinear_API_pointers 6
 
 #ifdef XBOB_LEARN_LINEAR_MODULE
 
@@ -55,13 +76,23 @@ typedef struct {
 
   extern int PyXbobLearnLinear_APIVersion;
 
-  /************************************
-   * Bindings for xbob.machine.Linear *
-   ************************************/
+  /******************************************
+   * Bindings for xbob.learn.linear.Machine *
+   ******************************************/
 
   extern PyBobLearnLinearMachine_Type_TYPE PyBobLearnLinearMachine_Type;
 
   PyBobLearnLinearMachine_Check_RET PyBobLearnLinearMachine_Check PyBobLearnLinearMachine_Check_PROTO;
+
+  PyBobLearnLinearMachine_NewFromSize_RET PyBobLearnLinearMachine_NewFromSize PyBobLearnLinearMachine_NewFromSize_PROTO;
+
+  /*********************************************
+   * Bindings for xbob.learn.linear.PCATrainer *
+   *********************************************/
+
+  extern PyBobLearnLinearPCATrainer_Type_TYPE PyBobLearnLinearPCATrainer_Type;
+
+  PyBobLearnLinearPCATrainer_Check_RET PyBobLearnLinearPCATrainer_Check PyBobLearnLinearPCATrainer_Check_PROTO;
 
 #else
 
@@ -95,13 +126,23 @@ typedef struct {
 
 # define PyXbobLearnLinear_APIVersion (*(PyXbobLearnLinear_APIVersion_TYPE *)PyXbobLearnLinear_API[PyXbobLearnLinear_APIVersion_NUM])
 
-  /************************************
-   * Bindings for xbob.machine.Linear *
-   ************************************/
+  /******************************************
+   * Bindings for xbob.learn.linear.Machine *
+   ******************************************/
 
 # define PyBobLearnLinearMachine_Type (*(PyBobLearnLinearMachine_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearMachine_Type_NUM])
 
 # define PyBobLearnLinearMachine_Check (*(PyBobLearnLinearMachine_Check_RET (*)PyBobLearnLinearMachine_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearMachine_Check_NUM])
+
+# define PyBobLearnLinearMachine_NewFromSize (*(PyBobLearnLinearMachine_NewFromSize_RET (*)PyBobLearnLinearMachine_NewFromSize_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearMachine_NewFromSize_NUM])
+
+  /*********************************************
+   * Bindings for xbob.learn.linear.PCATrainer *
+   *********************************************/
+
+# define PyBobLearnLinearPCATrainer_Type (*(PyBobLearnLinearPCATrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearPCATrainer_Type_NUM])
+
+# define PyBobLearnLinearPCATrainer_Check (*(PyBobLearnLinearPCATrainer_Check_RET (*)PyBobLearnLinearPCATrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearPCATrainer_Check_NUM])
 
 # if !defined(NO_IMPORT_ARRAY)
 

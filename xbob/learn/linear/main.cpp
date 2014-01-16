@@ -28,6 +28,9 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
   PyBobLearnLinearMachine_Type.tp_new = PyType_GenericNew;
   if (PyType_Ready(&PyBobLearnLinearMachine_Type) < 0) return;
 
+  PyBobLearnLinearPCATrainer_Type.tp_new = PyType_GenericNew;
+  if (PyType_Ready(&PyBobLearnLinearPCATrainer_Type) < 0) return;
+
   PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, library_methods, library_docstr);
 
   /* register some constants */
@@ -37,6 +40,9 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
   /* register the types to python */
   Py_INCREF(&PyBobLearnLinearMachine_Type);
   PyModule_AddObject(m, "Machine", (PyObject *)&PyBobLearnLinearMachine_Type);
+
+  Py_INCREF(&PyBobLearnLinearPCATrainer_Type);
+  PyModule_AddObject(m, "PCATrainer", (PyObject *)&PyBobLearnLinearPCATrainer_Type);
 
   static void* PyXbobLearnLinear_API[PyXbobLearnLinear_API_pointers];
 
@@ -48,13 +54,23 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
 
   PyXbobLearnLinear_API[PyXbobLearnLinear_APIVersion_NUM] = (void *)&PyXbobLearnLinear_APIVersion;
 
-  /*******************************************
-   * Bindings for xbob.machine.LinearMachine *
-   *******************************************/
+  /******************************************
+   * Bindings for xbob.learn.linear.Machine *
+   ******************************************/
 
   PyXbobLearnLinear_API[PyBobLearnLinearMachine_Type_NUM] = (void *)&PyBobLearnLinearMachine_Type;
 
   PyXbobLearnLinear_API[PyBobLearnLinearMachine_Check_NUM] = (void *)&PyBobLearnLinearMachine_Check;
+
+  PyXbobLearnLinear_API[PyBobLearnLinearMachine_NewFromSize_NUM] = (void *)&PyBobLearnLinearMachine_NewFromSize;
+
+  /*********************************************
+   * Bindings for xbob.learn.linear.PCATrainer *
+   *********************************************/
+
+  PyXbobLearnLinear_API[PyBobLearnLinearPCATrainer_Type_NUM] = (void *)&PyBobLearnLinearPCATrainer_Type;
+
+  PyXbobLearnLinear_API[PyBobLearnLinearPCATrainer_Check_NUM] = (void *)&PyBobLearnLinearPCATrainer_Check;
 
 #if PY_VERSION_HEX >= 0x02070000
 
