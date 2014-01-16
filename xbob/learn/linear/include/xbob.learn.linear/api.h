@@ -32,7 +32,7 @@
 
 typedef struct {
   PyObject_HEAD
-  bob::machine::LinearMachine* machine;
+  bob::machine::LinearMachine* cxx;
 } PyBobLearnLinearMachineObject;
 
 #define PyBobLearnLinearMachine_Type_NUM 1
