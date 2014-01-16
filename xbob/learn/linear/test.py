@@ -13,8 +13,8 @@ import nose.tools
 import math
 import numpy
 
-from . import Machine, PCATrainer
-#from . import FisherLDATrainer, WhiteningTrainer, EMPCATrainer, WCCNTrainer
+from . import Machine, PCATrainer, FisherLDATrainer
+#from . import WhiteningTrainer, EMPCATrainer, WCCNTrainer
 
 
 from xbob.learn.activation import HyperbolicTangent, Identity
@@ -388,7 +388,6 @@ def test_pca_svd_vs_cov_random_2():
   assert numpy.allclose(machine_svd.input_divide, machine_safe_svd.input_divide)
   assert numpy.allclose(abs(machine_svd.weights/machine_safe_svd.weights), 1.0)
 
-@nose.tools.nottest
 def test_fisher_lda_settings():
 
   t = FisherLDATrainer()
@@ -408,7 +407,6 @@ def test_fisher_lda_settings():
   assert t.use_pinv == False
   assert t.strip_to_rank == False
 
-@nose.tools.nottest
 def test_fisher_lda():
 
   # Tests our Fisher/LDA trainer for linear machines for a simple 2-class
@@ -460,7 +458,6 @@ def test_fisher_lda():
   normalized_weights = (machine_pinv.weights.T/weight_ratio).T
   assert numpy.allclose(machine.weights, normalized_weights)
 
-@nose.tools.nottest
 def test_fisher_lda_bis():
 
   # Tests our Fisher/LDA trainer for linear machines for a simple 2-class
@@ -510,7 +507,6 @@ def test_fisher_lda_bis():
   normalized_weights = (machine_pinv.weights.T/weight_ratio).T
   assert numpy.allclose(machine.weights, normalized_weights)
 
-@nose.tools.nottest
 def test_fisher_lda_comparisons():
 
   # Constructors and comparison operators

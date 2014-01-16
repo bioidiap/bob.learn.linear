@@ -19,7 +19,7 @@ static PyMethodDef library_methods[] = {
     {0}  /* Sentinel */
 };
 
-PyDoc_STRVAR(library_docstr, "bob::machine's LinearMachine and trainers");
+PyDoc_STRVAR(library_docstr, "bob::machine's linear machine and trainers");
 
 int PyXbobLearnLinear_APIVersion = XBOB_LEARN_LINEAR_API_VERSION;
 
@@ -30,6 +30,9 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
 
   PyBobLearnLinearPCATrainer_Type.tp_new = PyType_GenericNew;
   if (PyType_Ready(&PyBobLearnLinearPCATrainer_Type) < 0) return;
+
+  PyBobLearnLinearFisherLDATrainer_Type.tp_new = PyType_GenericNew;
+  if (PyType_Ready(&PyBobLearnLinearFisherLDATrainer_Type) < 0) return;
 
   PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, library_methods, library_docstr);
 
@@ -43,6 +46,9 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
 
   Py_INCREF(&PyBobLearnLinearPCATrainer_Type);
   PyModule_AddObject(m, "PCATrainer", (PyObject *)&PyBobLearnLinearPCATrainer_Type);
+
+  Py_INCREF(&PyBobLearnLinearFisherLDATrainer_Type);
+  PyModule_AddObject(m, "FisherLDATrainer", (PyObject *)&PyBobLearnLinearFisherLDATrainer_Type);
 
   static void* PyXbobLearnLinear_API[PyXbobLearnLinear_API_pointers];
 
@@ -71,6 +77,14 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
   PyXbobLearnLinear_API[PyBobLearnLinearPCATrainer_Type_NUM] = (void *)&PyBobLearnLinearPCATrainer_Type;
 
   PyXbobLearnLinear_API[PyBobLearnLinearPCATrainer_Check_NUM] = (void *)&PyBobLearnLinearPCATrainer_Check;
+
+  /***************************************************
+   * Bindings for xbob.learn.linear.FisherLDATrainer *
+   ***************************************************/
+
+  PyXbobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Type_NUM] = (void *)&PyBobLearnLinearFisherLDATrainer_Type;
+
+  PyXbobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Check_NUM] = (void *)&PyBobLearnLinearFisherLDATrainer_Check;
 
 #if PY_VERSION_HEX >= 0x02070000
 

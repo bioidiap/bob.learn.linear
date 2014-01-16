@@ -2,7 +2,7 @@
  * @author Andre Anjos <andre.anjos@idiap.ch>
  * @date Thu 16 Jan 2014 14:27:40 CET
  *
- * @brief Python bindings to LinearMachine trainers
+ * @brief Python bindings to PCA trainers
  *
  * Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
  */

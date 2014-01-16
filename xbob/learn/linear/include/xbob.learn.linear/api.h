@@ -12,6 +12,7 @@
 #include <xbob.learn.linear/config.h>
 #include <bob/machine/LinearMachine.h>
 #include <bob/trainer/PCATrainer.h>
+#include <bob/trainer/FisherLDATrainer.h>
 
 #define XBOB_LEARN_LINEAR_MODULE_PREFIX xbob.learn.linear
 #define XBOB_LEARN_LINEAR_MODULE_NAME _library
@@ -63,8 +64,24 @@ typedef struct {
 #define PyBobLearnLinearPCATrainer_Check_RET int
 #define PyBobLearnLinearPCATrainer_Check_PROTO (PyObject* o)
 
+/***************************************************
+ * Bindings for xbob.learn.linear.FisherLDATrainer *
+ ***************************************************/
+
+typedef struct {
+  PyObject_HEAD
+  bob::trainer::FisherLDATrainer* cxx;
+} PyBobLearnLinearFisherLDATrainerObject;
+
+#define PyBobLearnLinearFisherLDATrainer_Type_NUM 6
+#define PyBobLearnLinearFisherLDATrainer_Type_TYPE PyTypeObject
+
+#define PyBobLearnLinearFisherLDATrainer_Check_NUM 7
+#define PyBobLearnLinearFisherLDATrainer_Check_RET int
+#define PyBobLearnLinearFisherLDATrainer_Check_PROTO (PyObject* o)
+
 /* Total number of C API pointers */
-#define PyXbobLearnLinear_API_pointers 6
+#define PyXbobLearnLinear_API_pointers 8
 
 #ifdef XBOB_LEARN_LINEAR_MODULE
 
@@ -93,6 +110,14 @@ typedef struct {
   extern PyBobLearnLinearPCATrainer_Type_TYPE PyBobLearnLinearPCATrainer_Type;
 
   PyBobLearnLinearPCATrainer_Check_RET PyBobLearnLinearPCATrainer_Check PyBobLearnLinearPCATrainer_Check_PROTO;
+
+  /***************************************************
+   * Bindings for xbob.learn.linear.FisherLDATrainer *
+   ***************************************************/
+
+  extern PyBobLearnLinearFisherLDATrainer_Type_TYPE PyBobLearnLinearFisherLDATrainer_Type;
+
+  PyBobLearnLinearFisherLDATrainer_Check_RET PyBobLearnLinearFisherLDATrainer_Check PyBobLearnLinearFisherLDATrainer_Check_PROTO;
 
 #else
 
@@ -143,6 +168,14 @@ typedef struct {
 # define PyBobLearnLinearPCATrainer_Type (*(PyBobLearnLinearPCATrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearPCATrainer_Type_NUM])
 
 # define PyBobLearnLinearPCATrainer_Check (*(PyBobLearnLinearPCATrainer_Check_RET (*)PyBobLearnLinearPCATrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearPCATrainer_Check_NUM])
+
+  /***************************************************
+   * Bindings for xbob.learn.linear.FisherLDATrainer *
+   ***************************************************/
+
+# define PyBobLearnLinearFisherLDATrainer_Type (*(PyBobLearnLinearFisherLDATrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Type_NUM])
+
+# define PyBobLearnLinearFisherLDATrainer_Check (*(PyBobLearnLinearFisherLDATrainer_Check_RET (*)PyBobLearnLinearFisherLDATrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Check_NUM])
 
 # if !defined(NO_IMPORT_ARRAY)
 

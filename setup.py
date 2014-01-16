@@ -54,6 +54,7 @@ setup(
         [
           "xbob/learn/linear/machine.cpp",
           "xbob/learn/linear/pca.cpp",
+          "xbob/learn/linear/lda.cpp",
           "xbob/learn/linear/main.cpp",
           ],
         packages = packages,
