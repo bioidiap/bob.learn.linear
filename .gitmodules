@@ -4,3 +4,6 @@
 [submodule "src/xbob.blitz"]
 	path = src/xbob.blitz
 	url = git@github.com:anjos/xbob.blitz
+[submodule "src/xbob.learn.activation"]
+	path = src/xbob.learn.activation
+	url = git@github.com:anjos/xbob.learn.activation
