@@ -1,6 +1,3 @@
-[submodule "src/xbob.learn.activation"]
-	path = src/xbob.learn.activation
-	url = git@github.com:anjos/xbob.learn.activation
 [submodule "src/xbob.io"]
 	path = src/xbob.io
 	url = git@github.com:anjos/xbob.io
