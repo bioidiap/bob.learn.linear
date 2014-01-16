@@ -360,14 +360,16 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_Train
   static const char* const_kwlist[] = {"X", "machine", 0};
   static char** kwlist = const_cast<char**>(const_kwlist);
 
-  PyBlitzArrayObject* X = 0;
+  PyObject* X = 0;
   PyObject* machine = 0;
 
-  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O!|O!", kwlist,
-        &PySequence_Check, &X,
-        &PyBobLearnLinearMachine_Type, &machine
-        ))
+  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O|O!", kwlist,
+        &X, &PyBobLearnLinearMachine_Type, &machine)) return 0;
+
+  if (!PySequence_Check(X)) {
+    PyErr_Format(PyExc_TypeError, "`%s' requires an input sequence for parameter `X', but you passed a `%s' which does not implement the sequence protocol", self->ob_type->tp_name, X->ob_type->tp_name);
     return 0;
+  }
 
   /* Checks and converts all entries */
   std::vector<blitz::Array<double,2> > Xseq;
@@ -392,7 +394,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_Train
       return 0;
     }
 
-    if (bz->ndim != 2 || X->type_num != NPY_FLOAT64) {
+    if (bz->ndim != 2 || bz->type_num != NPY_FLOAT64) {
       PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input sequence `X' (or any other object coercible to that), but at position %" PY_FORMAT_SIZE_T "d I have found an object with %" PY_FORMAT_SIZE_T "d dimensions and with type `%s' which is not compatible - check your input", self->ob_type->tp_name, k, bz->ndim, PyBlitzArray_TypenumAsString(bz->type_num));
       Py_DECREF(bz);
       return 0;
@@ -474,10 +476,14 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_OutputSize
   static const char* const_kwlist[] = {"X", 0};
   static char** kwlist = const_cast<char**>(const_kwlist);
 
-  PyBlitzArrayObject* X = 0;
+  PyObject* X = 0;
 
-  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O!", kwlist,
-        &PySequence_Check, &X)) return 0;
+  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O", kwlist, &X)) return 0;
+
+  if (!PySequence_Check(X)) {
+    PyErr_Format(PyExc_TypeError, "`%s' requires an input sequence for parameter `X', but you passed a `%s' which does not implement the sequence protocol", self->ob_type->tp_name, X->ob_type->tp_name);
+    return 0;
+  }
 
   /* Checks and converts all entries */
   std::vector<blitz::Array<double,2> > Xseq;
@@ -502,7 +508,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_OutputSize
       return 0;
     }
 
-    if (bz->ndim != 2 || X->type_num != NPY_FLOAT64) {
+    if (bz->ndim != 2 || bz->type_num != NPY_FLOAT64) {
       PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input sequence `X' (or any other object coercible to that), but at position %" PY_FORMAT_SIZE_T "d I have found an object with %" PY_FORMAT_SIZE_T "d dimensions and with type `%s' which is not compatible - check your input", self->ob_type->tp_name, k, bz->ndim, PyBlitzArray_TypenumAsString(bz->type_num));
       Py_DECREF(bz);
       return 0;
@@ -571,7 +577,7 @@ static int PyBobLearnLinearFisherLDATrainer_setUsePinv
 
 }
 
-PyDoc_STRVAR(s_strip_to_rank_str, "safe_svd");
+PyDoc_STRVAR(s_strip_to_rank_str, "strip_to_rank");
 PyDoc_STRVAR(s_strip_to_rank_doc,
 "If the ``use_svd`` flag is enabled, this flag will indicate\n\
 which LAPACK SVD function to use (``dgesvd`` if set to\n\
