@@ -15,26 +15,56 @@
 #include <xbob.io/api.h>
 #include <xbob.learn.activation/api.h>
 
-static PyMethodDef library_methods[] = {
+static PyMethodDef module_methods[] = {
     {0}  /* Sentinel */
 };
 
-PyDoc_STRVAR(library_docstr, "bob::machine's linear machine and trainers");
+PyDoc_STRVAR(module_docstr, "bob::machine's linear machine and trainers");
 
 int PyXbobLearnLinear_APIVersion = XBOB_LEARN_LINEAR_API_VERSION;
+
+#if PY_VERSION_HEX >= 0x03000000
+static PyModuleDef module_definition = {
+  PyModuleDef_HEAD_INIT,
+  XBOB_EXT_MODULE_NAME,
+  module_docstr,
+  -1,
+  module_methods, 
+  0, 0, 0, 0
+};
+#endif
 
 PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
 
   PyBobLearnLinearMachine_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearMachine_Type) < 0) return;
+  if (PyType_Ready(&PyBobLearnLinearMachine_Type) < 0) return
+# if PY_VERSION_HEX >= 0x03000000
+    0
+# endif
+    ;
 
   PyBobLearnLinearPCATrainer_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearPCATrainer_Type) < 0) return;
+  if (PyType_Ready(&PyBobLearnLinearPCATrainer_Type) < 0) return
+# if PY_VERSION_HEX >= 0x03000000
+    0
+# endif
+    ;
 
   PyBobLearnLinearFisherLDATrainer_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearFisherLDATrainer_Type) < 0) return;
+  if (PyType_Ready(&PyBobLearnLinearFisherLDATrainer_Type) < 0) return
+# if PY_VERSION_HEX >= 0x03000000
+    0
+# endif
+    ;
 
-  PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, library_methods, library_docstr);
+# if PY_VERSION_HEX >= 0x03000000
+  PyObject* m = PyModule_Create(&module_definition);
+  if (!m) return 0;
+# else
+  PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, 
+      module_methods, module_docstr);
+  if (!m) return;
+# endif
 
   /* register some constants */
   PyModule_AddIntConstant(m, "__api_version__", XBOB_LEARN_LINEAR_API_VERSION);
@@ -112,5 +142,9 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
 
   /* imports xbob.learn.activation C-API */
   import_xbob_learn_activation();
+
+# if PY_VERSION_HEX >= 0x03000000
+  return m;
+# endif
 
 }

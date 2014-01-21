@@ -74,7 +74,7 @@ static int PyBobLearnLinearMachine_init_sizes
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -96,7 +96,7 @@ static int PyBobLearnLinearMachine_init_weights(PyBobLearnLinearMachineObject* s
   auto weights_ = make_safe(weights);
 
   if (weights->type_num != NPY_FLOAT64 || weights->ndim != 2) {
-    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit floats 2D arrays for property array `weights'", self->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit floats 2D arrays for property array `weights'", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -109,7 +109,7 @@ static int PyBobLearnLinearMachine_init_weights(PyBobLearnLinearMachineObject* s
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -139,7 +139,7 @@ static int PyBobLearnLinearMachine_init_hdf5(PyBobLearnLinearMachineObject* self
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -169,7 +169,7 @@ static int PyBobLearnLinearMachine_init_copy
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -216,7 +216,7 @@ static int PyBobLearnLinearMachine_init(PyBobLearnLinearMachineObject* self,
           return PyBobLearnLinearMachine_init_copy(self, args, kwds);
         }
 
-        PyErr_Format(PyExc_TypeError, "cannot initialize `%s' with `%s' (see help)", self->ob_type->tp_name, arg->ob_type->tp_name);
+        PyErr_Format(PyExc_TypeError, "cannot initialize `%s' with `%s' (see help)", Py_TYPE(self)->tp_name, Py_TYPE(arg)->tp_name);
 
       }
 
@@ -224,7 +224,7 @@ static int PyBobLearnLinearMachine_init(PyBobLearnLinearMachineObject* self,
 
     default:
 
-      PyErr_Format(PyExc_RuntimeError, "number of arguments mismatch - %s requires 0, 1 or 2 arguments, but you provided %" PY_FORMAT_SIZE_T "d (see help)", self->ob_type->tp_name, nargs);
+      PyErr_Format(PyExc_RuntimeError, "number of arguments mismatch - %s requires 0, 1 or 2 arguments, but you provided %" PY_FORMAT_SIZE_T "d (see help)", Py_TYPE(self)->tp_name, nargs);
 
   }
 
@@ -236,7 +236,7 @@ static void PyBobLearnLinearMachine_delete
 (PyBobLearnLinearMachineObject* self) {
 
   delete self->cxx;
-  self->ob_type->tp_free((PyObject*)self);
+  Py_TYPE(self)->tp_free((PyObject*)self);
 
 }
 
@@ -249,7 +249,7 @@ static PyObject* PyBobLearnLinearMachine_RichCompare
 
   if (!PyBobLearnLinearMachine_Check(other)) {
     PyErr_Format(PyExc_TypeError, "cannot compare `%s' with `%s'",
-        self->ob_type->tp_name, other->ob_type->tp_name);
+        Py_TYPE(self)->tp_name, Py_TYPE(other)->tp_name);
     return 0;
   }
 
@@ -291,7 +291,7 @@ static int PyBobLearnLinearMachine_setWeights (PyBobLearnLinearMachineObject* se
   auto weights_ = make_safe(weights);
 
   if (weights->type_num != NPY_FLOAT64 || weights->ndim != 2) {
-    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit floats 2D arrays for property array `weights'", self->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit floats 2D arrays for property array `weights'", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -303,7 +303,7 @@ static int PyBobLearnLinearMachine_setWeights (PyBobLearnLinearMachineObject* se
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot reset `weights' of %s: unknown exception caught", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot reset `weights' of %s: unknown exception caught", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -330,7 +330,7 @@ static int PyBobLearnLinearMachine_setBiases (PyBobLearnLinearMachineObject* sel
   auto biases_ = make_safe(biases);
 
   if (biases->type_num != NPY_FLOAT64 || biases->ndim != 1) {
-    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit floats 1D arrays for property array `biases'", self->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit floats 1D arrays for property array `biases'", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -342,7 +342,7 @@ static int PyBobLearnLinearMachine_setBiases (PyBobLearnLinearMachineObject* sel
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot reset `biases' of %s: unknown exception caught", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot reset `biases' of %s: unknown exception caught", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -371,7 +371,7 @@ static int PyBobLearnLinearMachine_setInputSubtraction
   auto input_subtract_ = make_safe(input_subtract);
 
   if (input_subtract->type_num != NPY_FLOAT64 || input_subtract->ndim != 1) {
-    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit floats 1D arrays for property array `input_subtract'", self->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit floats 1D arrays for property array `input_subtract'", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -383,7 +383,7 @@ static int PyBobLearnLinearMachine_setInputSubtraction
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot reset `input_subtract' of %s: unknown exception caught", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot reset `input_subtract' of %s: unknown exception caught", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -411,7 +411,7 @@ static int PyBobLearnLinearMachine_setInputDivision (PyBobLearnLinearMachineObje
   auto input_divide_ = make_safe(input_divide);
 
   if (input_divide->type_num != NPY_FLOAT64 || input_divide->ndim != 1) {
-    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit floats 1D arrays for property array `input_divide'", self->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit floats 1D arrays for property array `input_divide'", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -423,7 +423,7 @@ static int PyBobLearnLinearMachine_setInputDivision (PyBobLearnLinearMachineObje
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot reset `input_divide' of %s: unknown exception caught", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot reset `input_divide' of %s: unknown exception caught", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -448,7 +448,7 @@ static int PyBobLearnLinearMachine_setShape
 (PyBobLearnLinearMachineObject* self, PyObject* o, void* /*closure*/) {
 
   if (!PySequence_Check(o)) {
-    PyErr_Format(PyExc_TypeError, "`%s' shape can only be set using tuples (or sequences), not `%s'", self->ob_type->tp_name, o->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' shape can only be set using tuples (or sequences), not `%s'", Py_TYPE(self)->tp_name, Py_TYPE(o)->tp_name);
     return -1;
   }
 
@@ -456,7 +456,7 @@ static int PyBobLearnLinearMachine_setShape
   auto shape_ = make_safe(shape);
 
   if (PyTuple_GET_SIZE(shape) != 2) {
-    PyErr_Format(PyExc_RuntimeError, "`%s' shape can only be set using  2-position tuples (or sequences), not an %" PY_FORMAT_SIZE_T "d-position sequence", self->ob_type->tp_name, PyTuple_GET_SIZE(shape));
+    PyErr_Format(PyExc_RuntimeError, "`%s' shape can only be set using  2-position tuples (or sequences), not an %" PY_FORMAT_SIZE_T "d-position sequence", Py_TYPE(self)->tp_name, PyTuple_GET_SIZE(shape));
     return -1;
   }
 
@@ -473,7 +473,7 @@ static int PyBobLearnLinearMachine_setShape
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot reset `shape' of %s: unknown exception caught", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot reset `shape' of %s: unknown exception caught", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -497,7 +497,7 @@ static int PyBobLearnLinearMachine_setActivation
 (PyBobLearnLinearMachineObject* self, PyObject* o, void* /*closure*/) {
 
   if (!PyBobLearnActivation_Check(o)) {
-    PyErr_Format(PyExc_TypeError, "%s activation requires an object of type `Activation' (or an inherited type), not `%s'", self->ob_type->tp_name, o->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "%s activation requires an object of type `Activation' (or an inherited type), not `%s'", Py_TYPE(self)->tp_name, Py_TYPE(o)->tp_name);
     return -1;
   }
 
@@ -553,6 +553,12 @@ static PyGetSetDef PyBobLearnLinearMachine_getseters[] = {
     {0}  /* Sentinel */
 };
 
+#if PY_VERSION_HEX >= 0x03000000
+#  define PYOBJECT_STR PyObject_Str
+#else
+#  define PYOBJECT_STR PyObject_Unicode
+#endif
+
 PyObject* PyBobLearnLinearMachine_Repr(PyBobLearnLinearMachineObject* self) {
 
   /**
@@ -568,7 +574,7 @@ PyObject* PyBobLearnLinearMachine_Repr(PyBobLearnLinearMachineObject* self) {
   auto weights = make_safe(PyBobLearnLinearMachine_getWeights(self, 0));
   if (!weights) return 0;
   auto dtype = make_safe(PyObject_GetAttrString(weights.get(), "dtype"));
-  auto dtype_str = make_safe(PyObject_Unicode(dtype.get()));
+  auto dtype_str = make_safe(PYOBJECT_STR(dtype.get()));
   auto shape = make_safe(PyObject_GetAttrString(weights.get(), "shape"));
   auto shape_str = make_safe(PyObject_Str(shape.get()));
 
@@ -576,12 +582,12 @@ PyObject* PyBobLearnLinearMachine_Repr(PyBobLearnLinearMachineObject* self) {
 
   if (self->cxx->getActivation()->str() == identity_str) {
     retval = PyUnicode_FromFormat("<%s %U@%U>",
-        self->ob_type->tp_name, dtype_str.get(), shape_str.get());
+        Py_TYPE(self)->tp_name, dtype_str.get(), shape_str.get());
   }
 
   else {
     retval = PyUnicode_FromFormat("<%s %s@%s [act: %s]>",
-        self->ob_type->tp_name, dtype_str.get(), shape_str.get(),
+        Py_TYPE(self)->tp_name, dtype_str.get(), shape_str.get(),
         self->cxx->getActivation()->str().c_str());
   }
 
@@ -624,7 +630,7 @@ PyObject* PyBobLearnLinearMachine_Str(PyBobLearnLinearMachineObject* self) {
   std::shared_ptr<PyObject> sub;
   if (blitz::any(self->cxx->getInputSubtraction())) {
     auto t = make_safe(PyBobLearnLinearMachine_getInputSubtraction(self, 0));
-    auto t_str = make_safe(PyObject_Unicode(t.get()));
+    auto t_str = make_safe(PYOBJECT_STR(t.get()));
     sub = make_safe(PyUnicode_FromFormat("\n subtract: %U", t_str.get()));
   }
   else sub = make_safe(PyUnicode_FromString(""));
@@ -632,7 +638,7 @@ PyObject* PyBobLearnLinearMachine_Str(PyBobLearnLinearMachineObject* self) {
   std::shared_ptr<PyObject> div;
   if (blitz::any(self->cxx->getInputDivision())) {
     auto t = make_safe(PyBobLearnLinearMachine_getInputDivision(self, 0));
-    auto t_str = make_safe(PyObject_Unicode(t.get()));
+    auto t_str = make_safe(PYOBJECT_STR(t.get()));
     div = make_safe(PyUnicode_FromFormat("\n divide: %U", t_str.get()));
   }
   else div = make_safe(PyUnicode_FromString(""));
@@ -640,20 +646,20 @@ PyObject* PyBobLearnLinearMachine_Str(PyBobLearnLinearMachineObject* self) {
   std::shared_ptr<PyObject> bias;
   if (blitz::any(self->cxx->getBiases())) {
     auto t = make_safe(PyBobLearnLinearMachine_getBiases(self, 0));
-    auto t_str = make_safe(PyObject_Unicode(t.get()));
+    auto t_str = make_safe(PYOBJECT_STR(t.get()));
     bias = make_safe(PyUnicode_FromFormat("\n bias: %U", t_str.get()));
   }
   else bias = make_safe(PyUnicode_FromString(""));
 
   auto weights = make_safe(PyBobLearnLinearMachine_getWeights(self, 0));
   if (!weights) return 0;
-  auto weights_str = make_safe(PyObject_Unicode(weights.get()));
+  auto weights_str = make_safe(PYOBJECT_STR(weights.get()));
   auto dtype = make_safe(PyObject_GetAttrString(weights.get(), "dtype"));
-  auto dtype_str = make_safe(PyObject_Unicode(dtype.get()));
+  auto dtype_str = make_safe(PYOBJECT_STR(dtype.get()));
   auto shape = make_safe(PyObject_GetAttrString(weights.get(), "shape"));
 
   PyObject* retval = PyUnicode_FromFormat("%s (%U) %" PY_FORMAT_SIZE_T "d inputs, %" PY_FORMAT_SIZE_T "d outputs%U%U%U%U\n %U",
-    self->ob_type->tp_name, dtype_str.get(),
+    Py_TYPE(self)->tp_name, dtype_str.get(),
     PyNumber_AsSsize_t(PyTuple_GET_ITEM(shape.get(), 0), PyExc_OverflowError),
     PyNumber_AsSsize_t(PyTuple_GET_ITEM(shape.get(), 1), PyExc_OverflowError),
     act.get(), sub.get(), div.get(), bias.get(), weights_str.get());
@@ -712,17 +718,17 @@ static PyObject* PyBobLearnLinearMachine_forward
   auto output_ = make_xsafe(output);
 
   if (input->type_num != NPY_FLOAT64) {
-    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit float arrays for input array `input'", self->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit float arrays for input array `input'", Py_TYPE(self)->tp_name);
     return 0;
   }
 
   if (output && output->type_num != NPY_FLOAT64) {
-    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit float arrays for output array `output'", self->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 64-bit float arrays for output array `output'", Py_TYPE(self)->tp_name);
     return 0;
   }
 
   if (input->ndim < 1 || input->ndim > 2) {
-    PyErr_Format(PyExc_TypeError, "`%s' only accepts 1 or 2-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", self->ob_type->tp_name, input->ndim);
+    PyErr_Format(PyExc_TypeError, "`%s' only accepts 1 or 2-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", Py_TYPE(self)->tp_name, input->ndim);
     return 0;
   }
 
@@ -733,21 +739,21 @@ static PyObject* PyBobLearnLinearMachine_forward
 
   if (input->ndim == 1) {
     if (input->shape[0] != (Py_ssize_t)self->cxx->inputSize()) {
-      PyErr_Format(PyExc_RuntimeError, "1D `input' array should have %" PY_FORMAT_SIZE_T "d elements matching `%s' input size, not %" PY_FORMAT_SIZE_T "d elements", self->cxx->inputSize(), self->ob_type->tp_name, input->shape[0]);
+      PyErr_Format(PyExc_RuntimeError, "1D `input' array should have %" PY_FORMAT_SIZE_T "d elements matching `%s' input size, not %" PY_FORMAT_SIZE_T "d elements", self->cxx->inputSize(), Py_TYPE(self)->tp_name, input->shape[0]);
       return 0;
     }
     if (output && output->shape[0] != (Py_ssize_t)self->cxx->outputSize()) {
-      PyErr_Format(PyExc_RuntimeError, "1D `output' array should have %" PY_FORMAT_SIZE_T "d elements matching `%s' output size, not %" PY_FORMAT_SIZE_T "d elements", self->cxx->outputSize(), self->ob_type->tp_name, output->shape[0]);
+      PyErr_Format(PyExc_RuntimeError, "1D `output' array should have %" PY_FORMAT_SIZE_T "d elements matching `%s' output size, not %" PY_FORMAT_SIZE_T "d elements", self->cxx->outputSize(), Py_TYPE(self)->tp_name, output->shape[0]);
       return 0;
     }
   }
   else {
     if (input->shape[1] != (Py_ssize_t)self->cxx->inputSize()) {
-      PyErr_Format(PyExc_RuntimeError, "2D `input' array should have %" PY_FORMAT_SIZE_T "d columns, matching `%s' input size, not %" PY_FORMAT_SIZE_T "d elements", self->cxx->inputSize(), self->ob_type->tp_name, input->shape[1]);
+      PyErr_Format(PyExc_RuntimeError, "2D `input' array should have %" PY_FORMAT_SIZE_T "d columns, matching `%s' input size, not %" PY_FORMAT_SIZE_T "d elements", self->cxx->inputSize(), Py_TYPE(self)->tp_name, input->shape[1]);
       return 0;
     }
     if (output && output->shape[1] != (Py_ssize_t)self->cxx->outputSize()) {
-      PyErr_Format(PyExc_RuntimeError, "2D `output' array should have %" PY_FORMAT_SIZE_T "d columns matching `%s' output size, not %" PY_FORMAT_SIZE_T "d elements", self->cxx->outputSize(), self->ob_type->tp_name, output->shape[1]);
+      PyErr_Format(PyExc_RuntimeError, "2D `output' array should have %" PY_FORMAT_SIZE_T "d columns matching `%s' output size, not %" PY_FORMAT_SIZE_T "d elements", self->cxx->outputSize(), Py_TYPE(self)->tp_name, output->shape[1]);
       return 0;
     }
     if (output && input->shape[0] != output->shape[0]) {
@@ -792,7 +798,7 @@ static PyObject* PyBobLearnLinearMachine_forward
     return 0;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "%s cannot forward data: unknown exception caught", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "%s cannot forward data: unknown exception caught", Py_TYPE(self)->tp_name);
     return 0;
   }
 
@@ -813,7 +819,7 @@ static PyObject* PyBobLearnLinearMachine_Load
 (PyBobLearnLinearMachineObject* self, PyObject* f) {
 
   if (!PyBobIoHDF5File_Check(f)) {
-    PyErr_Format(PyExc_TypeError, "`%s' cannot load itself from `%s', only from an HDF5 file", self->ob_type->tp_name, f->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' cannot load itself from `%s', only from an HDF5 file", Py_TYPE(self)->tp_name, Py_TYPE(f)->tp_name);
     return 0;
   }
 
@@ -847,7 +853,7 @@ static PyObject* PyBobLearnLinearMachine_Save
 (PyBobLearnLinearMachineObject* self, PyObject* f) {
 
   if (!PyBobIoHDF5File_Check(f)) {
-    PyErr_Format(PyExc_TypeError, "Activation function cannot write itself to `%s', only to an HDF5 file", f->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "Activation function cannot write itself to `%s', only to an HDF5 file", Py_TYPE(f)->tp_name);
     return 0;
   }
 
@@ -946,7 +952,7 @@ static PyObject* PyBobLearnLinearMachine_Resize
     return 0;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot resize object of type `%s' - unknown exception thrown", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot resize object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
     return 0;
   }
 
@@ -1013,8 +1019,7 @@ PyObject* PyBobLearnLinearMachine_NewFromSize
 }
 
 PyTypeObject PyBobLearnLinearMachine_Type = {
-    PyObject_HEAD_INIT(0)
-    0,                                                /* ob_size */
+    PyVarObject_HEAD_INIT(0, 0)
     s_linear_str,                                     /* tp_name */
     sizeof(PyBobLearnLinearMachineObject),            /* tp_basicsize */
     0,                                                /* tp_itemsize */

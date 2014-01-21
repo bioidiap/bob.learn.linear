@@ -163,7 +163,7 @@ static int PyBobLearnLinearPCATrainer_init_bool
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot initialize object of type `%s' - unknown exception thrown", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot initialize object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -193,7 +193,7 @@ static int PyBobLearnLinearPCATrainer_init_copy
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -234,7 +234,7 @@ static int PyBobLearnLinearPCATrainer_init
           return PyBobLearnLinearPCATrainer_init_bool(self, args, kwds);
         }
 
-        PyErr_Format(PyExc_TypeError, "cannot initialize `%s' with `%s' (see help)", self->ob_type->tp_name, arg->ob_type->tp_name);
+        PyErr_Format(PyExc_TypeError, "cannot initialize `%s' with `%s' (see help)", Py_TYPE(self)->tp_name, Py_TYPE(arg)->tp_name);
 
       }
 
@@ -242,7 +242,7 @@ static int PyBobLearnLinearPCATrainer_init
 
     default:
 
-      PyErr_Format(PyExc_RuntimeError, "number of arguments mismatch - `%s' requires 0 or 1 arguments, but you provided %" PY_FORMAT_SIZE_T "d (see help)", self->ob_type->tp_name, nargs);
+      PyErr_Format(PyExc_RuntimeError, "number of arguments mismatch - `%s' requires 0 or 1 arguments, but you provided %" PY_FORMAT_SIZE_T "d (see help)", Py_TYPE(self)->tp_name, nargs);
 
   }
 
@@ -254,7 +254,7 @@ static void PyBobLearnLinearPCATrainer_delete
 (PyBobLearnLinearPCATrainerObject* self) {
 
   delete self->cxx;
-  self->ob_type->tp_free((PyObject*)self);
+  Py_TYPE(self)->tp_free((PyObject*)self);
 
 }
 
@@ -263,7 +263,7 @@ static PyObject* PyBobLearnLinearPCATrainer_RichCompare
 
   if (!PyBobLearnLinearPCATrainer_Check(other)) {
     PyErr_Format(PyExc_TypeError, "cannot compare `%s' with `%s'",
-        self->ob_type->tp_name, other->ob_type->tp_name);
+        Py_TYPE(self)->tp_name, Py_TYPE(other)->tp_name);
     return 0;
   }
 
@@ -374,7 +374,7 @@ static PyObject* PyBobLearnLinearPCATrainer_Train
   auto X_ = make_safe(X); ///< auto-delete in case of problems
 
   if (X->ndim != 2 || X->type_num != NPY_FLOAT64) {
-    PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input array `X'", self->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input array `X'", Py_TYPE(self)->tp_name);
     return 0;
   }
 
@@ -402,7 +402,7 @@ static PyObject* PyBobLearnLinearPCATrainer_Train
     return 0;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot train `%s' with this `%s': unknown exception caught", machine->ob_type->tp_name, self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot train `%s' with this `%s': unknown exception caught", Py_TYPE(machine)->tp_name, Py_TYPE(self)->tp_name);
     return 0;
   }
 
@@ -452,7 +452,7 @@ static PyObject* PyBobLearnLinearPCATrainer_OutputSize
   auto X_ = make_safe(X); ///< auto-delete in case of problems
 
   if (X->ndim != 2 || X->type_num != NPY_FLOAT64) {
-    PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input array `X'", self->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input array `X'", Py_TYPE(self)->tp_name);
     return 0;
   }
 
@@ -565,8 +565,7 @@ static PyGetSetDef PyBobLearnLinearPCATrainer_getseters[] = {
 };
 
 PyTypeObject PyBobLearnLinearPCATrainer_Type = {
-    PyObject_HEAD_INIT(0)
-    0,                                                /* ob_size */
+    PyVarObject_HEAD_INIT(0, 0)
     s_pcatrainer_str,                                 /* tp_name */
     sizeof(PyBobLearnLinearPCATrainerObject),         /* tp_basicsize */
     0,                                                /* tp_itemsize */

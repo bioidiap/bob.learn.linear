@@ -154,7 +154,7 @@ static int PyBobLearnLinearFisherLDATrainer_init_bools
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot initialize object of type `%s' - unknown exception thrown", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot initialize object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -184,7 +184,7 @@ static int PyBobLearnLinearFisherLDATrainer_init_copy
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
     return -1;
   }
 
@@ -225,7 +225,7 @@ static int PyBobLearnLinearFisherLDATrainer_init
           return PyBobLearnLinearFisherLDATrainer_init_bools(self, args, kwds);
         }
 
-        PyErr_Format(PyExc_TypeError, "cannot initialize `%s' with `%s' (see help)", self->ob_type->tp_name, arg->ob_type->tp_name);
+        PyErr_Format(PyExc_TypeError, "cannot initialize `%s' with `%s' (see help)", Py_TYPE(self)->tp_name, Py_TYPE(arg)->tp_name);
 
       }
 
@@ -233,7 +233,7 @@ static int PyBobLearnLinearFisherLDATrainer_init
 
     default:
 
-      PyErr_Format(PyExc_RuntimeError, "number of arguments mismatch - `%s' requires 0 or 1 arguments, but you provided %" PY_FORMAT_SIZE_T "d (see help)", self->ob_type->tp_name, nargs);
+      PyErr_Format(PyExc_RuntimeError, "number of arguments mismatch - `%s' requires 0 or 1 arguments, but you provided %" PY_FORMAT_SIZE_T "d (see help)", Py_TYPE(self)->tp_name, nargs);
 
   }
 
@@ -245,7 +245,7 @@ static void PyBobLearnLinearFisherLDATrainer_delete
 (PyBobLearnLinearFisherLDATrainerObject* self) {
 
   delete self->cxx;
-  self->ob_type->tp_free((PyObject*)self);
+  Py_TYPE(self)->tp_free((PyObject*)self);
 
 }
 
@@ -254,7 +254,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_RichCompare
 
   if (!PyBobLearnLinearFisherLDATrainer_Check(other)) {
     PyErr_Format(PyExc_TypeError, "cannot compare `%s' with `%s'",
-        self->ob_type->tp_name, other->ob_type->tp_name);
+        Py_TYPE(self)->tp_name, Py_TYPE(other)->tp_name);
     return 0;
   }
 
@@ -367,7 +367,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_Train
         &X, &PyBobLearnLinearMachine_Type, &machine)) return 0;
 
   if (!PySequence_Check(X)) {
-    PyErr_Format(PyExc_TypeError, "`%s' requires an input sequence for parameter `X', but you passed a `%s' which does not implement the sequence protocol", self->ob_type->tp_name, X->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' requires an input sequence for parameter `X', but you passed a `%s' which does not implement the sequence protocol", Py_TYPE(self)->tp_name, Py_TYPE(X)->tp_name);
     return 0;
   }
 
@@ -377,7 +377,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_Train
   Py_ssize_t size = PySequence_Fast_GET_SIZE(X);
 
   if (size < 2) {
-    PyErr_Format(PyExc_RuntimeError, "`%s' requires an input sequence for parameter `X' with at least two entries (representing two classes), but you have passed something that has only %" PY_FORMAT_SIZE_T "d entries", self->ob_type->tp_name, size);
+    PyErr_Format(PyExc_RuntimeError, "`%s' requires an input sequence for parameter `X' with at least two entries (representing two classes), but you have passed something that has only %" PY_FORMAT_SIZE_T "d entries", Py_TYPE(self)->tp_name, size);
     return 0;
   }
 
@@ -390,12 +390,12 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_Train
     PyObject* borrowed = PySequence_Fast_GET_ITEM(X, k);
 
     if (!PyBlitzArray_Converter(borrowed, &bz)) {
-      PyErr_Format(PyExc_TypeError, "`%s' could not convert object of type `%s' at position %" PY_FORMAT_SIZE_T "d of input sequence `X' into an array - check your input", self->ob_type->tp_name, borrowed->ob_type->tp_name, k);
+      PyErr_Format(PyExc_TypeError, "`%s' could not convert object of type `%s' at position %" PY_FORMAT_SIZE_T "d of input sequence `X' into an array - check your input", Py_TYPE(self)->tp_name, Py_TYPE(borrowed)->tp_name, k);
       return 0;
     }
 
     if (bz->ndim != 2 || bz->type_num != NPY_FLOAT64) {
-      PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input sequence `X' (or any other object coercible to that), but at position %" PY_FORMAT_SIZE_T "d I have found an object with %" PY_FORMAT_SIZE_T "d dimensions and with type `%s' which is not compatible - check your input", self->ob_type->tp_name, k, bz->ndim, PyBlitzArray_TypenumAsString(bz->type_num));
+      PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input sequence `X' (or any other object coercible to that), but at position %" PY_FORMAT_SIZE_T "d I have found an object with %" PY_FORMAT_SIZE_T "d dimensions and with type `%s' which is not compatible - check your input", Py_TYPE(self)->tp_name, k, bz->ndim, PyBlitzArray_TypenumAsString(bz->type_num));
       Py_DECREF(bz);
       return 0;
     }
@@ -428,7 +428,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_Train
     return 0;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot train `%s' with this `%s': unknown exception caught", machine->ob_type->tp_name, self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "cannot train `%s' with this `%s': unknown exception caught", Py_TYPE(machine)->tp_name, Py_TYPE(self)->tp_name);
     return 0;
   }
 
@@ -481,7 +481,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_OutputSize
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "O", kwlist, &X)) return 0;
 
   if (!PySequence_Check(X)) {
-    PyErr_Format(PyExc_TypeError, "`%s' requires an input sequence for parameter `X', but you passed a `%s' which does not implement the sequence protocol", self->ob_type->tp_name, X->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' requires an input sequence for parameter `X', but you passed a `%s' which does not implement the sequence protocol", Py_TYPE(self)->tp_name, Py_TYPE(X)->tp_name);
     return 0;
   }
 
@@ -491,7 +491,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_OutputSize
   Py_ssize_t size = PySequence_Fast_GET_SIZE(X);
 
   if (size < 2) {
-    PyErr_Format(PyExc_RuntimeError, "`%s' requires an input sequence for parameter `X' with at least two entries (representing two classes), but you have passed something that has only %" PY_FORMAT_SIZE_T "d entries", self->ob_type->tp_name, size);
+    PyErr_Format(PyExc_RuntimeError, "`%s' requires an input sequence for parameter `X' with at least two entries (representing two classes), but you have passed something that has only %" PY_FORMAT_SIZE_T "d entries", Py_TYPE(self)->tp_name, size);
     return 0;
   }
 
@@ -504,12 +504,12 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_OutputSize
     PyObject* borrowed = PySequence_Fast_GET_ITEM(X, k);
 
     if (!PyBlitzArray_Converter(borrowed, &bz)) {
-      PyErr_Format(PyExc_TypeError, "`%s' could not convert object of type `%s' at position %" PY_FORMAT_SIZE_T "d of input sequence `X' into an array - check your input", self->ob_type->tp_name, borrowed->ob_type->tp_name, k);
+      PyErr_Format(PyExc_TypeError, "`%s' could not convert object of type `%s' at position %" PY_FORMAT_SIZE_T "d of input sequence `X' into an array - check your input", Py_TYPE(self)->tp_name, Py_TYPE(borrowed)->tp_name, k);
       return 0;
     }
 
     if (bz->ndim != 2 || bz->type_num != NPY_FLOAT64) {
-      PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input sequence `X' (or any other object coercible to that), but at position %" PY_FORMAT_SIZE_T "d I have found an object with %" PY_FORMAT_SIZE_T "d dimensions and with type `%s' which is not compatible - check your input", self->ob_type->tp_name, k, bz->ndim, PyBlitzArray_TypenumAsString(bz->type_num));
+      PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input sequence `X' (or any other object coercible to that), but at position %" PY_FORMAT_SIZE_T "d I have found an object with %" PY_FORMAT_SIZE_T "d dimensions and with type `%s' which is not compatible - check your input", Py_TYPE(self)->tp_name, k, bz->ndim, PyBlitzArray_TypenumAsString(bz->type_num));
       Py_DECREF(bz);
       return 0;
     }
@@ -627,8 +627,7 @@ static PyGetSetDef PyBobLearnLinearFisherLDATrainer_getseters[] = {
 };
 
 PyTypeObject PyBobLearnLinearFisherLDATrainer_Type = {
-    PyObject_HEAD_INIT(0)
-    0,                                                /* ob_size */
+    PyVarObject_HEAD_INIT(0, 0)
     s_pcatrainer_str,                                 /* tp_name */
     sizeof(PyBobLearnLinearFisherLDATrainerObject),   /* tp_basicsize */
     0,                                                /* tp_itemsize */
