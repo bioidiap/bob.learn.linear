@@ -8,8 +8,8 @@
  */
 
 #define XBOB_LEARN_LINEAR_MODULE
-#include "cleanup.h"
 #include <xbob.blitz/cppapi.h>
+#include <xbob.blitz/cleanup.h>
 #include <bob/trainer/FisherLDATrainer.h>
 #include <xbob.learn.linear/api.h>
 #include <structmember.h>

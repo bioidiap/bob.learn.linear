@@ -11,9 +11,8 @@
 #ifdef NO_IMPORT_ARRAY
 #undef NO_IMPORT_ARRAY
 #endif
-#include <xbob.blitz/capi.h>
-#include <xbob.io/api.h>
 #include <xbob.learn.activation/api.h>
+#include <xbob.blitz/cleanup.h>
 
 static PyMethodDef module_methods[] = {
     {0}  /* Sentinel */
@@ -34,51 +33,38 @@ static PyModuleDef module_definition = {
 };
 #endif
 
-PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
+static PyObject* create_module (void) {
 
   PyBobLearnLinearMachine_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearMachine_Type) < 0) return
-# if PY_VERSION_HEX >= 0x03000000
-    0
-# endif
-    ;
+  if (PyType_Ready(&PyBobLearnLinearMachine_Type) < 0) return 0;
 
   PyBobLearnLinearPCATrainer_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearPCATrainer_Type) < 0) return
-# if PY_VERSION_HEX >= 0x03000000
-    0
-# endif
-    ;
+  if (PyType_Ready(&PyBobLearnLinearPCATrainer_Type) < 0) return 0;
 
   PyBobLearnLinearFisherLDATrainer_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearFisherLDATrainer_Type) < 0) return
-# if PY_VERSION_HEX >= 0x03000000
-    0
-# endif
-    ;
+  if (PyType_Ready(&PyBobLearnLinearFisherLDATrainer_Type) < 0) return 0;
 
 # if PY_VERSION_HEX >= 0x03000000
   PyObject* m = PyModule_Create(&module_definition);
-  if (!m) return 0;
 # else
-  PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, 
-      module_methods, module_docstr);
-  if (!m) return;
+  PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, module_methods, module_docstr);
 # endif
+  if (!m) return 0;
+  auto m_ = make_safe(m);
 
   /* register some constants */
-  PyModule_AddIntConstant(m, "__api_version__", XBOB_LEARN_LINEAR_API_VERSION);
-  PyModule_AddStringConstant(m, "__version__", XBOB_EXT_MODULE_VERSION);
+  if (PyModule_AddIntConstant(m, "__api_version__", XBOB_IO_API_VERSION) < 0) return 0;
+  if (PyModule_AddStringConstant(m, "__version__", XBOB_EXT_MODULE_VERSION) < 0) return 0;
 
   /* register the types to python */
   Py_INCREF(&PyBobLearnLinearMachine_Type);
-  PyModule_AddObject(m, "Machine", (PyObject *)&PyBobLearnLinearMachine_Type);
+  if (PyModule_AddObject(m, "Machine", (PyObject *)&PyBobLearnLinearMachine_Type) < 0) return 0;
 
   Py_INCREF(&PyBobLearnLinearPCATrainer_Type);
-  PyModule_AddObject(m, "PCATrainer", (PyObject *)&PyBobLearnLinearPCATrainer_Type);
+  if (PyModule_AddObject(m, "PCATrainer", (PyObject *)&PyBobLearnLinearPCATrainer_Type) < 0) return 0;
 
   Py_INCREF(&PyBobLearnLinearFisherLDATrainer_Type);
-  PyModule_AddObject(m, "FisherLDATrainer", (PyObject *)&PyBobLearnLinearFisherLDATrainer_Type);
+  if (PyModule_AddObject(m, "FisherLDATrainer", (PyObject *)&PyBobLearnLinearFisherLDATrainer_Type) < 0) return 0;
 
   static void* PyXbobLearnLinear_API[PyXbobLearnLinear_API_pointers];
 
@@ -131,20 +117,19 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
 
   if (c_api_object) PyModule_AddObject(m, "_C_API", c_api_object);
 
-  /* imports the NumPy C-API */
-  import_array();
+  /* imports xbob.learn.activation C-API + dependencies */
+  if (import_xbob_blitz() < 0) return 0;
+  if (import_xbob_io() < 0) return 0;
+  if (import_xbob_learn_activation() < 0) return 0;
 
-  /* imports xbob.blitz C-API */
-  import_xbob_blitz();
-
-  /* imports xbob.io C-API */
-  import_xbob_io();
-
-  /* imports xbob.learn.activation C-API */
-  import_xbob_learn_activation();
-
-# if PY_VERSION_HEX >= 0x03000000
+  Py_INCREF(m);
   return m;
-# endif
 
+}
+
+PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
+# if PY_VERSION_HEX >= 0x03000000
+  return
+# endif
+    create_module();
 }

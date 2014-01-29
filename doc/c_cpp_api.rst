@@ -7,10 +7,11 @@
 =========
 
 The C++ API of ``xbob.learn.linear`` allows users to leverage from automatic
-converters for classes in :py:class:`xbob.machine`.  To use the C API, clients
-should first, include the header file ``<xbob.machine/api.h>`` on their
-compilation units and then, make sure to call once ``import_xbob_machine()`` at
-their module instantiation, as explained at the `Python manual
+converters for classes in :py:class:`xbob.learn.linear`.  To use the C API,
+clients should first, include the header file ``<xbob.learn.linear/api.h>`` on
+their compilation units and then, make sure to call once
+``import_xbob_learn_linear()`` at their module instantiation, as explained at
+the `Python manual
 <http://docs.python.org/2/extending/extending.html#using-capsules>`_.
 
 Here is a dummy C example showing how to include the header and where to call
@@ -18,32 +19,26 @@ the import function:
 
 .. code-block:: c++
 
-   #include <xbob.machine/api.h>
+   #include <xbob.learn.linear/api.h>
 
    PyMODINIT_FUNC initclient(void) {
 
      PyObject* m Py_InitModule("client", ClientMethods);
 
-     if (!m) return;
+     if (!m) return 0;
 
-     // imports the NumPy C-API
-     import_array();
+     if (import_xbob_blitz() < 0) return 0;
+     if (import_xbob_io() < 0) return 0;
+     if (import_xbob_learn_activation() < 0) return 0;
 
-     // imports blitz.array C-API
-     import_xbob_blitz();
-
-     // imports xbob.io C-API
-     import_xbob_io();
-
-     // imports xbob.machine C-API
-     import_xbob_machine();
+     return m;
 
    }
 
 .. note::
 
   The include directory can be discovered using
-  :py:func:`xbob.machine.get_include`.
+  :py:func:`xbob.learn.linear.get_include`.
 
 Activation Functors
 -------------------

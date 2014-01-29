@@ -8,8 +8,8 @@
  */
 
 #define XBOB_LEARN_LINEAR_MODULE
-#include "cleanup.h"
 #include <xbob.blitz/cppapi.h>
+#include <xbob.blitz/cleanup.h>
 #include <xbob.io/api.h>
 #include <xbob.learn.activation/api.h>
 #include <xbob.learn.linear/api.h>
