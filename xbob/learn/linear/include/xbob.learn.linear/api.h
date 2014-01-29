@@ -179,8 +179,6 @@ typedef struct {
 
 # if !defined(NO_IMPORT_ARRAY)
 
-#include <xbob.learn.activation/api.h>
-
   /**
    * Returns -1 on error, 0 on success. PyCapsule_Import will set an exception
    * if there's an error.
