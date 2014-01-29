@@ -11,8 +11,10 @@
 #ifdef NO_IMPORT_ARRAY
 #undef NO_IMPORT_ARRAY
 #endif
-#include <xbob.learn.activation/api.h>
+#include <xbob.blitz/capi.h>
 #include <xbob.blitz/cleanup.h>
+#include <xbob.io/api.h>
+#include <xbob.learn.activation/api.h>
 
 static PyMethodDef module_methods[] = {
     {0}  /* Sentinel */
@@ -53,7 +55,7 @@ static PyObject* create_module (void) {
   auto m_ = make_safe(m);
 
   /* register some constants */
-  if (PyModule_AddIntConstant(m, "__api_version__", XBOB_IO_API_VERSION) < 0) return 0;
+  if (PyModule_AddIntConstant(m, "__api_version__", XBOB_LEARN_LINEAR_API_VERSION) < 0) return 0;
   if (PyModule_AddStringConstant(m, "__version__", XBOB_EXT_MODULE_VERSION) < 0) return 0;
 
   /* register the types to python */
