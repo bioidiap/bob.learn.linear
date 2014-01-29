@@ -366,43 +366,47 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_Train
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "O|O!", kwlist,
         &X, &PyBobLearnLinearMachine_Type, &machine)) return 0;
 
-  if (!PySequence_Check(X)) {
-    PyErr_Format(PyExc_TypeError, "`%s' requires an input sequence for parameter `X', but you passed a `%s' which does not implement the sequence protocol", Py_TYPE(self)->tp_name, Py_TYPE(X)->tp_name);
+  /** 
+  // Note: strangely, if you pass dict.values(), this check does not work
+  if (!PyIter_Check(X)) {
+    PyErr_Format(PyExc_TypeError, "`%s' requires an iterable for parameter `X', but you passed `%s' which does not implement the iterator protocol", Py_TYPE(self)->tp_name, Py_TYPE(X)->tp_name);
     return 0;
   }
+  **/
 
   /* Checks and converts all entries */
   std::vector<blitz::Array<double,2> > Xseq;
   std::vector<std::shared_ptr<PyBlitzArrayObject>> Xseq_;
-  Py_ssize_t size = PySequence_Fast_GET_SIZE(X);
 
-  if (size < 2) {
-    PyErr_Format(PyExc_RuntimeError, "`%s' requires an input sequence for parameter `X' with at least two entries (representing two classes), but you have passed something that has only %" PY_FORMAT_SIZE_T "d entries", Py_TYPE(self)->tp_name, size);
-    return 0;
-  }
+  PyObject* iterator = PyObject_GetIter(X);
+  if (!iterator) return 0;
+  auto iterator_ = make_safe(iterator);
 
-  Xseq.reserve(size);
-  Xseq_.reserve(size);
-
-  for (Py_ssize_t k=0; k<size; ++k) {
-
+  while (PyObject* item = PyIter_Next(iterator)) {
+    auto item_ = make_safe(item);
+    
     PyBlitzArrayObject* bz = 0;
-    PyObject* borrowed = PySequence_Fast_GET_ITEM(X, k);
 
-    if (!PyBlitzArray_Converter(borrowed, &bz)) {
-      PyErr_Format(PyExc_TypeError, "`%s' could not convert object of type `%s' at position %" PY_FORMAT_SIZE_T "d of input sequence `X' into an array - check your input", Py_TYPE(self)->tp_name, Py_TYPE(borrowed)->tp_name, k);
+    if (!PyBlitzArray_Converter(item, &bz)) {
+      PyErr_Format(PyExc_TypeError, "`%s' could not convert object of type `%s' at position %" PY_FORMAT_SIZE_T "d of input sequence `X' into an array - check your input", Py_TYPE(self)->tp_name, Py_TYPE(item)->tp_name, Xseq.size());
       return 0;
     }
 
     if (bz->ndim != 2 || bz->type_num != NPY_FLOAT64) {
-      PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input sequence `X' (or any other object coercible to that), but at position %" PY_FORMAT_SIZE_T "d I have found an object with %" PY_FORMAT_SIZE_T "d dimensions and with type `%s' which is not compatible - check your input", Py_TYPE(self)->tp_name, k, bz->ndim, PyBlitzArray_TypenumAsString(bz->type_num));
+      PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for input sequence `X' (or any other object coercible to that), but at position %" PY_FORMAT_SIZE_T "d I have found an object with %" PY_FORMAT_SIZE_T "d dimensions and with type `%s' which is not compatible - check your input", Py_TYPE(self)->tp_name, Xseq.size(), bz->ndim, PyBlitzArray_TypenumAsString(bz->type_num));
       Py_DECREF(bz);
       return 0;
     }
 
     Xseq_.push_back(make_safe(bz)); ///< prevents data deletion
     Xseq.push_back(*PyBlitzArrayCxx_AsBlitz<double,2>(bz)); ///< only a view!
+  }
 
+  if (PyErr_Occurred()) return 0;
+
+  if (Xseq.size() < 2) {
+    PyErr_Format(PyExc_RuntimeError, "`%s' requires an iterable for parameter `X' leading to, at least, two entries (representing two classes), but you have passed something that has only %" PY_FORMAT_SIZE_T "d entries", Py_TYPE(self)->tp_name, Xseq.size());
+    return 0;
   }
 
   // evaluates the expected rank for the output, allocate eigens value array
