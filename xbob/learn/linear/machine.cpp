@@ -180,7 +180,7 @@ static int PyBobLearnLinearMachine_init_copy
 static int PyBobLearnLinearMachine_init(PyBobLearnLinearMachineObject* self,
     PyObject* args, PyObject* kwds) {
 
-  Py_ssize_t nargs = args?PyTuple_Size(args):0 + kwds?PyDict_Size(kwds):0;
+  Py_ssize_t nargs = (args?PyTuple_Size(args):0) + (kwds?PyDict_Size(kwds):0);
 
   switch (nargs) {
 

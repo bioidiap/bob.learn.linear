@@ -208,7 +208,7 @@ int PyBobLearnLinearPCATrainer_Check(PyObject* o) {
 static int PyBobLearnLinearPCATrainer_init
 (PyBobLearnLinearPCATrainerObject* self, PyObject* args, PyObject* kwds) {
 
-  Py_ssize_t nargs = args?PyTuple_Size(args):0 + kwds?PyDict_Size(kwds):0;
+  Py_ssize_t nargs = (args?PyTuple_Size(args):0) + (kwds?PyDict_Size(kwds):0);
 
   switch (nargs) {
 
