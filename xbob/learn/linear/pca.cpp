@@ -385,7 +385,7 @@ static PyObject* PyBobLearnLinearPCATrainer_Train
   auto eigval_ = make_safe(eigval); ///< auto-delete in case of problems
 
   // allocates a new machine if that was not given by the user
-  std::shared_ptr<PyObject> machine_;
+  boost::shared_ptr<PyObject> machine_;
   if (!machine) {
     machine = PyBobLearnLinearMachine_NewFromSize(X_bz->extent(1), rank);
     machine_ = make_safe(machine); ///< auto-delete in case of problems

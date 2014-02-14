@@ -620,14 +620,14 @@ PyObject* PyBobLearnLinearMachine_Str(PyBobLearnLinearMachineObject* self) {
 
   static const std::string identity_str = IdentityActivation().str();
 
-  std::shared_ptr<PyObject> act;
+  boost::shared_ptr<PyObject> act;
   if (self->cxx->getActivation()->str() != identity_str) {
     act = make_safe(PyUnicode_FromFormat(" [act: %s]",
           self->cxx->getActivation()->str().c_str()));
   }
   else act = make_safe(PyUnicode_FromString(""));
 
-  std::shared_ptr<PyObject> sub;
+  boost::shared_ptr<PyObject> sub;
   if (blitz::any(self->cxx->getInputSubtraction())) {
     auto t = make_safe(PyBobLearnLinearMachine_getInputSubtraction(self, 0));
     auto t_str = make_safe(PYOBJECT_STR(t.get()));
@@ -635,7 +635,7 @@ PyObject* PyBobLearnLinearMachine_Str(PyBobLearnLinearMachineObject* self) {
   }
   else sub = make_safe(PyUnicode_FromString(""));
 
-  std::shared_ptr<PyObject> div;
+  boost::shared_ptr<PyObject> div;
   if (blitz::any(self->cxx->getInputDivision())) {
     auto t = make_safe(PyBobLearnLinearMachine_getInputDivision(self, 0));
     auto t_str = make_safe(PYOBJECT_STR(t.get()));
@@ -643,7 +643,7 @@ PyObject* PyBobLearnLinearMachine_Str(PyBobLearnLinearMachineObject* self) {
   }
   else div = make_safe(PyUnicode_FromString(""));
 
-  std::shared_ptr<PyObject> bias;
+  boost::shared_ptr<PyObject> bias;
   if (blitz::any(self->cxx->getBiases())) {
     auto t = make_safe(PyBobLearnLinearMachine_getBiases(self, 0));
     auto t_str = make_safe(PYOBJECT_STR(t.get()));

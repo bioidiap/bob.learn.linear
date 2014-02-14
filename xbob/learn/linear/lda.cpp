@@ -376,7 +376,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_Train
 
   /* Checks and converts all entries */
   std::vector<blitz::Array<double,2> > Xseq;
-  std::vector<std::shared_ptr<PyBlitzArrayObject>> Xseq_;
+  std::vector<boost::shared_ptr<PyBlitzArrayObject>> Xseq_;
 
   PyObject* iterator = PyObject_GetIter(X);
   if (!iterator) return 0;
@@ -415,7 +415,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_Train
   auto eigval_ = make_safe(eigval); ///< auto-delete in case of problems
 
   // allocates a new machine if that was not given by the user
-  std::shared_ptr<PyObject> machine_;
+  boost::shared_ptr<PyObject> machine_;
   if (!machine) {
     machine = PyBobLearnLinearMachine_NewFromSize(Xseq[0].extent(1), rank);
     machine_ = make_safe(machine); ///< auto-delete in case of problems
@@ -491,7 +491,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_OutputSize
 
   /* Checks and converts all entries */
   std::vector<blitz::Array<double,2> > Xseq;
-  std::vector<std::shared_ptr<PyBlitzArrayObject>> Xseq_;
+  std::vector<boost::shared_ptr<PyBlitzArrayObject>> Xseq_;
   Py_ssize_t size = PySequence_Fast_GET_SIZE(X);
 
   if (size < 2) {
