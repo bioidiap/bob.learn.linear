@@ -25,7 +25,7 @@ PyDoc_STRVAR(s_pcatrainer_doc,
 PCATrainer(other) -> new PCATrainer\n\
 \n\
 Sets a linear machine to perform the Principal Component\n\
-Analysis (a.k.a. Karhunen-Loève Transform) on a given dataset\n\
+Analysis (a.k.a. Karhunen-Loeve Transform) on a given dataset\n\
 using either Singular Value Decomposition (SVD, *the\n\
 default*) or the Covariance Matrix Method.\n\
 \n\
