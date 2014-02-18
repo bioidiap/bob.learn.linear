@@ -10,10 +10,10 @@
 
 .. testsetup:: *
 
-   import numpy
-   import bob
-   import tempfile
    import os
+   import numpy
+   import tempfile
+   import xbob.learn.linear
 
    current_directory = os.path.realpath(os.curdir)
    temp_dir = tempfile.mkdtemp(prefix='bob_doctest_')
@@ -126,7 +126,7 @@ property:
 Linear machine trainers
 -----------------------
 
-Next, we examine available ways to train a :py:class:`bob.learn.linear.Machine`
+Next, we examine available ways to train a :py:class:`xbob.learn.linear.Machine`
 so they can do something useful for you.
 
 Principal component analysis
@@ -152,8 +152,8 @@ this container is a 2D :py:class:`numpy.ndarray`.
     [   3.8   -3.7 -100. ]]
 
 Once the training set has been defined, the overall procedure to train a
-:py:class:`bob.learn.linear.Machine` with a
-:py:class:`bob.learn.linear.PCATrainer` is simple and shown below. Please note
+:py:class:`xbob.learn.linear.Machine` with a
+:py:class:`xbob.learn.linear.PCATrainer` is simple and shown below. Please note
 that the concepts remains very similar for most of the other `trainers` and
 `machines`.
 
@@ -181,9 +181,9 @@ Next, input data can be projected using this learned projection matrix
 Linear discriminant analysis
 ============================
 
-**LDA** [2]_ is another way to train a :py:class:`bob.learn.linear.Machine`.
+**LDA** [2]_ is another way to train a :py:class:`xbob.learn.linear.Machine`.
 The associated |project| class is
-:py:class:`bob.learn.linear.FisherLDATrainer`.
+:py:class:`xbob.learn.linear.FisherLDATrainer`.
 
 In contrast to **PCA** [1]_, **LDA** [2]_ is a `supervised` technique.
 Furthermore, the training data should be organized differently. It is indeed
@@ -197,13 +197,13 @@ required to be a list of 2D :py:class:`numpy.ndarray`\'s, one for each class.
    >>> data = [data1,data2]
 
 Once the training set has been defined, the procedure to train the
-:py:class:`bob.learn.linear.Machine` with **LDA** is very similar to the one
+:py:class:`xbob.learn.linear.Machine` with **LDA** is very similar to the one
 for **PCA**. This is shown below.
 
 .. doctest::
    :options: +NORMALIZE_WHITESPACE
 
-   >>> trainer = bob.learn.linear.FisherLDATrainer()
+   >>> trainer = xbob.learn.linear.FisherLDATrainer()
    >>> [machine,eig_vals] = trainer.train(data)  # Trains the machine with the given data
    >>> print(eig_vals)  # doctest: +SKIP
    [ 13.10097786 0. ]
