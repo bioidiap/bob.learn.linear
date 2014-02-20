@@ -15,6 +15,8 @@
    import tempfile
    import xbob.learn.linear
 
+   numpy.set_printoptions(precision=3, suppress=True)
+
    current_directory = os.path.realpath(os.curdir)
    temp_dir = tempfile.mkdtemp(prefix='bob_doctest_')
    os.chdir(temp_dir)
