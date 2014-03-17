@@ -7,5 +7,4 @@ def get_include():
   return __import__('pkg_resources').resource_filename(__name__, 'include')
 
 # gets sphinx autodoc done right - don't remove it
-__all__ = [k for k in dir() if not k.startswith('_')]
-del k
+__all__ = [_ for _ in dir() if not _.startswith('_')]
