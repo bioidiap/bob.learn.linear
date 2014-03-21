@@ -12,8 +12,8 @@ This module contains base functionality from Bob bound to Python, available in
 the C++ counter-part ``bob::machine``. It includes machines from our Machine
 Learning core.
 
-User Guide
-----------
+Documentation
+-------------
 
 .. toctree::
    :maxdepth: 2
