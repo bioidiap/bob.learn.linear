@@ -4,6 +4,14 @@
 
 .. image:: https://travis-ci.org/bioidiap/xbob.learn.linear.svg?branch=master
    :target: https://travis-ci.org/bioidiap/xbob.learn.linear
+.. image:: https://coveralls.io/repos/bioidiap/xbob.learn.linear/badge.png
+   :target: https://coveralls.io/r/bioidiap/xbob.learn.linear
+.. image:: http://img.shields.io/github/tag/bioidiap/xbob.learn.linear.png
+   :target: https://github.com/bioidiap/xbob.learn.linear
+.. image:: http://img.shields.io/pypi/v/xbob.learn.linear.png
+   :target: https://pypi.python.org/pypi/xbob.learn.linear
+.. image:: http://img.shields.io/pypi/dm/xbob.learn.linear.png
+   :target: https://pypi.python.org/pypi/xbob.learn.linear
 
 ==============================================================
  Python bindings for bob.machine's LinearMachine and Trainers
