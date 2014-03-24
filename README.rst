@@ -2,6 +2,9 @@
 .. Andre Anjos <andre.anjos@idiap.ch>
 .. Fri 13 Dec 2013 12:35:22 CET
 
+.. image:: https://travis-ci.org/bioidiap/xbob.learn.linear.svg?branch=master
+   :target: https://travis-ci.org/bioidiap/xbob.learn.linear
+
 ==============================================================
  Python bindings for bob.machine's LinearMachine and Trainers
 ==============================================================

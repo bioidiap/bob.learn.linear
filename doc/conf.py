@@ -31,7 +31,6 @@ extensions = [
   'sphinx.ext.autosummary',
   'sphinx.ext.doctest',
   'sphinx.ext.intersphinx',
-  'matplotlib.sphinxext.plot_directive',
   ]
 
 # The viewcode extension appeared only on Sphinx >= 1.0.0

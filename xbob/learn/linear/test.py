@@ -16,9 +16,35 @@ import numpy
 from . import Machine, PCATrainer, FisherLDATrainer
 #from . import WhiteningTrainer, EMPCATrainer, WCCNTrainer
 
-
 from xbob.learn.activation import HyperbolicTangent, Identity
 from xbob.io import HDF5File
+
+def bob_at_least(version_geq):
+  '''Decorator to check if at least a certain version of Bob is installed
+
+  To use this, decorate your test routine with something like:
+
+  .. code-block:: python
+
+    @bob_at_least('1.2.2')
+
+  '''
+  import functools
+  from distutils.version import StrictVersion
+
+  def test_wrapper(test):
+
+    @functools.wraps(test)
+    def wrapper(*args, **kwargs):
+      from .version import externals
+      inst = StrictVersion(externals['Bob'][0])
+      if inst < version_geq:
+        raise nose.plugins.skip.SkipTest('Bob version installed (%s) is smaller than required for this test (%s)' % (externals['Bob'][0], version_geq))
+      return test(*args, **kwargs)
+
+    return wrapper
+
+  return test_wrapper
 
 def F(f):
   """Returns the test file on the "data" subdirectory"""
@@ -266,6 +292,28 @@ def test_pca_versus_matlab_princomp():
   assert numpy.allclose(eig_vals_svd, eig_val_correct)
   assert machine_svd.weights.shape == (2,2)
 
+@bob_at_least('1.3.0a0')
+def test_pca_versus_matlab_princomp_safe():
+
+  # Tests our SVD/PCA extractor.
+  data = numpy.array([
+      [2.5, 2.4],
+      [0.5, 0.7],
+      [2.2, 2.9],
+      [1.9, 2.2],
+      [3.1, 3.0],
+      [2.3, 2.7],
+      [2., 1.6],
+      [1., 1.1],
+      [1.5, 1.6],
+      [1.1, 0.9],
+      ], dtype='float64')
+
+  # Expected results (from Matlab's princomp) - a good ground truth?
+  eig_val_correct = numpy.array([1.28402771, 0.0490834], 'float64')
+  eig_vec_correct = numpy.array([[-0.6778734, -0.73517866], [-0.73517866, 0.6778734]], 'float64')
+
+  T = PCATrainer()
   T.safe_svd = True
   machine_safe_svd, eig_vals_safe_svd = T.train(data)
 
@@ -273,6 +321,27 @@ def test_pca_versus_matlab_princomp():
   assert numpy.allclose(eig_vals_safe_svd, eig_val_correct)
   assert machine_safe_svd.weights.shape == (2,2)
 
+def test_pca_versus_matlab_princomp_cov():
+
+  # Tests our SVD/PCA extractor.
+  data = numpy.array([
+      [2.5, 2.4],
+      [0.5, 0.7],
+      [2.2, 2.9],
+      [1.9, 2.2],
+      [3.1, 3.0],
+      [2.3, 2.7],
+      [2., 1.6],
+      [1., 1.1],
+      [1.5, 1.6],
+      [1.1, 0.9],
+      ], dtype='float64')
+
+  # Expected results (from Matlab's princomp) - a good ground truth?
+  eig_val_correct = numpy.array([1.28402771, 0.0490834], 'float64')
+  eig_vec_correct = numpy.array([[-0.6778734, -0.73517866], [-0.73517866, 0.6778734]], 'float64')
+
+  T = PCATrainer()
   T.use_svd = False #make it use the covariance method
   machine_cov, eig_vals_cov = T.train(data)
 
@@ -333,22 +402,25 @@ def test_pca_trainer_comparisons():
 
   t7 = PCATrainer(t1)
   assert t1 == t7
+
+@bob_at_least('1.3.0a0')
+def test_pca_trainer_comparisons_safe():
+
+  t1 = PCATrainer()
+  t7 = PCATrainer(t1)
+
   t7.safe_svd = True
   assert t1 != t7
   t7.safe_svd = False
   assert t1 == t7
-
 
 def test_pca_svd_vs_cov_random_1():
 
   # Tests our SVD/PCA extractor.
   data = numpy.random.rand(1000,4)
 
-  # Train method 1
   T = PCATrainer()
   machine_svd, eig_vals_svd = T.train(data)
-  T.safe_svd = True
-  machine_safe_svd, eig_vals_safe_svd = T.train(data)
   T.use_svd = False #make it use the covariance method
   machine_cov, eig_vals_cov = T.train(data)
 
@@ -358,11 +430,24 @@ def test_pca_svd_vs_cov_random_1():
   assert numpy.allclose(machine_svd.input_divide, machine_cov.input_divide)
   assert numpy.allclose(abs(machine_svd.weights/machine_cov.weights), 1.0)
 
-  assert numpy.allclose(eig_vals_svd, eig_vals_safe_svd)
-  assert numpy.allclose(machine_svd.input_subtract, machine_safe_svd.input_subtract)
-  assert numpy.allclose(machine_svd.input_divide, machine_safe_svd.input_divide)
-  assert numpy.allclose(abs(machine_svd.weights/machine_safe_svd.weights), 1.0)
+@bob_at_least('1.3.0a0')
+def test_pca_svd_vs_cov_random_1_safe():
 
+  # Tests our SVD/PCA extractor.
+  data = numpy.random.rand(1000,4)
+
+  # Train method 1
+  T = PCATrainer()
+  T.safe_svd = True
+  machine_svd, eig_vals_svd = T.train(data)
+  T.use_svd = False #make it use the covariance method
+  machine_cov, eig_vals_cov = T.train(data)
+
+  assert numpy.allclose(eig_vals_svd, eig_vals_cov)
+  assert machine_svd.weights.shape == (4,4)
+  assert numpy.allclose(machine_svd.input_subtract, machine_cov.input_subtract)
+  assert numpy.allclose(machine_svd.input_divide, machine_cov.input_divide)
+  assert numpy.allclose(abs(machine_svd.weights/machine_cov.weights), 1.0)
 
 def test_pca_svd_vs_cov_random_2():
 
@@ -372,8 +457,6 @@ def test_pca_svd_vs_cov_random_2():
   # Train method 1
   T = PCATrainer()
   machine_svd, eig_vals_svd = T.train(data)
-  T.safe_svd = True
-  machine_safe_svd, eig_vals_safe_svd = T.train(data)
   T.use_svd = False #make it use the covariance method
   machine_cov, eig_vals_cov = T.train(data)
 
@@ -383,10 +466,24 @@ def test_pca_svd_vs_cov_random_2():
   assert numpy.allclose(machine_svd.input_divide, machine_cov.input_divide)
   assert numpy.allclose(abs(machine_svd.weights/machine_cov.weights), 1.0)
 
-  assert numpy.allclose(eig_vals_svd, eig_vals_safe_svd)
-  assert numpy.allclose(machine_svd.input_subtract, machine_safe_svd.input_subtract)
-  assert numpy.allclose(machine_svd.input_divide, machine_safe_svd.input_divide)
-  assert numpy.allclose(abs(machine_svd.weights/machine_safe_svd.weights), 1.0)
+@bob_at_least('1.3.0a0')
+def test_pca_svd_vs_cov_random_2_safe():
+
+  # Tests our SVD/PCA extractor.
+  data = numpy.random.rand(15,60)
+
+  # Train method 1
+  T = PCATrainer()
+  T.safe_svd = True
+  machine_svd, eig_vals_svd = T.train(data)
+  T.use_svd = False #make it use the covariance method
+  machine_cov, eig_vals_cov = T.train(data)
+
+  assert numpy.allclose(eig_vals_svd, eig_vals_cov)
+  assert machine_svd.weights.shape == (60,14)
+  assert numpy.allclose(machine_svd.input_subtract, machine_cov.input_subtract)
+  assert numpy.allclose(machine_svd.input_divide, machine_cov.input_divide)
+  assert numpy.allclose(abs(machine_svd.weights/machine_cov.weights), 1.0)
 
 def test_fisher_lda_settings():
 
