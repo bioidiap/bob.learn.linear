@@ -10,6 +10,7 @@
 #define XBOB_LEARN_LINEAR_MODULE
 #include <xbob.blitz/cppapi.h>
 #include <xbob.blitz/cleanup.h>
+#include <bob/config.h>
 #include <bob/trainer/PCATrainer.h>
 #include <xbob.learn.linear/api.h>
 #include <structmember.h>
