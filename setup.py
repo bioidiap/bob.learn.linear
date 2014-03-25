@@ -27,7 +27,7 @@ setup(
     name='xbob.learn.linear',
     version=version,
     description='Bindings for bob.machine\'s LinearMachine and Trainers',
-    url='http://github.com/anjos/xbob.learn.linear',
+    url='http://github.com/bioidiap/xbob.learn.linear',
     license='BSD',
     author='Andre Anjos',
     author_email='andre.anjos@idiap.ch',
