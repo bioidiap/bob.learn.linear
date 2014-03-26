@@ -853,7 +853,7 @@ static PyObject* PyBobLearnLinearMachine_Save
 (PyBobLearnLinearMachineObject* self, PyObject* f) {
 
   if (!PyBobIoHDF5File_Check(f)) {
-    PyErr_Format(PyExc_TypeError, "Linear Machine cannot write itself to `%s', only to an HDF5 file", Py_TYPE(f)->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' cannot write itself to `%s', only to an HDF5 file", Py_TYPE(self)->tp_name, Py_TYPE(f)->tp_name);
     return 0;
   }
 
@@ -867,8 +867,8 @@ static PyObject* PyBobLearnLinearMachine_Save
     return 0;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot write data to file `%s' (at group `%s'): unknown exception caught", h5f->f->filename().c_str(),
-        h5f->f->cwd().c_str());
+    PyErr_Format(PyExc_RuntimeError, "`%s' cannot write data to file `%s' (at group `%s'): unknown exception caught", Py_TYPE(self)->tp_name,
+        h5f->f->filename().c_str(), h5f->f->cwd().c_str());
     return 0;
   }
 
