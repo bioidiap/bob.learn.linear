@@ -853,7 +853,7 @@ static PyObject* PyBobLearnLinearMachine_Save
 (PyBobLearnLinearMachineObject* self, PyObject* f) {
 
   if (!PyBobIoHDF5File_Check(f)) {
-    PyErr_Format(PyExc_TypeError, "Activation function cannot write itself to `%s', only to an HDF5 file", Py_TYPE(f)->tp_name);
+    PyErr_Format(PyExc_TypeError, "Linear Machine cannot write itself to `%s', only to an HDF5 file", Py_TYPE(f)->tp_name);
     return 0;
   }
 
