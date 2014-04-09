@@ -575,7 +575,7 @@ PyObject* PyBobLearnLinearMachine_Repr(PyBobLearnLinearMachineObject* self) {
   if (!weights) return 0;
   auto dtype = make_safe(PyObject_GetAttrString(weights.get(), "dtype"));
   auto dtype_str = make_safe(PYOBJECT_STR(dtype.get()));
-  auto shape = make_safe(PyObject_GetAttrString(weights.get(), "shape"));
+  auto shape = make_safe(PyObject_GetAttrString(shape.get(), "shape"));
   auto shape_str = make_safe(PyObject_Str(shape.get()));
 
   PyObject* retval = 0;
@@ -656,7 +656,7 @@ PyObject* PyBobLearnLinearMachine_Str(PyBobLearnLinearMachineObject* self) {
   auto weights_str = make_safe(PYOBJECT_STR(weights.get()));
   auto dtype = make_safe(PyObject_GetAttrString(weights.get(), "dtype"));
   auto dtype_str = make_safe(PYOBJECT_STR(dtype.get()));
-  auto shape = make_safe(PyObject_GetAttrString(weights.get(), "shape"));
+  auto shape = make_safe(PyObject_GetAttrString(shape.get(), "shape"));
 
   PyObject* retval = PyUnicode_FromFormat("%s (%U) %" PY_FORMAT_SIZE_T "d inputs, %" PY_FORMAT_SIZE_T "d outputs%U%U%U%U\n %U",
     Py_TYPE(self)->tp_name, dtype_str.get(),
