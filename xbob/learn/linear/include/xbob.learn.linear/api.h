@@ -21,11 +21,27 @@
  * C API functions *
  *******************/
 
+/* Enum defining entries in the function table */
+enum _PyBobLearnLinear_ENUM{
+  PyXbobLearnLinear_APIVersion_NUM = 0,
+  // Bindings for xbob.learn.linear.Machine
+  PyBobLearnLinearMachine_Type_NUM,
+  PyBobLearnLinearMachine_Check_NUM,
+  PyBobLearnLinearMachine_NewFromSize_NUM,
+  // Bindings for xbob.learn.linear.PCATrainer
+  PyBobLearnLinearPCATrainer_Type_NUM,
+  PyBobLearnLinearPCATrainer_Check_NUM,
+  // Bindings for xbob.learn.linear.FisherLDATrainer
+  PyBobLearnLinearFisherLDATrainer_Type_NUM,
+  PyBobLearnLinearFisherLDATrainer_Check_NUM,
+  // Total number of C API pointers
+  PyXbobLearnLinear_API_pointers
+};
+
 /**************
  * Versioning *
  **************/
 
-#define PyXbobLearnLinear_APIVersion_NUM 0
 #define PyXbobLearnLinear_APIVersion_TYPE int
 
 /******************************************
@@ -37,14 +53,11 @@ typedef struct {
   bob::machine::LinearMachine* cxx;
 } PyBobLearnLinearMachineObject;
 
-#define PyBobLearnLinearMachine_Type_NUM 1
 #define PyBobLearnLinearMachine_Type_TYPE PyTypeObject
 
-#define PyBobLearnLinearMachine_Check_NUM 2
 #define PyBobLearnLinearMachine_Check_RET int
 #define PyBobLearnLinearMachine_Check_PROTO (PyObject* o)
 
-#define PyBobLearnLinearMachine_NewFromSize_NUM 3
 #define PyBobLearnLinearMachine_NewFromSize_RET PyObject*
 #define PyBobLearnLinearMachine_NewFromSize_PROTO (Py_ssize_t i, Py_ssize_t o)
 
@@ -57,10 +70,8 @@ typedef struct {
   bob::trainer::PCATrainer* cxx;
 } PyBobLearnLinearPCATrainerObject;
 
-#define PyBobLearnLinearPCATrainer_Type_NUM 4
 #define PyBobLearnLinearPCATrainer_Type_TYPE PyTypeObject
 
-#define PyBobLearnLinearPCATrainer_Check_NUM 5
 #define PyBobLearnLinearPCATrainer_Check_RET int
 #define PyBobLearnLinearPCATrainer_Check_PROTO (PyObject* o)
 
@@ -73,15 +84,11 @@ typedef struct {
   bob::trainer::FisherLDATrainer* cxx;
 } PyBobLearnLinearFisherLDATrainerObject;
 
-#define PyBobLearnLinearFisherLDATrainer_Type_NUM 6
 #define PyBobLearnLinearFisherLDATrainer_Type_TYPE PyTypeObject
 
-#define PyBobLearnLinearFisherLDATrainer_Check_NUM 7
 #define PyBobLearnLinearFisherLDATrainer_Check_RET int
 #define PyBobLearnLinearFisherLDATrainer_Check_PROTO (PyObject* o)
 
-/* Total number of C API pointers */
-#define PyXbobLearnLinear_API_pointers 8
 
 #ifdef XBOB_LEARN_LINEAR_MODULE
 
