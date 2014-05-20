@@ -14,6 +14,7 @@
    import numpy
    import tempfile
    import xbob.learn.linear
+   import xbob.io.base
 
    numpy.set_printoptions(precision=3, suppress=True)
 
@@ -61,15 +62,15 @@ call its :py:meth:`xbob.learn.linear.Machine.__call__()` operator.
 
 The first thing to notice about machines is that they can be stored and
 retrieved in HDF5 files (for more details in manipulating HDF5 files, please
-consult the documentation for :py:mod:`xbob.io`. To save the before metioned
-machine to a file, just use the machine's
+consult the documentation for :py:mod:`xbob.io.base`. To save the before
+metioned machine to a file, just use the machine's
 :py:meth:`xbob.learn.linear.Machine.save`` command. Because several machines
-can be stored on the same :py:class:`xbob.io.HDF5File`, we let the user open
-the file and set it up before the machine can write to it:
+can be stored on the same :py:class:`xbob.io.base.HDF5File`, we let the user
+open the file and set it up before the machine can write to it:
 
 .. doctest::
 
-  >>> myh5_file = xbob.io.HDF5File('linear.hdf5', 'w')
+  >>> myh5_file = xbob.io.base.HDF5File('linear.hdf5', 'w')
   >>> #do other operations on myh5_file to set it up, optionally
   >>> machine.save(myh5_file)
   >>> del myh5_file #close
@@ -78,7 +79,7 @@ You can load the machine again in a similar way:
 
 .. doctest::
 
-  >>> myh5_file = xbob.io.HDF5File('linear.hdf5')
+  >>> myh5_file = xbob.io.base.HDF5File('linear.hdf5')
   >>> reloaded = xbob.learn.linear.Machine(myh5_file)
   >>> numpy.array_equal(machine.weights, reloaded.weights)
   True

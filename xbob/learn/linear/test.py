@@ -17,7 +17,7 @@ from . import Machine, PCATrainer, FisherLDATrainer
 #from . import WhiteningTrainer, EMPCATrainer, WCCNTrainer
 
 from xbob.learn.activation import HyperbolicTangent, Identity
-from xbob.io import HDF5File
+from xbob.io.base import HDF5File
 
 def bob_at_least(version_geq):
   '''Decorator to check if at least a certain version of Bob is installed

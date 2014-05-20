@@ -21,7 +21,7 @@
 #endif
 #include <xbob.blitz/capi.h>
 #include <xbob.blitz/cleanup.h>
-#include <xbob.io/config.h>
+#include <xbob.io.base/config.h>
 #include <xbob.learn.activation/config.h>
 #include <xbob.learn.linear/config.h>
 
@@ -106,10 +106,10 @@ static PyObject* xbob_blitz_version() {
 }
 
 /**
- * xbob.io c/c++ api version
+ * xbob.io.base c/c++ api version
  */
-static PyObject* xbob_io_version() {
-  return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(XBOB_IO_API_VERSION));
+static PyObject* xbob_io_base_version() {
+  return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(XBOB_IO_BASE_API_VERSION));
 }
 
 /**
@@ -131,7 +131,7 @@ static PyObject* build_version_dictionary() {
   if (!dict_steal(retval, "Python", python_version())) return 0;
   if (!dict_steal(retval, "NumPy", numpy_version())) return 0;
   if (!dict_steal(retval, "xbob.blitz", xbob_blitz_version())) return 0;
-  if (!dict_steal(retval, "xbob.io", xbob_io_version())) return 0;
+  if (!dict_steal(retval, "xbob.io", xbob_io_base_version())) return 0;
   if (!dict_steal(retval, "xbob.learn.activation", xbob_learn_activation_version())) return 0;
   if (!dict_steal(retval, "Bob", bob_version())) return 0;
 
@@ -178,8 +178,12 @@ static PyObject* create_module (void) {
   if (!externals) return 0;
   if (PyModule_AddObject(m, "externals", externals) < 0) return 0;
 
-  /* imports xbob.io C-API + dependencies */
-  if (import_xbob_blitz() < 0) return 0;
+  /* imports dependencies */
+  if (import_xbob_blitz() < 0) {
+    PyErr_Print();
+    PyErr_Format(PyExc_ImportError, "cannot import `%s'", XBOB_EXT_MODULE_NAME);
+    return 0;
+  }
 
   Py_INCREF(m);
   return m;
