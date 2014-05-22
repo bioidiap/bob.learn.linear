@@ -3,7 +3,7 @@
 # Andre Anjos <andre.anjos@idiap.ch>
 # Tue May 31 16:55:10 2011 +0200
 #
-# Copyright (C) 2011-2013 Idiap Research Institute, Martigny, Switzerland
+# Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
 
 """Tests on the machine infrastructure.
 """
@@ -13,38 +13,13 @@ import nose.tools
 import math
 import numpy
 
-from . import Machine, PCATrainer, FisherLDATrainer
-#from . import WhiteningTrainer, EMPCATrainer, WCCNTrainer
+from . import Machine, PCATrainer, FisherLDATrainer, CGLogRegTrainer
+#from . import WhiteningTrainer, WCCNTrainer
 
+import xbob.io.base
 from xbob.learn.activation import HyperbolicTangent, Identity
 from xbob.io.base import HDF5File
-
-def bob_at_least(version_geq):
-  '''Decorator to check if at least a certain version of Bob is installed
-
-  To use this, decorate your test routine with something like:
-
-  .. code-block:: python
-
-    @bob_at_least('1.2.2')
-
-  '''
-  import functools
-  from distutils.version import StrictVersion
-
-  def test_wrapper(test):
-
-    @functools.wraps(test)
-    def wrapper(*args, **kwargs):
-      from .version import externals
-      inst = StrictVersion(externals['Bob'][0])
-      if inst < version_geq:
-        raise nose.plugins.skip.SkipTest('Bob version installed (%s) is smaller than required for this test (%s)' % (externals['Bob'][0], version_geq))
-      return test(*args, **kwargs)
-
-    return wrapper
-
-  return test_wrapper
+from xbob.io.base.test_utils import datafile
 
 def F(f):
   """Returns the test file on the "data" subdirectory"""
@@ -292,7 +267,6 @@ def test_pca_versus_matlab_princomp():
   assert numpy.allclose(eig_vals_svd, eig_val_correct)
   assert machine_svd.weights.shape == (2,2)
 
-@bob_at_least('1.3.0a0')
 def test_pca_versus_matlab_princomp_safe():
 
   # Tests our SVD/PCA extractor.
@@ -403,7 +377,6 @@ def test_pca_trainer_comparisons():
   t7 = PCATrainer(t1)
   assert t1 == t7
 
-@bob_at_least('1.3.0a0')
 def test_pca_trainer_comparisons_safe():
 
   t1 = PCATrainer()
@@ -430,7 +403,6 @@ def test_pca_svd_vs_cov_random_1():
   assert numpy.allclose(machine_svd.input_divide, machine_cov.input_divide)
   assert numpy.allclose(abs(machine_svd.weights/machine_cov.weights), 1.0)
 
-@bob_at_least('1.3.0a0')
 def test_pca_svd_vs_cov_random_1_safe():
 
   # Tests our SVD/PCA extractor.
@@ -466,7 +438,6 @@ def test_pca_svd_vs_cov_random_2():
   assert numpy.allclose(machine_svd.input_divide, machine_cov.input_divide)
   assert numpy.allclose(abs(machine_svd.weights/machine_cov.weights), 1.0)
 
-@bob_at_least('1.3.0a0')
 def test_pca_svd_vs_cov_random_2_safe():
 
   # Tests our SVD/PCA extractor.
@@ -774,3 +745,148 @@ def test_wccn_train():
   assert numpy.allclose(m2.input_subtract, mean_ref, eps, eps)
   assert numpy.allclose(m2.weights, weight_ref, eps, eps)
   assert numpy.allclose(s2, sample_wccn_ref, eps, eps)
+
+def test_cglogreg():
+
+  # Tests our LLR Trainer.
+  positives = numpy.array([
+    [1.,1.2,-1.],
+    [2.,2.1,2.2],
+    [3.,2.9,3.1],
+    [4.,3.7,4.],
+    [5.,5.2,4.9],
+    [6.,6.1,5.9],
+    [7.,7.,7.3],
+    ], dtype='float64')
+
+  negatives = numpy.array([
+    [-10.,-9.2,-1.],
+    [-5.,-4.1,-0.5],
+    [-10.,-9.9,-1.8],
+    [-5.,-5.4,-0.3],
+    [-10.,-9.3,-0.7],
+    [-5.,-4.5,-0.5],
+    [-10.,-9.7,-1.2],
+    [-5.,-4.8,-0.2],
+    ], dtype='float64')
+
+  # Expected trained machine
+  #weights_ref= numpy.array([[13.5714], [19.3997], [-0.6432]])
+  weights_ref= numpy.array([[1.75536], [2.69297], [-0.54142]])
+  #bias_ref = numpy.array([55.3255])
+  bias_ref = numpy.array([7.26999])
+
+  # Features and expected outputs of the trained machine
+  feat1 = numpy.array([1.,2.,3.])
+  #out1 = 105.7668
+  out1 = 12.78703
+  feat2 = numpy.array([2.,3.,4.])
+  #out2 = 138.0947
+  out2 = 16.69394
+
+
+  # Trains a machine (method 1)
+  T = CGLogRegTrainer(0.5, 1e-5, 30)
+  machine1 = T.train(negatives,positives)
+
+  # Makes sure results are good
+  assert (abs(machine1.weights - weights_ref) < 2e-4).all()
+  assert (abs(machine1.biases - bias_ref) < 2e-4).all()
+  assert abs(machine1(feat1) - out1) < 2e-4
+  assert abs(machine1(feat2) - out2) < 2e-4
+
+  # Trains a machine (method 2)
+  machine2 = Machine()
+  T.train(negatives, positives, machine2)
+
+  # Makes sure results are good
+  assert (abs(machine2.weights - weights_ref) < 2e-4).all()
+  assert (abs(machine2.biases - bias_ref) < 2e-4).all()
+  assert abs(machine2(feat1) - out1) < 2e-4
+  assert abs(machine2(feat2) - out2) < 2e-4
+
+  # Expected trained machine (with regularization)
+  weights_ref= numpy.array([[0.54926], [0.58304], [0.06558]])
+  bias_ref = numpy.array([0.27897])
+
+  # Trains a machine (method 1)
+  T = CGLogRegTrainer(0.5, 1e-5, 30, 1.)
+  machine1 = T.train(negatives, positives)
+
+  # Makes sure results are good
+  assert (abs(machine1.weights - weights_ref) < 2e-4).all()
+  assert (abs(machine1.biases - bias_ref) < 2e-4).all()
+
+def test_cglogreg_norm():
+
+  # read some real test data;
+  # for toy examples the results are quite different...
+
+  pos1 = xbob.io.base.load(datafile('positives_isv.hdf5', __name__))
+  neg1 = xbob.io.base.load(datafile('negatives_isv.hdf5', __name__))
+
+  pos2 = xbob.io.base.load(datafile('positives_lda.hdf5', __name__))
+  neg2 = xbob.io.base.load(datafile('negatives_lda.hdf5', __name__))
+
+  negatives = numpy.vstack((neg1, neg2)).T
+  positives = numpy.vstack((pos1, pos2)).T
+
+  # Train the machine after mean-std norm
+  T = CGLogRegTrainer(0.5, 1e-10, 10000, mean_std_norm=True)
+  machine = T.train(negatives,positives)
+
+  # assert that mean and variance are correct
+  mean = numpy.mean(numpy.vstack((positives, negatives)), 0)
+  std = numpy.std(numpy.vstack((positives, negatives)), 0)
+
+  assert (abs(machine.input_subtract - mean) < 1e-10).all()
+  assert (abs(machine.input_divide - std) < 1e-10).all()
+
+  # apply it to test data
+  test1 = [1., -50.]
+  test2 = [0.5, -86.]
+
+  res1 = machine(test1)
+  res2 = machine(test2)
+
+  # normalize training data
+  pos = numpy.vstack([(positives[i] - mean) / std for i in range(len(positives))])
+  neg = numpy.vstack([(negatives[i] - mean) / std for i in range(len(negatives))])
+
+  # re-train the machine; should give identical results
+  T.mean_std_norm = False
+  machine = T.train(neg, pos)
+  machine.input_subtract = mean
+  machine.input_divide = std
+
+  # assert that the result is the same
+  assert abs(machine(test1) - res1) < 1e-10
+  assert abs(machine(test2) - res2) < 1e-10
+
+@nose.tools.nottest
+def test_cglogreg_norm_slow():
+
+  pos1 = xbob.io.base.load(datafile('positives_isv.hdf5', __name__))
+  neg1 = xbob.io.base.load(datafile('negatives_isv.hdf5', __name__))
+
+  pos2 = xbob.io.base.load(datafile('positives_lda.hdf5', __name__))
+  neg2 = xbob.io.base.load(datafile('negatives_lda.hdf5', __name__))
+
+  negatives = numpy.vstack((neg1, neg2)).T
+  positives = numpy.vstack((pos1, pos2)).T
+
+  T = CGLogRegTrainer(0.5, 1e-10, 10000, mean_std_norm=True)
+
+  # apply it to test data
+  test1 = [1., -50.]
+  test2 = [0.5, -86.]
+
+  res1 = machine(test1)
+  res2 = machine(test2)
+
+  # try the training without normalization
+  machine = T.train(negatives, positives)
+  # check that the results are at least approximately equal
+  # Note: lower values for epsilon and higher number of iterations improve the stability)
+  assert abs(machine(test1) - res1) < 1e-3
+  assert abs(machine(test2) - res2) < 1e-3

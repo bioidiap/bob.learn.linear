@@ -46,6 +46,9 @@ static PyObject* create_module (void) {
   PyBobLearnLinearFisherLDATrainer_Type.tp_new = PyType_GenericNew;
   if (PyType_Ready(&PyBobLearnLinearFisherLDATrainer_Type) < 0) return 0;
 
+  PyBobLearnLinearCGLogRegTrainer_Type.tp_new = PyType_GenericNew;
+  if (PyType_Ready(&PyBobLearnLinearCGLogRegTrainer_Type) < 0) return 0;
+
 # if PY_VERSION_HEX >= 0x03000000
   PyObject* m = PyModule_Create(&module_definition);
 # else
@@ -67,6 +70,9 @@ static PyObject* create_module (void) {
 
   Py_INCREF(&PyBobLearnLinearFisherLDATrainer_Type);
   if (PyModule_AddObject(m, "FisherLDATrainer", (PyObject *)&PyBobLearnLinearFisherLDATrainer_Type) < 0) return 0;
+
+  Py_INCREF(&PyBobLearnLinearCGLogRegTrainer_Type);
+  if (PyModule_AddObject(m, "CGLogRegTrainer", (PyObject *)&PyBobLearnLinearCGLogRegTrainer_Type) < 0) return 0;
 
   static void* PyXbobLearnLinear_API[PyXbobLearnLinear_API_pointers];
 
@@ -103,6 +109,14 @@ static PyObject* create_module (void) {
   PyXbobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Type_NUM] = (void *)&PyBobLearnLinearFisherLDATrainer_Type;
 
   PyXbobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Check_NUM] = (void *)&PyBobLearnLinearFisherLDATrainer_Check;
+
+  /**************************************************
+   * Bindings for xbob.learn.linear.CGLogRegTrainer *
+   **************************************************/
+
+  PyXbobLearnLinear_API[PyBobLearnLinearCGLogRegTrainer_Type_NUM] = (void *)&PyBobLearnLinearCGLogRegTrainer_Type;
+
+  PyXbobLearnLinear_API[PyBobLearnLinearCGLogRegTrainer_Check_NUM] = (void *)&PyBobLearnLinearCGLogRegTrainer_Check;
 
 #if PY_VERSION_HEX >= 0x02070000
 

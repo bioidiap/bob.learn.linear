@@ -37,7 +37,7 @@ resulting linear machine also divides the variables by the\n\
 standard deviation of each variable ensemble.\n\
 \n\
 There are two initializers for objects of this class. In the\n\
-first variant, the user can pass flag indicating if the trainer\n\
+first variant, the user can pass a flag indicating if the trainer\n\
 should use SVD (default) or the covariance method for PCA\n\
 extraction. The second initialization form copy constructs a\n\
 new trainer from an existing one.\n\
@@ -153,7 +153,7 @@ static int PyBobLearnLinearPCATrainer_init_bool
 
   int use_svd_ = PyObject_IsTrue(use_svd);
 
-  if (use_svd_ == -1) return -1;
+  if (use_svd_ == -1) return -1; //error on conversion
 
   try {
     self->cxx = new bob::learn::linear::PCATrainer(use_svd_?true:false);
@@ -208,45 +208,20 @@ int PyBobLearnLinearPCATrainer_Check(PyObject* o) {
 static int PyBobLearnLinearPCATrainer_init
 (PyBobLearnLinearPCATrainerObject* self, PyObject* args, PyObject* kwds) {
 
-  Py_ssize_t nargs = (args?PyTuple_Size(args):0) + (kwds?PyDict_Size(kwds):0);
-
-  switch (nargs) {
-
-    case 0: //default initializer
-      return PyBobLearnLinearPCATrainer_init_bool(self, args, kwds);
-
-    case 1:
-
-      {
-
-        PyObject* arg = 0; ///< borrowed (don't delete)
-        if (PyTuple_Size(args)) arg = PyTuple_GET_ITEM(args, 0);
-        else {
-          PyObject* tmp = PyDict_Values(kwds);
-          auto tmp_ = make_safe(tmp);
-          arg = PyList_GET_ITEM(tmp, 0);
-        }
-
-        if (PyBobLearnLinearPCATrainer_Check(arg)) {
-          return PyBobLearnLinearPCATrainer_init_copy(self, args, kwds);
-        }
-        else {
-          return PyBobLearnLinearPCATrainer_init_bool(self, args, kwds);
-        }
-
-        PyErr_Format(PyExc_TypeError, "cannot initialize `%s' with `%s' (see help)", Py_TYPE(self)->tp_name, Py_TYPE(arg)->tp_name);
-
-      }
-
-      break;
-
-    default:
-
-      PyErr_Format(PyExc_RuntimeError, "number of arguments mismatch - `%s' requires 0 or 1 arguments, but you provided %" PY_FORMAT_SIZE_T "d (see help)", Py_TYPE(self)->tp_name, nargs);
-
+  PyObject* arg = 0; ///< borrowed (don't delete)
+  if (PyTuple_Size(args)) arg = PyTuple_GET_ITEM(args, 0);
+  else {
+    if (!kwds) return PyBobLearnLinearPCATrainer_init_bool(self, args, kwds);
+    PyObject* tmp = PyDict_Values(kwds);
+    auto tmp_ = make_safe(tmp);
+    arg = PyList_GET_ITEM(tmp, 0);
   }
 
-  return -1;
+  if (PyBobLearnLinearPCATrainer_Check(arg)) {
+    return PyBobLearnLinearPCATrainer_init_copy(self, args, kwds);
+  }
+
+  return PyBobLearnLinearPCATrainer_init_bool(self, args, kwds);
 
 }
 

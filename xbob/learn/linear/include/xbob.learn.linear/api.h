@@ -13,6 +13,7 @@
 #include <xbob.learn.linear/machine.h>
 #include <xbob.learn.linear/pca.h>
 #include <xbob.learn.linear/lda.h>
+#include <xbob.learn.linear/logreg.h>
 
 #define XBOB_LEARN_LINEAR_MODULE_PREFIX xbob.learn.linear
 #define XBOB_LEARN_LINEAR_MODULE_NAME _library
@@ -34,6 +35,9 @@ enum _PyBobLearnLinear_ENUM{
   // Bindings for xbob.learn.linear.FisherLDATrainer
   PyBobLearnLinearFisherLDATrainer_Type_NUM,
   PyBobLearnLinearFisherLDATrainer_Check_NUM,
+  // Bindings for xbob.learn.linear.CGLogRegTrainer
+  PyBobLearnLinearCGLogRegTrainer_Type_NUM,
+  PyBobLearnLinearCGLogRegTrainer_Check_NUM,
   // Total number of C API pointers
   PyXbobLearnLinear_API_pointers
 };
@@ -89,6 +93,20 @@ typedef struct {
 #define PyBobLearnLinearFisherLDATrainer_Check_RET int
 #define PyBobLearnLinearFisherLDATrainer_Check_PROTO (PyObject* o)
 
+/**************************************************
+ * Bindings for xbob.learn.linear.CGLogRegTrainer *
+ **************************************************/
+
+typedef struct {
+  PyObject_HEAD
+  bob::learn::linear::CGLogRegTrainer* cxx;
+} PyBobLearnLinearCGLogRegTrainerObject;
+
+#define PyBobLearnLinearCGLogRegTrainer_Type_TYPE PyTypeObject
+
+#define PyBobLearnLinearCGLogRegTrainer_Check_RET int
+#define PyBobLearnLinearCGLogRegTrainer_Check_PROTO (PyObject* o)
+
 
 #ifdef XBOB_LEARN_LINEAR_MODULE
 
@@ -125,6 +143,14 @@ typedef struct {
   extern PyBobLearnLinearFisherLDATrainer_Type_TYPE PyBobLearnLinearFisherLDATrainer_Type;
 
   PyBobLearnLinearFisherLDATrainer_Check_RET PyBobLearnLinearFisherLDATrainer_Check PyBobLearnLinearFisherLDATrainer_Check_PROTO;
+
+  /**************************************************
+   * Bindings for xbob.learn.linear.CGLogRegTrainer *
+   **************************************************/
+
+  extern PyBobLearnLinearCGLogRegTrainer_Type_TYPE PyBobLearnLinearCGLogRegTrainer_Type;
+
+  PyBobLearnLinearCGLogRegTrainer_Check_RET PyBobLearnLinearCGLogRegTrainer_Check PyBobLearnLinearCGLogRegTrainer_Check_PROTO;
 
 #else
 
@@ -183,6 +209,14 @@ typedef struct {
 # define PyBobLearnLinearFisherLDATrainer_Type (*(PyBobLearnLinearFisherLDATrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Type_NUM])
 
 # define PyBobLearnLinearFisherLDATrainer_Check (*(PyBobLearnLinearFisherLDATrainer_Check_RET (*)PyBobLearnLinearFisherLDATrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Check_NUM])
+
+  /**************************************************
+   * Bindings for xbob.learn.linear.CGLogRegTrainer *
+   **************************************************/
+
+# define PyBobLearnLinearCGLogRegTrainer_Type (*(PyBobLearnLinearCGLogRegTrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearCGLogRegTrainer_Type_NUM])
+
+# define PyBobLearnLinearCGLogRegTrainer_Check (*(PyBobLearnLinearCGLogRegTrainer_Check_RET (*)PyBobLearnLinearCGLogRegTrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearCGLogRegTrainer_Check_NUM])
 
 # if !defined(NO_IMPORT_ARRAY)
 
