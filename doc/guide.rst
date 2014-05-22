@@ -234,15 +234,14 @@ The initialisation of the trainer and the machine:
 .. doctest::
    :options: +NORMALIZE_WHITESPACE
 
-   >>> t = bob.trainer.WhiteningTrainer()
-   >>> m = bob.machine.LinearMachine(3,3)
+   >>> t = xbob.learn.linear.WhiteningTrainer()
 
 Then, the training and projection are done as follows:
 
 .. doctest::
-   :options: +NORMALIZE_WHITESPACE
+   :options: +NORMALIZE_WHITESPACE, +ELLIPSIS
 
-   >>> t.train(m, data)
+   >>> m = t.train(data)
    >>> withened_sample = m.forward(sample)
 
 
@@ -262,7 +261,7 @@ The initialisation of the trainer is done as follows:
 .. doctest::
    :options: +NORMALIZE_WHITESPACE
 
-   >>> t = bob.trainer.WCCNTrainer()
+   >>> t = xbob.learn.linear.WCCNTrainer()
 
 Then, the training and projection are done as follows:
 

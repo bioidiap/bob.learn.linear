@@ -576,7 +576,7 @@ PyObject* PyBobLearnLinearMachine_Repr(PyBobLearnLinearMachineObject* self) {
   auto dtype = make_safe(PyObject_GetAttrString(weights.get(), "dtype"));
   auto dtype_str = make_safe(PYOBJECT_STR(dtype.get()));
   auto shape = make_safe(PyObject_GetAttrString(weights.get(), "shape"));
-  auto shape_str = make_safe(PyObject_Str(shape.get()));
+  auto shape_str = make_safe(PYOBJECT_STR(shape.get()));
 
   PyObject* retval = 0;
 
