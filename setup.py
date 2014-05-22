@@ -19,7 +19,7 @@ include_dirs = [
     xbob.learn.activation.get_include()
     ]
 
-packages = ['bob-machine >= 1.2.2', 'bob-trainer >= 1.2.2']
+packages = ['bob-machine >= 2.0.0a2', 'bob-io >= 2.0.0a2']
 version = '2.0.0a0'
 
 setup(
@@ -64,6 +64,12 @@ setup(
           "xbob/learn/linear/pca.cpp",
           "xbob/learn/linear/lda.cpp",
           "xbob/learn/linear/main.cpp",
+          "xbob/learn/linear/cpp/machine.cpp",
+          "xbob/learn/linear/cpp/pca.cpp",
+          "xbob/learn/linear/cpp/lda.cpp",
+          "xbob/learn/linear/cpp/logreg.cpp",
+          "xbob/learn/linear/cpp/wccn.cpp",
+          "xbob/learn/linear/cpp/whitening.cpp",
           ],
         packages = packages,
         include_dirs = include_dirs,

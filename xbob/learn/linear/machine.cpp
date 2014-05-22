@@ -67,7 +67,7 @@ static int PyBobLearnLinearMachine_init_sizes
         &input_size, &output_size)) return -1;
 
   try {
-    self->cxx = new bob::machine::LinearMachine(input_size, output_size);
+    self->cxx = new bob::learn::linear::Machine(input_size, output_size);
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
@@ -101,7 +101,7 @@ static int PyBobLearnLinearMachine_init_weights(PyBobLearnLinearMachineObject* s
   }
 
   try {
-    self->cxx = new bob::machine::LinearMachine
+    self->cxx = new bob::learn::linear::Machine
       (*PyBlitzArrayCxx_AsBlitz<double,2>(weights));
   }
   catch (std::exception& ex) {
@@ -132,7 +132,7 @@ static int PyBobLearnLinearMachine_init_hdf5(PyBobLearnLinearMachineObject* self
   auto h5f = reinterpret_cast<PyBobIoHDF5FileObject*>(config);
 
   try {
-    self->cxx = new bob::machine::LinearMachine(*(h5f->f));
+    self->cxx = new bob::learn::linear::Machine(*(h5f->f));
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
@@ -162,7 +162,7 @@ static int PyBobLearnLinearMachine_init_copy
   auto copy = reinterpret_cast<PyBobLearnLinearMachineObject*>(other);
 
   try {
-    self->cxx = new bob::machine::LinearMachine(*(copy->cxx));
+    self->cxx = new bob::learn::linear::Machine(*(copy->cxx));
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
@@ -1012,7 +1012,7 @@ PyObject* PyBobLearnLinearMachine_NewFromSize
 
   PyBobLearnLinearMachineObject* retval = (PyBobLearnLinearMachineObject*)PyBobLearnLinearMachine_new(&PyBobLearnLinearMachine_Type, 0, 0);
 
-  retval->cxx = new bob::machine::LinearMachine(input, output);
+  retval->cxx = new bob::learn::linear::Machine(input, output);
 
   return reinterpret_cast<PyObject*>(retval);
 

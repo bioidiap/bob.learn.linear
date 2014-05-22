@@ -10,9 +10,9 @@
 
 #include <Python.h>
 #include <xbob.learn.linear/config.h>
-#include <bob/machine/LinearMachine.h>
-#include <bob/trainer/PCATrainer.h>
-#include <bob/trainer/FisherLDATrainer.h>
+#include <xbob.learn.linear/machine.h>
+#include <xbob.learn.linear/pca.h>
+#include <xbob.learn.linear/lda.h>
 
 #define XBOB_LEARN_LINEAR_MODULE_PREFIX xbob.learn.linear
 #define XBOB_LEARN_LINEAR_MODULE_NAME _library
@@ -50,7 +50,7 @@ enum _PyBobLearnLinear_ENUM{
 
 typedef struct {
   PyObject_HEAD
-  bob::machine::LinearMachine* cxx;
+  bob::learn::linear::Machine* cxx;
 } PyBobLearnLinearMachineObject;
 
 #define PyBobLearnLinearMachine_Type_TYPE PyTypeObject
@@ -67,7 +67,7 @@ typedef struct {
 
 typedef struct {
   PyObject_HEAD
-  bob::trainer::PCATrainer* cxx;
+  bob::learn::linear::PCATrainer* cxx;
 } PyBobLearnLinearPCATrainerObject;
 
 #define PyBobLearnLinearPCATrainer_Type_TYPE PyTypeObject
@@ -81,7 +81,7 @@ typedef struct {
 
 typedef struct {
   PyObject_HEAD
-  bob::trainer::FisherLDATrainer* cxx;
+  bob::learn::linear::FisherLDATrainer* cxx;
 } PyBobLearnLinearFisherLDATrainerObject;
 
 #define PyBobLearnLinearFisherLDATrainer_Type_TYPE PyTypeObject

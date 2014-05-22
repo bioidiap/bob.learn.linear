@@ -11,7 +11,6 @@
 #include <xbob.blitz/cppapi.h>
 #include <xbob.blitz/cleanup.h>
 #include <bob/config.h>
-#include <bob/trainer/PCATrainer.h>
 #include <xbob.learn.linear/api.h>
 #include <structmember.h>
 
@@ -157,7 +156,7 @@ static int PyBobLearnLinearPCATrainer_init_bool
   if (use_svd_ == -1) return -1;
 
   try {
-    self->cxx = new bob::trainer::PCATrainer(use_svd_?true:false);
+    self->cxx = new bob::learn::linear::PCATrainer(use_svd_?true:false);
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
@@ -187,7 +186,7 @@ static int PyBobLearnLinearPCATrainer_init_copy
   auto copy = reinterpret_cast<PyBobLearnLinearPCATrainerObject*>(other);
 
   try {
-    self->cxx = new bob::trainer::PCATrainer(*(copy->cxx));
+    self->cxx = new bob::learn::linear::PCATrainer(*(copy->cxx));
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());

@@ -2,7 +2,7 @@
  * @author Andre Anjos <andre.anjos@idiap.ch>
  * @date Fri 13 Dec 2013 12:35:59 CET
  *
- * @brief Bindings to bob::machine
+ * @brief Bindings to bob::learn::linear
  */
 
 #define XBOB_LEARN_LINEAR_MODULE
@@ -20,7 +20,7 @@ static PyMethodDef module_methods[] = {
     {0}  /* Sentinel */
 };
 
-PyDoc_STRVAR(module_docstr, "bob::machine's linear machine and trainers");
+PyDoc_STRVAR(module_docstr, "Bob's Linear machine and trainers");
 
 int PyXbobLearnLinear_APIVersion = XBOB_LEARN_LINEAR_API_VERSION;
 

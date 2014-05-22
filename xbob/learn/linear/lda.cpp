@@ -10,7 +10,6 @@
 #define XBOB_LEARN_LINEAR_MODULE
 #include <xbob.blitz/cppapi.h>
 #include <xbob.blitz/cleanup.h>
-#include <bob/trainer/FisherLDATrainer.h>
 #include <xbob.learn.linear/api.h>
 #include <structmember.h>
 
@@ -146,7 +145,7 @@ static int PyBobLearnLinearFisherLDATrainer_init_bools
   if (strip_to_rank_ == -1) return -1;
 
   try {
-    self->cxx = new bob::trainer::FisherLDATrainer(use_pinv_?true:false,
+    self->cxx = new bob::learn::linear::FisherLDATrainer(use_pinv_?true:false,
         strip_to_rank_?true:false);
   }
   catch (std::exception& ex) {
@@ -177,7 +176,7 @@ static int PyBobLearnLinearFisherLDATrainer_init_copy
   auto copy = reinterpret_cast<PyBobLearnLinearFisherLDATrainerObject*>(other);
 
   try {
-    self->cxx = new bob::trainer::FisherLDATrainer(*(copy->cxx));
+    self->cxx = new bob::learn::linear::FisherLDATrainer(*(copy->cxx));
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
@@ -366,7 +365,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_Train
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "O|O!", kwlist,
         &X, &PyBobLearnLinearMachine_Type, &machine)) return 0;
 
-  /** 
+  /**
   // Note: strangely, if you pass dict.values(), this check does not work
   if (!PyIter_Check(X)) {
     PyErr_Format(PyExc_TypeError, "`%s' requires an iterable for parameter `X', but you passed `%s' which does not implement the iterator protocol", Py_TYPE(self)->tp_name, Py_TYPE(X)->tp_name);
@@ -384,7 +383,7 @@ static PyObject* PyBobLearnLinearFisherLDATrainer_Train
 
   while (PyObject* item = PyIter_Next(iterator)) {
     auto item_ = make_safe(item);
-    
+
     PyBlitzArrayObject* bz = 0;
 
     if (!PyBlitzArray_Converter(item, &bz)) {

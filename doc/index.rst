@@ -2,17 +2,25 @@
 .. Andre Anjos <andre.anjos@idiap.ch>
 .. Fri 13 Dec 2013 12:50:06 CET
 ..
-.. Copyright (C) 2011-2013 Idiap Research Institute, Martigny, Switzerland
+.. Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
 
-==============
- Bob Machines
-==============
+==================================
+ Bob Linear Machines and Trainers
+==================================
 
 .. todolist::
 
-This module contains base functionality from Bob bound to Python, available in
-the C++ counter-part ``bob::machine``. It includes machines from our Machine
-Learning core.
+This package includes the definition of a linear machine, which is capable of
+either projecting the input data into maximally spread representations,
+linearly, or providing linear separation planes for multi-class data samples.
+The package includes the machine definition *per se* and a selection of
+different trainers for specialized purposes:
+
+ * Principal Component Analysis
+ * Fisher's Linear Discriminant Analysis
+ * (Conjugate Gradient) Logistic Regression
+ * Whitening filter
+ * Within-class covariance normalization (WCCN)
 
 Documentation
 -------------
