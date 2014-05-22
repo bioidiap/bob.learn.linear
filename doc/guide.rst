@@ -216,6 +216,62 @@ for **PCA**. This is shown below.
     [ 0.785]
     [ 0.111]]
 
+Whitening
+==========
+
+This is generally used for i-vector preprocessing.
+
+Let's consider a 2D array of data used to train the withening, and a sample to be whitened:
+
+.. doctest::
+   :options: +NORMALIZE_WHITESPACE
+
+   >>> data = numpy.array([[ 1.2622, -1.6443, 0.1889], [ 0.4286, -0.8922, 1.3020], [-0.6613,  0.0430, 0.6377], [-0.8718, -0.4788, 0.3988], [-0.0098, -0.3121,-0.1807],  [ 0.4301,  0.4886, -0.1456]])
+   >>> sample = numpy.array([1, 2, 3.])
+
+The initialisation of the trainer and the machine:
+
+.. doctest::
+   :options: +NORMALIZE_WHITESPACE
+
+   >>> t = bob.trainer.WhiteningTrainer()
+   >>> m = bob.machine.LinearMachine(3,3)
+
+Then, the training and projection are done as follows:
+
+.. doctest::
+   :options: +NORMALIZE_WHITESPACE
+
+   >>> t.train(m, data)
+   >>> withened_sample = m.forward(sample)
+
+
+Within-Class Covariance Normalisation
+=====================================
+
+This can also be used for i-vector preprocessing. Let's first put the training data into list of numpy arrays.
+
+.. doctest::
+   :options: +NORMALIZE_WHITESPACE
+
+   >>> data = [numpy.array([[ 1.2622, -1.6443, 0.1889], [ 0.4286, -0.8922, 1.3020]]), numpy.array([[-0.6613,  0.0430, 0.6377], [-0.8718, -0.4788, 0.3988]]), numpy.array([[-0.0098, -0.3121,-0.1807],  [ 0.4301,  0.4886, -0.1456]])]
+
+
+The initialisation of the trainer is done as follows:
+
+.. doctest::
+   :options: +NORMALIZE_WHITESPACE
+
+   >>> t = bob.trainer.WCCNTrainer()
+
+Then, the training and projection are done as follows:
+
+.. doctest::
+   :options: +NORMALIZE_WHITESPACE
+
+   >>> m = t.train(data)
+   >>> wccn_sample = m.forward(sample)
+
 
 .. Place here your external references
 .. [1] http://en.wikipedia.org/wiki/Principal_component_analysis

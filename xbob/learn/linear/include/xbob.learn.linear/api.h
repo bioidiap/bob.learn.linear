@@ -15,6 +15,7 @@
 #include <xbob.learn.linear/lda.h>
 #include <xbob.learn.linear/logreg.h>
 #include <xbob.learn.linear/whitening.h>
+#include <xbob.learn.linear/wccn.h>
 
 #define XBOB_LEARN_LINEAR_MODULE_PREFIX xbob.learn.linear
 #define XBOB_LEARN_LINEAR_MODULE_NAME _library
@@ -42,6 +43,9 @@ enum _PyBobLearnLinear_ENUM{
   // Bindings for xbob.learn.linear.WhiteningTrainer
   PyBobLearnLinearWhiteningTrainer_Type_NUM,
   PyBobLearnLinearWhiteningTrainer_Check_NUM,
+  // Bindings for xbob.learn.linear.WCCNTrainer
+  PyBobLearnLinearWCCNTrainer_Type_NUM,
+  PyBobLearnLinearWCCNTrainer_Check_NUM,
   // Total number of C API pointers
   PyXbobLearnLinear_API_pointers
 };
@@ -125,6 +129,20 @@ typedef struct {
 #define PyBobLearnLinearWhiteningTrainer_Check_RET int
 #define PyBobLearnLinearWhiteningTrainer_Check_PROTO (PyObject* o)
 
+/**********************************************
+ * Bindings for xbob.learn.linear.WCCNTrainer *
+ **********************************************/
+
+typedef struct {
+  PyObject_HEAD
+  bob::learn::linear::WCCNTrainer* cxx;
+} PyBobLearnLinearWCCNTrainerObject;
+
+#define PyBobLearnLinearWCCNTrainer_Type_TYPE PyTypeObject
+
+#define PyBobLearnLinearWCCNTrainer_Check_RET int
+#define PyBobLearnLinearWCCNTrainer_Check_PROTO (PyObject* o)
+
 
 #ifdef XBOB_LEARN_LINEAR_MODULE
 
@@ -177,6 +195,14 @@ typedef struct {
   extern PyBobLearnLinearWhiteningTrainer_Type_TYPE PyBobLearnLinearWhiteningTrainer_Type;
 
   PyBobLearnLinearWhiteningTrainer_Check_RET PyBobLearnLinearWhiteningTrainer_Check PyBobLearnLinearWhiteningTrainer_Check_PROTO;
+
+  /**********************************************
+   * Bindings for xbob.learn.linear.WCCNTrainer *
+   **********************************************/
+
+  extern PyBobLearnLinearWCCNTrainer_Type_TYPE PyBobLearnLinearWCCNTrainer_Type;
+
+  PyBobLearnLinearWCCNTrainer_Check_RET PyBobLearnLinearWCCNTrainer_Check PyBobLearnLinearWCCNTrainer_Check_PROTO;
 
 #else
 
@@ -251,6 +277,14 @@ typedef struct {
 # define PyBobLearnLinearWhiteningTrainer_Type (*(PyBobLearnLinearWhiteningTrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearWhiteningTrainer_Type_NUM])
 
 # define PyBobLearnLinearWhiteningTrainer_Check (*(PyBobLearnLinearWhiteningTrainer_Check_RET (*)PyBobLearnLinearWhiteningTrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearWhiteningTrainer_Check_NUM])
+
+  /**********************************************
+   * Bindings for xbob.learn.linear.WCCNTrainer *
+   **********************************************/
+
+# define PyBobLearnLinearWCCNTrainer_Type (*(PyBobLearnLinearWCCNTrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearWCCNTrainer_Type_NUM])
+
+# define PyBobLearnLinearWCCNTrainer_Check (*(PyBobLearnLinearWCCNTrainer_Check_RET (*)PyBobLearnLinearWCCNTrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearWCCNTrainer_Check_NUM])
 
 # if !defined(NO_IMPORT_ARRAY)
 

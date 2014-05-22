@@ -52,6 +52,9 @@ static PyObject* create_module (void) {
   PyBobLearnLinearWhiteningTrainer_Type.tp_new = PyType_GenericNew;
   if (PyType_Ready(&PyBobLearnLinearWhiteningTrainer_Type) < 0) return 0;
 
+  PyBobLearnLinearWCCNTrainer_Type.tp_new = PyType_GenericNew;
+  if (PyType_Ready(&PyBobLearnLinearWCCNTrainer_Type) < 0) return 0;
+
 # if PY_VERSION_HEX >= 0x03000000
   PyObject* m = PyModule_Create(&module_definition);
 # else
@@ -79,6 +82,9 @@ static PyObject* create_module (void) {
 
   Py_INCREF(&PyBobLearnLinearWhiteningTrainer_Type);
   if (PyModule_AddObject(m, "WhiteningTrainer", (PyObject *)&PyBobLearnLinearWhiteningTrainer_Type) < 0) return 0;
+
+  Py_INCREF(&PyBobLearnLinearWCCNTrainer_Type);
+  if (PyModule_AddObject(m, "WCCNTrainer", (PyObject *)&PyBobLearnLinearWCCNTrainer_Type) < 0) return 0;
 
   static void* PyXbobLearnLinear_API[PyXbobLearnLinear_API_pointers];
 
@@ -131,6 +137,14 @@ static PyObject* create_module (void) {
   PyXbobLearnLinear_API[PyBobLearnLinearWhiteningTrainer_Type_NUM] = (void *)&PyBobLearnLinearWhiteningTrainer_Type;
 
   PyXbobLearnLinear_API[PyBobLearnLinearWhiteningTrainer_Check_NUM] = (void *)&PyBobLearnLinearWhiteningTrainer_Check;
+
+  /***************************************************
+   * Bindings for xbob.learn.linear.WCCNTrainer *
+   ***************************************************/
+
+  PyXbobLearnLinear_API[PyBobLearnLinearWCCNTrainer_Type_NUM] = (void *)&PyBobLearnLinearWCCNTrainer_Type;
+
+  PyXbobLearnLinear_API[PyBobLearnLinearWCCNTrainer_Check_NUM] = (void *)&PyBobLearnLinearWCCNTrainer_Check;
 
 #if PY_VERSION_HEX >= 0x02070000
 

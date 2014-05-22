@@ -14,7 +14,7 @@ import math
 import numpy
 
 from . import Machine, PCATrainer, FisherLDATrainer, CGLogRegTrainer, \
-    WhiteningTrainer #, WCCNTrainer
+    WhiteningTrainer, WCCNTrainer
 
 import xbob.io.base
 from xbob.learn.activation import HyperbolicTangent, Identity
@@ -596,47 +596,6 @@ def test_fisher_lda_comparisons():
   assert t3 != t1
   assert not t3.is_similar_to(t2)
 
-@nose.tools.nottest
-def test_ppca():
-
-  # Tests our Probabilistic PCA trainer for linear machines for a simple
-  # problem:
-  ar=numpy.array([
-    [1, 2, 3],
-    [2, 4, 19],
-    [3, 6, 5],
-    [4, 8, 13],
-    ], dtype='float64')
-
-  # Expected llh 1 and 2 (Reference values)
-  exp_llh1 =  -32.8443
-  exp_llh2 =  -30.8559
-
-  # Do two iterations of EM to check the training procedure
-  T = EMPCATrainer()
-  m = Machine(3,2)
-  # Initialization of the trainer
-  T.initialize(m, ar)
-  # Sets ('random') initialization values for test purposes
-  w_init = numpy.array([1.62945, 0.270954, 1.81158, 1.67002, 0.253974,
-    1.93774], 'float64').reshape(3,2)
-  sigma2_init = 1.82675
-  m.weights = w_init
-  T.sigma2 = sigma2_init
-  # Checks that the log likehood matches the reference one
-  # This should be sufficient to check everything as it requires to use
-  # the new value of W and sigma2
-  # This does an E-Step, M-Step, computes the likelihood, and compares it to
-  # the reference value obtained using matlab
-  T.e_step(m, ar)
-  T.m_step(m, ar)
-  llh1 = T.compute_likelihood(m)
-  assert abs(exp_llh1 - llh1) < 2e-4
-  T.e_step(m, ar)
-  T.m_step(m, ar)
-  llh2 = T.compute_likelihood(m)
-  assert abs(exp_llh2 - llh2) < 2e-4
-
 def test_whitening_initialization():
 
   # Constructors and comparison operators
@@ -691,7 +650,6 @@ def test_whitening_train():
   assert numpy.allclose(m2.weights, whit_ref, eps, eps)
   assert numpy.allclose(s2, sample_whitened_ref, eps, eps)
 
-@nose.tools.nottest
 def test_wccn_initialization():
 
   # Constructors and comparison operators
@@ -706,7 +664,6 @@ def test_wccn_initialization():
   assert t1 == t4
   assert t1.is_similar_to(t4)
 
-@nose.tools.nottest
 def test_wccn_train():
 
   # Tests our Whitening extractor.
@@ -725,7 +682,7 @@ def test_wccn_train():
   # Runs WCCN (first method)
   t = WCCNTrainer()
   m = Machine(3,3)
-  t.train(m, data)
+  t.train(data, m)
   s = m.forward(sample)
 
   # Makes sure results are good
