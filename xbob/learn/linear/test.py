@@ -13,8 +13,8 @@ import nose.tools
 import math
 import numpy
 
-from . import Machine, PCATrainer, FisherLDATrainer, CGLogRegTrainer
-#from . import WhiteningTrainer, WCCNTrainer
+from . import Machine, PCATrainer, FisherLDATrainer, CGLogRegTrainer, \
+    WhiteningTrainer #, WCCNTrainer
 
 import xbob.io.base
 from xbob.learn.activation import HyperbolicTangent, Identity
@@ -614,7 +614,7 @@ def test_ppca():
 
   # Do two iterations of EM to check the training procedure
   T = EMPCATrainer()
-  m = LinearMachine(3,2)
+  m = Machine(3,2)
   # Initialization of the trainer
   T.initialize(m, ar)
   # Sets ('random') initialization values for test purposes
@@ -637,7 +637,6 @@ def test_ppca():
   llh2 = T.compute_likelihood(m)
   assert abs(exp_llh2 - llh2) < 2e-4
 
-@nose.tools.nottest
 def test_whitening_initialization():
 
   # Constructors and comparison operators
@@ -652,7 +651,6 @@ def test_whitening_initialization():
   assert t1 == t4
   assert t1.is_similar_to(t4)
 
-@nose.tools.nottest
 def test_whitening_train():
 
   # Tests our Whitening extractor.
@@ -673,8 +671,8 @@ def test_whitening_train():
 
   # Runs whitening (first method)
   t = WhiteningTrainer()
-  m = LinearMachine(3,3)
-  t.train(m, data)
+  m = Machine(3,3)
+  t.train(data, m)
   s = m.forward(sample)
 
   # Makes sure results are good
@@ -726,7 +724,7 @@ def test_wccn_train():
 
   # Runs WCCN (first method)
   t = WCCNTrainer()
-  m = LinearMachine(3,3)
+  m = Machine(3,3)
   t.train(m, data)
   s = m.forward(sample)
 

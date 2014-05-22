@@ -10,7 +10,6 @@
 #define XBOB_LEARN_LINEAR_MODULE
 #include <xbob.blitz/cppapi.h>
 #include <xbob.blitz/cleanup.h>
-#include <bob/config.h>
 #include <xbob.learn.linear/api.h>
 #include <structmember.h>
 
@@ -22,6 +21,7 @@ PyDoc_STRVAR(s_pcatrainer_str, XBOB_EXT_MODULE_PREFIX ".PCATrainer");
 
 PyDoc_STRVAR(s_pcatrainer_doc,
 "PCATrainer([use_svd=True]) -> new PCATrainer\n\
+\n\
 PCATrainer(other) -> new PCATrainer\n\
 \n\
 Sets a linear machine to perform the Principal Component\n\
@@ -490,7 +490,6 @@ static int PyBobLearnLinearPCATrainer_setUseSVD
 
 }
 
-#if BOB_API_VERSION >= 0x0103
 PyDoc_STRVAR(s_safe_svd_str, "safe_svd");
 PyDoc_STRVAR(s_safe_svd_doc,
 "If the ``use_svd`` flag is enabled, this flag will indicate\n\
@@ -521,7 +520,6 @@ static int PyBobLearnLinearPCATrainer_setSafeSVD
   return 0;
 
 }
-#endif
 
 static PyGetSetDef PyBobLearnLinearPCATrainer_getseters[] = {
     {
@@ -531,7 +529,6 @@ static PyGetSetDef PyBobLearnLinearPCATrainer_getseters[] = {
       s_use_svd_doc,
       0
     },
-#     if BOB_API_VERSION >= 0x0103
     {
       s_safe_svd_str,
       (getter)PyBobLearnLinearPCATrainer_getSafeSVD,
@@ -539,7 +536,6 @@ static PyGetSetDef PyBobLearnLinearPCATrainer_getseters[] = {
       s_safe_svd_doc,
       0
     },
-#     endif
     {0}  /* Sentinel */
 };
 

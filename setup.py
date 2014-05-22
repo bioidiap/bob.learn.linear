@@ -64,6 +64,7 @@ setup(
           "xbob/learn/linear/pca.cpp",
           "xbob/learn/linear/lda.cpp",
           "xbob/learn/linear/logreg.cpp",
+          "xbob/learn/linear/whitening.cpp",
           "xbob/learn/linear/main.cpp",
           "xbob/learn/linear/cpp/machine.cpp",
           "xbob/learn/linear/cpp/pca.cpp",
