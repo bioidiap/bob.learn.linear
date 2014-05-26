@@ -16,7 +16,7 @@
 #include <bob/math/linear.h>
 #include <bob/math/stats.h>
 
-#include <xbob.learn.linear/lda.h>
+#include <bob.learn.linear/lda.h>
 
 namespace bob { namespace learn { namespace linear {
 

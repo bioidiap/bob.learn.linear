@@ -17,7 +17,7 @@
 #include <bob/math/svd.h>
 #include <bob/math/eig.h>
 
-#include <xbob.learn.linear/pca.h>
+#include <bob.learn.linear/pca.h>
 
 namespace bob { namespace learn { namespace linear {
 

@@ -4,19 +4,19 @@
 # Mon 16 Apr 08:18:08 2012 CEST
 
 from setuptools import setup, find_packages, dist
-dist.Distribution(dict(setup_requires=['xbob.blitz', 'xbob.io.base', 'xbob.learn.activation']))
-from xbob.blitz.extension import Extension
-import xbob.io.base
-import xbob.learn.activation
+dist.Distribution(dict(setup_requires=['bob.blitz', 'bob.io.base', 'bob.learn.activation']))
+from bob.blitz.extension import Extension
+import bob.io.base
+import bob.learn.activation
 
 import os
 package_dir = os.path.dirname(os.path.realpath(__file__))
-package_dir = os.path.join(package_dir, 'xbob', 'learn', 'linear', 'include')
+package_dir = os.path.join(package_dir, 'bob', 'learn', 'linear', 'include')
 include_dirs = [
     package_dir,
-    xbob.blitz.get_include(),
-    xbob.io.base.get_include(),
-    xbob.learn.activation.get_include()
+    bob.blitz.get_include(),
+    bob.io.base.get_include(),
+    bob.learn.activation.get_include()
     ]
 
 packages = ['bob-machine >= 2.0.0a2', 'bob-io >= 2.0.0a2']
@@ -24,10 +24,10 @@ version = '2.0.0a0'
 
 setup(
 
-    name='xbob.learn.linear',
+    name='bob.learn.linear',
     version=version,
     description='Bindings for bob.machine\'s LinearMachine and Trainers',
-    url='http://github.com/bioidiap/xbob.learn.linear',
+    url='http://github.com/bioidiap/bob.learn.linear',
     license='BSD',
     author='Andre Anjos',
     author_email='andre.anjos@idiap.ch',
@@ -39,40 +39,40 @@ setup(
 
     install_requires=[
       'setuptools',
-      'xbob.blitz',
-      'xbob.io.base',
-      'xbob.learn.activation',
+      'bob.blitz',
+      'bob.io.base',
+      'bob.learn.activation',
     ],
 
     namespace_packages=[
-      "xbob",
-      "xbob.learn",
+      "bob",
+      "bob.learn",
       ],
 
     ext_modules = [
-      Extension("xbob.learn.linear.version",
+      Extension("bob.learn.linear.version",
         [
-          "xbob/learn/linear/version.cpp",
+          "bob/learn/linear/version.cpp",
           ],
         packages = packages,
         include_dirs = include_dirs,
         version = version,
         ),
-      Extension("xbob.learn.linear._library",
+      Extension("bob.learn.linear._library",
         [
-          "xbob/learn/linear/machine.cpp",
-          "xbob/learn/linear/pca.cpp",
-          "xbob/learn/linear/lda.cpp",
-          "xbob/learn/linear/logreg.cpp",
-          "xbob/learn/linear/whitening.cpp",
-          "xbob/learn/linear/wccn.cpp",
-          "xbob/learn/linear/main.cpp",
-          "xbob/learn/linear/cpp/machine.cpp",
-          "xbob/learn/linear/cpp/pca.cpp",
-          "xbob/learn/linear/cpp/lda.cpp",
-          "xbob/learn/linear/cpp/logreg.cpp",
-          "xbob/learn/linear/cpp/whitening.cpp",
-          "xbob/learn/linear/cpp/wccn.cpp",
+          "bob/learn/linear/machine.cpp",
+          "bob/learn/linear/pca.cpp",
+          "bob/learn/linear/lda.cpp",
+          "bob/learn/linear/logreg.cpp",
+          "bob/learn/linear/whitening.cpp",
+          "bob/learn/linear/wccn.cpp",
+          "bob/learn/linear/main.cpp",
+          "bob/learn/linear/cpp/machine.cpp",
+          "bob/learn/linear/cpp/pca.cpp",
+          "bob/learn/linear/cpp/lda.cpp",
+          "bob/learn/linear/cpp/logreg.cpp",
+          "bob/learn/linear/cpp/whitening.cpp",
+          "bob/learn/linear/cpp/wccn.cpp",
           ],
         packages = packages,
         include_dirs = include_dirs,

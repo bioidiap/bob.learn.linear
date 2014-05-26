@@ -11,7 +11,7 @@
 #include <bob/math/lu.h>
 #include <bob/math/stats.h>
 
-#include <xbob.learn.linear/wccn.h>
+#include <bob.learn.linear/wccn.h>
 
 namespace bob { namespace learn { namespace linear {
 

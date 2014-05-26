@@ -14,7 +14,7 @@
 #include <bob/core/array_copy.h>
 #include <bob/math/linear.h>
 
-#include <xbob.learn.linear/machine.h>
+#include <bob.learn.linear/machine.h>
 
 namespace bob { namespace learn { namespace linear {
 

@@ -9,7 +9,7 @@
 #include <bob/math/linear.h>
 #include <limits>
 
-#include <xbob.learn.linear/logreg.h>
+#include <bob.learn.linear/logreg.h>
 
 namespace bob { namespace learn { namespace linear {
 

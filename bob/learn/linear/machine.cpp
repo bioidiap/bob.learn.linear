@@ -7,19 +7,19 @@
  * Copyright (C) 2011-2013 Idiap Research Institute, Martigny, Switzerland
  */
 
-#define XBOB_LEARN_LINEAR_MODULE
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
-#include <xbob.io.base/api.h>
-#include <xbob.learn.activation/api.h>
-#include <xbob.learn.linear/api.h>
+#define BOB_LEARN_LINEAR_MODULE
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
+#include <bob.io.base/api.h>
+#include <bob.learn.activation/api.h>
+#include <bob.learn.linear/api.h>
 #include <structmember.h>
 
 /**********************************************
  * Implementation of LinearMachine base class *
  **********************************************/
 
-PyDoc_STRVAR(s_linear_str, XBOB_EXT_MODULE_PREFIX ".Machine");
+PyDoc_STRVAR(s_linear_str, BOB_EXT_MODULE_PREFIX ".Machine");
 
 PyDoc_STRVAR(s_linear_doc,
 "Machine([input_size=0, [output_size=0]])\n\
@@ -564,7 +564,7 @@ PyObject* PyBobLearnLinearMachine_Repr(PyBobLearnLinearMachineObject* self) {
   /**
    * Expected output:
    *
-   * <xbob.learn.linear.Machine float64@(3, 2) [act: f(z) = tanh(z)]>
+   * <bob.learn.linear.Machine float64@(3, 2) [act: f(z) = tanh(z)]>
    */
 
   using bob::machine::IdentityActivation;
@@ -607,7 +607,7 @@ PyObject* PyBobLearnLinearMachine_Str(PyBobLearnLinearMachineObject* self) {
   /**
    * Expected output:
    *
-   * xbob.learn.linear.Machine (float64) 3 inputs, 2 outputs [act: f(z) = C*z]
+   * bob.learn.linear.Machine (float64) 3 inputs, 2 outputs [act: f(z) = C*z]
    *  subtract: [ 0.   0.5  0.5]
    *  divide: [ 0.5  1.   1. ]
    *  bias: [ 0.3 -3. ]
@@ -811,7 +811,7 @@ PyDoc_STRVAR(s_load_str, "load");
 PyDoc_STRVAR(s_load_doc,
 "o.load(f) -> None\n\
 \n\
-Loads itself from a :py:class:`xbob.io.HDF5File`\n\
+Loads itself from a :py:class:`bob.io.HDF5File`\n\
 \n\
 ");
 
@@ -845,7 +845,7 @@ PyDoc_STRVAR(s_save_str, "save");
 PyDoc_STRVAR(s_save_doc,
 "o.save(f) -> None\n\
 \n\
-Saves itself at a :py:class:`xbob.io.HDF5File`\n\
+Saves itself at a :py:class:`bob.io.HDF5File`\n\
 \n\
 ");
 

@@ -7,17 +7,17 @@
  * Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
  */
 
-#define XBOB_LEARN_LINEAR_MODULE
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
-#include <xbob.learn.linear/api.h>
+#define BOB_LEARN_LINEAR_MODULE
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
+#include <bob.learn.linear/api.h>
 #include <structmember.h>
 
 /************************************************
  * Implementation of CGLogRegTrainer base class *
  ************************************************/
 
-PyDoc_STRVAR(s_logregtrainer_str, XBOB_EXT_MODULE_PREFIX ".CGLogRegTrainer");
+PyDoc_STRVAR(s_logregtrainer_str, BOB_EXT_MODULE_PREFIX ".CGLogRegTrainer");
 
 PyDoc_STRVAR(s_logregtrainer_doc,
 "CGLogRegTrainer([prior=0.5, [convergence_threshold=1e-5,\n\
@@ -231,7 +231,7 @@ negatives, positives, 2D 64-bit float arrays\n\
 \n\
 machine, :py:class:`Machine` (optional)\n\
   The user may provide or not an object of type\n\
-  :py:class:`xbob.learn.linear.Machine` that will be set by this\n\
+  :py:class:`bob.learn.linear.Machine` that will be set by this\n\
   method. If provided, the machine should have 1 output and the\n\
   correct number of inputs matching the number of columns in the\n\
   input data arrays.\n\

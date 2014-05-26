@@ -25,8 +25,8 @@ install:
   - "python bootstrap.py"
   - "CFLAGS=-coverage ./bin/buildout"
 script:
-  - "./bin/python -c 'from xbob.learn.linear import get_config; print(get_config())'"
-  - "./bin/coverage run --source=xbob.learn.linear ./bin/nosetests -sv"
+  - "./bin/python -c 'from bob.learn.linear import get_config; print(get_config())'"
+  - "./bin/coverage run --source=bob.learn.linear ./bin/nosetests -sv"
   - "./bin/sphinx-build -b doctest doc sphinx"
   - "./bin/sphinx-build -b html doc sphinx"
 after_success:

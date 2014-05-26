@@ -7,18 +7,18 @@
  * Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
  */
 
-#define XBOB_LEARN_LINEAR_MODULE
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
+#define BOB_LEARN_LINEAR_MODULE
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
 #include <bob/config.h>
-#include <xbob.learn.linear/api.h>
+#include <bob.learn.linear/api.h>
 #include <structmember.h>
 
 /*************************************************
  * Implementation of WCCNTrainer base class *
  *************************************************/
 
-PyDoc_STRVAR(s_wccntrainer_str, XBOB_EXT_MODULE_PREFIX ".WCCNTrainer");
+PyDoc_STRVAR(s_wccntrainer_str, BOB_EXT_MODULE_PREFIX ".WCCNTrainer");
 
 PyDoc_STRVAR(s_wccntrainer_doc,
 "WCCNTrainer() -> new WCCNTrainer\n\
@@ -212,7 +212,7 @@ The resulting machine will have the same number of inputs\n\
 **and** outputs as columns in any of ``X``'s matrices.\n\
 \n\
 The user may provide or not an object of type\n\
-:py:class:`xbob.learn.linear.Machine` that will be set by this\n\
+:py:class:`bob.learn.linear.Machine` that will be set by this\n\
 method. In such a case, the machine should have a shape that\n\
 matches ``(X.shape[1], X.shape[1])``. If the user does not\n\
 provide a machine to be set, then a new one will be allocated\n\

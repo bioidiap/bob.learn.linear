@@ -10,7 +10,7 @@
 #include <bob/math/lu.h>
 #include <bob/math/stats.h>
 
-#include <xbob.learn.linear/whitening.h>
+#include <bob.learn.linear/whitening.h>
 
 namespace bob { namespace learn { namespace linear {
 

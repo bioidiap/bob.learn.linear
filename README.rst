@@ -2,16 +2,16 @@
 .. Andre Anjos <andre.anjos@idiap.ch>
 .. Fri 13 Dec 2013 12:35:22 CET
 
-.. image:: https://travis-ci.org/bioidiap/xbob.learn.linear.svg?branch=master
-   :target: https://travis-ci.org/bioidiap/xbob.learn.linear
-.. image:: https://coveralls.io/repos/bioidiap/xbob.learn.linear/badge.png
-   :target: https://coveralls.io/r/bioidiap/xbob.learn.linear
-.. image:: http://img.shields.io/github/tag/bioidiap/xbob.learn.linear.png
-   :target: https://github.com/bioidiap/xbob.learn.linear
-.. image:: http://img.shields.io/pypi/v/xbob.learn.linear.png
-   :target: https://pypi.python.org/pypi/xbob.learn.linear
-.. image:: http://img.shields.io/pypi/dm/xbob.learn.linear.png
-   :target: https://pypi.python.org/pypi/xbob.learn.linear
+.. image:: https://travis-ci.org/bioidiap/bob.learn.linear.svg?branch=master
+   :target: https://travis-ci.org/bioidiap/bob.learn.linear
+.. image:: https://coveralls.io/repos/bioidiap/bob.learn.linear/badge.png
+   :target: https://coveralls.io/r/bioidiap/bob.learn.linear
+.. image:: http://img.shields.io/github/tag/bioidiap/bob.learn.linear.png
+   :target: https://github.com/bioidiap/bob.learn.linear
+.. image:: http://img.shields.io/pypi/v/bob.learn.linear.png
+   :target: https://pypi.python.org/pypi/bob.learn.linear
+.. image:: http://img.shields.io/pypi/dm/bob.learn.linear.png
+   :target: https://pypi.python.org/pypi/bob.learn.linear
 
 ==============================================================
  Python bindings for bob.machine's LinearMachine and Trainers
@@ -42,7 +42,7 @@ Testing
 
 You can run a set of tests using the nose test runner::
 
-  $ nosetests -sv xbob.learn.linear
+  $ nosetests -sv bob.learn.linear
 
 .. warning::
 
@@ -59,7 +59,7 @@ You can run our documentation tests using sphinx itself::
 
 You can test overall test coverage with::
 
-  $ nosetests --with-coverage --cover-package=xbob.learn.linear
+  $ nosetests --with-coverage --cover-package=bob.learn.linear
 
 The ``coverage`` egg must be installed for this to work properly.
 

@@ -5,20 +5,20 @@
  * @brief C/C++ API for bob::machine
  */
 
-#ifndef XBOB_LEARN_LINEAR_H
-#define XBOB_LEARN_LINEAR_H
+#ifndef BOB_LEARN_LINEAR_H
+#define BOB_LEARN_LINEAR_H
 
 #include <Python.h>
-#include <xbob.learn.linear/config.h>
-#include <xbob.learn.linear/machine.h>
-#include <xbob.learn.linear/pca.h>
-#include <xbob.learn.linear/lda.h>
-#include <xbob.learn.linear/logreg.h>
-#include <xbob.learn.linear/whitening.h>
-#include <xbob.learn.linear/wccn.h>
+#include <bob.learn.linear/config.h>
+#include <bob.learn.linear/machine.h>
+#include <bob.learn.linear/pca.h>
+#include <bob.learn.linear/lda.h>
+#include <bob.learn.linear/logreg.h>
+#include <bob.learn.linear/whitening.h>
+#include <bob.learn.linear/wccn.h>
 
-#define XBOB_LEARN_LINEAR_MODULE_PREFIX xbob.learn.linear
-#define XBOB_LEARN_LINEAR_MODULE_NAME _library
+#define BOB_LEARN_LINEAR_MODULE_PREFIX bob.learn.linear
+#define BOB_LEARN_LINEAR_MODULE_NAME _library
 
 /*******************
  * C API functions *
@@ -26,38 +26,38 @@
 
 /* Enum defining entries in the function table */
 enum _PyBobLearnLinear_ENUM{
-  PyXbobLearnLinear_APIVersion_NUM = 0,
-  // Bindings for xbob.learn.linear.Machine
+  PyBobLearnLinear_APIVersion_NUM = 0,
+  // Bindings for bob.learn.linear.Machine
   PyBobLearnLinearMachine_Type_NUM,
   PyBobLearnLinearMachine_Check_NUM,
   PyBobLearnLinearMachine_NewFromSize_NUM,
-  // Bindings for xbob.learn.linear.PCATrainer
+  // Bindings for bob.learn.linear.PCATrainer
   PyBobLearnLinearPCATrainer_Type_NUM,
   PyBobLearnLinearPCATrainer_Check_NUM,
-  // Bindings for xbob.learn.linear.FisherLDATrainer
+  // Bindings for bob.learn.linear.FisherLDATrainer
   PyBobLearnLinearFisherLDATrainer_Type_NUM,
   PyBobLearnLinearFisherLDATrainer_Check_NUM,
-  // Bindings for xbob.learn.linear.CGLogRegTrainer
+  // Bindings for bob.learn.linear.CGLogRegTrainer
   PyBobLearnLinearCGLogRegTrainer_Type_NUM,
   PyBobLearnLinearCGLogRegTrainer_Check_NUM,
-  // Bindings for xbob.learn.linear.WhiteningTrainer
+  // Bindings for bob.learn.linear.WhiteningTrainer
   PyBobLearnLinearWhiteningTrainer_Type_NUM,
   PyBobLearnLinearWhiteningTrainer_Check_NUM,
-  // Bindings for xbob.learn.linear.WCCNTrainer
+  // Bindings for bob.learn.linear.WCCNTrainer
   PyBobLearnLinearWCCNTrainer_Type_NUM,
   PyBobLearnLinearWCCNTrainer_Check_NUM,
   // Total number of C API pointers
-  PyXbobLearnLinear_API_pointers
+  PyBobLearnLinear_API_pointers
 };
 
 /**************
  * Versioning *
  **************/
 
-#define PyXbobLearnLinear_APIVersion_TYPE int
+#define PyBobLearnLinear_APIVersion_TYPE int
 
 /******************************************
- * Bindings for xbob.learn.linear.Machine *
+ * Bindings for bob.learn.linear.Machine *
  ******************************************/
 
 typedef struct {
@@ -74,7 +74,7 @@ typedef struct {
 #define PyBobLearnLinearMachine_NewFromSize_PROTO (Py_ssize_t i, Py_ssize_t o)
 
 /*********************************************
- * Bindings for xbob.learn.linear.PCATrainer *
+ * Bindings for bob.learn.linear.PCATrainer *
  *********************************************/
 
 typedef struct {
@@ -88,7 +88,7 @@ typedef struct {
 #define PyBobLearnLinearPCATrainer_Check_PROTO (PyObject* o)
 
 /***************************************************
- * Bindings for xbob.learn.linear.FisherLDATrainer *
+ * Bindings for bob.learn.linear.FisherLDATrainer *
  ***************************************************/
 
 typedef struct {
@@ -102,7 +102,7 @@ typedef struct {
 #define PyBobLearnLinearFisherLDATrainer_Check_PROTO (PyObject* o)
 
 /**************************************************
- * Bindings for xbob.learn.linear.CGLogRegTrainer *
+ * Bindings for bob.learn.linear.CGLogRegTrainer *
  **************************************************/
 
 typedef struct {
@@ -116,7 +116,7 @@ typedef struct {
 #define PyBobLearnLinearCGLogRegTrainer_Check_PROTO (PyObject* o)
 
 /***************************************************
- * Bindings for xbob.learn.linear.WhiteningTrainer *
+ * Bindings for bob.learn.linear.WhiteningTrainer *
  ***************************************************/
 
 typedef struct {
@@ -130,7 +130,7 @@ typedef struct {
 #define PyBobLearnLinearWhiteningTrainer_Check_PROTO (PyObject* o)
 
 /**********************************************
- * Bindings for xbob.learn.linear.WCCNTrainer *
+ * Bindings for bob.learn.linear.WCCNTrainer *
  **********************************************/
 
 typedef struct {
@@ -144,18 +144,18 @@ typedef struct {
 #define PyBobLearnLinearWCCNTrainer_Check_PROTO (PyObject* o)
 
 
-#ifdef XBOB_LEARN_LINEAR_MODULE
+#ifdef BOB_LEARN_LINEAR_MODULE
 
-  /* This section is used when compiling `xbob.learn.linear' itself */
+  /* This section is used when compiling `bob.learn.linear' itself */
 
   /**************
    * Versioning *
    **************/
 
-  extern int PyXbobLearnLinear_APIVersion;
+  extern int PyBobLearnLinear_APIVersion;
 
   /******************************************
-   * Bindings for xbob.learn.linear.Machine *
+   * Bindings for bob.learn.linear.Machine *
    ******************************************/
 
   extern PyBobLearnLinearMachine_Type_TYPE PyBobLearnLinearMachine_Type;
@@ -165,7 +165,7 @@ typedef struct {
   PyBobLearnLinearMachine_NewFromSize_RET PyBobLearnLinearMachine_NewFromSize PyBobLearnLinearMachine_NewFromSize_PROTO;
 
   /*********************************************
-   * Bindings for xbob.learn.linear.PCATrainer *
+   * Bindings for bob.learn.linear.PCATrainer *
    *********************************************/
 
   extern PyBobLearnLinearPCATrainer_Type_TYPE PyBobLearnLinearPCATrainer_Type;
@@ -173,7 +173,7 @@ typedef struct {
   PyBobLearnLinearPCATrainer_Check_RET PyBobLearnLinearPCATrainer_Check PyBobLearnLinearPCATrainer_Check_PROTO;
 
   /***************************************************
-   * Bindings for xbob.learn.linear.FisherLDATrainer *
+   * Bindings for bob.learn.linear.FisherLDATrainer *
    ***************************************************/
 
   extern PyBobLearnLinearFisherLDATrainer_Type_TYPE PyBobLearnLinearFisherLDATrainer_Type;
@@ -181,7 +181,7 @@ typedef struct {
   PyBobLearnLinearFisherLDATrainer_Check_RET PyBobLearnLinearFisherLDATrainer_Check PyBobLearnLinearFisherLDATrainer_Check_PROTO;
 
   /**************************************************
-   * Bindings for xbob.learn.linear.CGLogRegTrainer *
+   * Bindings for bob.learn.linear.CGLogRegTrainer *
    **************************************************/
 
   extern PyBobLearnLinearCGLogRegTrainer_Type_TYPE PyBobLearnLinearCGLogRegTrainer_Type;
@@ -189,7 +189,7 @@ typedef struct {
   PyBobLearnLinearCGLogRegTrainer_Check_RET PyBobLearnLinearCGLogRegTrainer_Check PyBobLearnLinearCGLogRegTrainer_Check_PROTO;
 
   /***************************************************
-   * Bindings for xbob.learn.linear.WhiteningTrainer *
+   * Bindings for bob.learn.linear.WhiteningTrainer *
    ***************************************************/
 
   extern PyBobLearnLinearWhiteningTrainer_Type_TYPE PyBobLearnLinearWhiteningTrainer_Type;
@@ -197,7 +197,7 @@ typedef struct {
   PyBobLearnLinearWhiteningTrainer_Check_RET PyBobLearnLinearWhiteningTrainer_Check PyBobLearnLinearWhiteningTrainer_Check_PROTO;
 
   /**********************************************
-   * Bindings for xbob.learn.linear.WCCNTrainer *
+   * Bindings for bob.learn.linear.WCCNTrainer *
    **********************************************/
 
   extern PyBobLearnLinearWCCNTrainer_Type_TYPE PyBobLearnLinearWCCNTrainer_Type;
@@ -206,7 +206,7 @@ typedef struct {
 
 #else
 
-  /* This section is used in modules that use `xbob.learn.linear's' C-API */
+  /* This section is used in modules that use `bob.learn.linear's' C-API */
 
 /************************************************************************
  * Macros to avoid symbol collision and allow for separate compilation. *
@@ -215,18 +215,18 @@ typedef struct {
  ************************************************************************/
 
 #  if defined(PY_ARRAY_UNIQUE_SYMBOL)
-#    define XBOB_LEARN_LINEAR_MAKE_API_NAME_INNER(a) XBOB_LEARN_LINEAR_ ## a
-#    define XBOB_LEARN_LINEAR_MAKE_API_NAME(a) XBOB_LEARN_LINEAR_MAKE_API_NAME_INNER(a)
-#    define PyXbobLearnLinear_API XBOB_LEARN_LINEAR_MAKE_API_NAME(PY_ARRAY_UNIQUE_SYMBOL)
+#    define BOB_LEARN_LINEAR_MAKE_API_NAME_INNER(a) BOB_LEARN_LINEAR_ ## a
+#    define BOB_LEARN_LINEAR_MAKE_API_NAME(a) BOB_LEARN_LINEAR_MAKE_API_NAME_INNER(a)
+#    define PyBobLearnLinear_API BOB_LEARN_LINEAR_MAKE_API_NAME(PY_ARRAY_UNIQUE_SYMBOL)
 #  endif
 
 #  if defined(NO_IMPORT_ARRAY)
-  extern void **PyXbobLearnLinear_API;
+  extern void **PyBobLearnLinear_API;
 #  else
 #    if defined(PY_ARRAY_UNIQUE_SYMBOL)
-  void **PyXbobLearnLinear_API;
+  void **PyBobLearnLinear_API;
 #    else
-  static void **PyXbobLearnLinear_API=NULL;
+  static void **PyBobLearnLinear_API=NULL;
 #    endif
 #  endif
 
@@ -234,57 +234,57 @@ typedef struct {
    * Versioning *
    **************/
 
-# define PyXbobLearnLinear_APIVersion (*(PyXbobLearnLinear_APIVersion_TYPE *)PyXbobLearnLinear_API[PyXbobLearnLinear_APIVersion_NUM])
+# define PyBobLearnLinear_APIVersion (*(PyBobLearnLinear_APIVersion_TYPE *)PyBobLearnLinear_API[PyBobLearnLinear_APIVersion_NUM])
 
   /******************************************
-   * Bindings for xbob.learn.linear.Machine *
+   * Bindings for bob.learn.linear.Machine *
    ******************************************/
 
-# define PyBobLearnLinearMachine_Type (*(PyBobLearnLinearMachine_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearMachine_Type_NUM])
+# define PyBobLearnLinearMachine_Type (*(PyBobLearnLinearMachine_Type_TYPE *)PyBobLearnLinear_API[PyBobLearnLinearMachine_Type_NUM])
 
-# define PyBobLearnLinearMachine_Check (*(PyBobLearnLinearMachine_Check_RET (*)PyBobLearnLinearMachine_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearMachine_Check_NUM])
+# define PyBobLearnLinearMachine_Check (*(PyBobLearnLinearMachine_Check_RET (*)PyBobLearnLinearMachine_Check_PROTO) PyBobLearnLinear_API[PyBobLearnLinearMachine_Check_NUM])
 
-# define PyBobLearnLinearMachine_NewFromSize (*(PyBobLearnLinearMachine_NewFromSize_RET (*)PyBobLearnLinearMachine_NewFromSize_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearMachine_NewFromSize_NUM])
+# define PyBobLearnLinearMachine_NewFromSize (*(PyBobLearnLinearMachine_NewFromSize_RET (*)PyBobLearnLinearMachine_NewFromSize_PROTO) PyBobLearnLinear_API[PyBobLearnLinearMachine_NewFromSize_NUM])
 
   /*********************************************
-   * Bindings for xbob.learn.linear.PCATrainer *
+   * Bindings for bob.learn.linear.PCATrainer *
    *********************************************/
 
-# define PyBobLearnLinearPCATrainer_Type (*(PyBobLearnLinearPCATrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearPCATrainer_Type_NUM])
+# define PyBobLearnLinearPCATrainer_Type (*(PyBobLearnLinearPCATrainer_Type_TYPE *)PyBobLearnLinear_API[PyBobLearnLinearPCATrainer_Type_NUM])
 
-# define PyBobLearnLinearPCATrainer_Check (*(PyBobLearnLinearPCATrainer_Check_RET (*)PyBobLearnLinearPCATrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearPCATrainer_Check_NUM])
+# define PyBobLearnLinearPCATrainer_Check (*(PyBobLearnLinearPCATrainer_Check_RET (*)PyBobLearnLinearPCATrainer_Check_PROTO) PyBobLearnLinear_API[PyBobLearnLinearPCATrainer_Check_NUM])
 
   /***************************************************
-   * Bindings for xbob.learn.linear.FisherLDATrainer *
+   * Bindings for bob.learn.linear.FisherLDATrainer *
    ***************************************************/
 
-# define PyBobLearnLinearFisherLDATrainer_Type (*(PyBobLearnLinearFisherLDATrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Type_NUM])
+# define PyBobLearnLinearFisherLDATrainer_Type (*(PyBobLearnLinearFisherLDATrainer_Type_TYPE *)PyBobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Type_NUM])
 
-# define PyBobLearnLinearFisherLDATrainer_Check (*(PyBobLearnLinearFisherLDATrainer_Check_RET (*)PyBobLearnLinearFisherLDATrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Check_NUM])
+# define PyBobLearnLinearFisherLDATrainer_Check (*(PyBobLearnLinearFisherLDATrainer_Check_RET (*)PyBobLearnLinearFisherLDATrainer_Check_PROTO) PyBobLearnLinear_API[PyBobLearnLinearFisherLDATrainer_Check_NUM])
 
   /**************************************************
-   * Bindings for xbob.learn.linear.CGLogRegTrainer *
+   * Bindings for bob.learn.linear.CGLogRegTrainer *
    **************************************************/
 
-# define PyBobLearnLinearCGLogRegTrainer_Type (*(PyBobLearnLinearCGLogRegTrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearCGLogRegTrainer_Type_NUM])
+# define PyBobLearnLinearCGLogRegTrainer_Type (*(PyBobLearnLinearCGLogRegTrainer_Type_TYPE *)PyBobLearnLinear_API[PyBobLearnLinearCGLogRegTrainer_Type_NUM])
 
-# define PyBobLearnLinearCGLogRegTrainer_Check (*(PyBobLearnLinearCGLogRegTrainer_Check_RET (*)PyBobLearnLinearCGLogRegTrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearCGLogRegTrainer_Check_NUM])
+# define PyBobLearnLinearCGLogRegTrainer_Check (*(PyBobLearnLinearCGLogRegTrainer_Check_RET (*)PyBobLearnLinearCGLogRegTrainer_Check_PROTO) PyBobLearnLinear_API[PyBobLearnLinearCGLogRegTrainer_Check_NUM])
 
   /***************************************************
-   * Bindings for xbob.learn.linear.WhiteningTrainer *
+   * Bindings for bob.learn.linear.WhiteningTrainer *
    ***************************************************/
 
-# define PyBobLearnLinearWhiteningTrainer_Type (*(PyBobLearnLinearWhiteningTrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearWhiteningTrainer_Type_NUM])
+# define PyBobLearnLinearWhiteningTrainer_Type (*(PyBobLearnLinearWhiteningTrainer_Type_TYPE *)PyBobLearnLinear_API[PyBobLearnLinearWhiteningTrainer_Type_NUM])
 
-# define PyBobLearnLinearWhiteningTrainer_Check (*(PyBobLearnLinearWhiteningTrainer_Check_RET (*)PyBobLearnLinearWhiteningTrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearWhiteningTrainer_Check_NUM])
+# define PyBobLearnLinearWhiteningTrainer_Check (*(PyBobLearnLinearWhiteningTrainer_Check_RET (*)PyBobLearnLinearWhiteningTrainer_Check_PROTO) PyBobLearnLinear_API[PyBobLearnLinearWhiteningTrainer_Check_NUM])
 
   /**********************************************
-   * Bindings for xbob.learn.linear.WCCNTrainer *
+   * Bindings for bob.learn.linear.WCCNTrainer *
    **********************************************/
 
-# define PyBobLearnLinearWCCNTrainer_Type (*(PyBobLearnLinearWCCNTrainer_Type_TYPE *)PyXbobLearnLinear_API[PyBobLearnLinearWCCNTrainer_Type_NUM])
+# define PyBobLearnLinearWCCNTrainer_Type (*(PyBobLearnLinearWCCNTrainer_Type_TYPE *)PyBobLearnLinear_API[PyBobLearnLinearWCCNTrainer_Type_NUM])
 
-# define PyBobLearnLinearWCCNTrainer_Check (*(PyBobLearnLinearWCCNTrainer_Check_RET (*)PyBobLearnLinearWCCNTrainer_Check_PROTO) PyXbobLearnLinear_API[PyBobLearnLinearWCCNTrainer_Check_NUM])
+# define PyBobLearnLinearWCCNTrainer_Check (*(PyBobLearnLinearWCCNTrainer_Check_RET (*)PyBobLearnLinearWCCNTrainer_Check_PROTO) PyBobLearnLinear_API[PyBobLearnLinearWCCNTrainer_Check_NUM])
 
 # if !defined(NO_IMPORT_ARRAY)
 
@@ -292,12 +292,12 @@ typedef struct {
    * Returns -1 on error, 0 on success. PyCapsule_Import will set an exception
    * if there's an error.
    */
-  static int import_xbob_learn_linear(void) {
+  static int import_bob_learn_linear(void) {
 
     PyObject *c_api_object;
     PyObject *module;
 
-    module = PyImport_ImportModule(BOOST_PP_STRINGIZE(XBOB_LEARN_LINEAR_MODULE_PREFIX) "." BOOST_PP_STRINGIZE(XBOB_LEARN_LINEAR_MODULE_NAME));
+    module = PyImport_ImportModule(BOOST_PP_STRINGIZE(BOB_LEARN_LINEAR_MODULE_PREFIX) "." BOOST_PP_STRINGIZE(BOB_LEARN_LINEAR_MODULE_NAME));
 
     if (module == NULL) return -1;
 
@@ -310,35 +310,35 @@ typedef struct {
 
 #   if PY_VERSION_HEX >= 0x02070000
     if (PyCapsule_CheckExact(c_api_object)) {
-      PyXbobLearnLinear_API = (void **)PyCapsule_GetPointer(c_api_object,
+      PyBobLearnLinear_API = (void **)PyCapsule_GetPointer(c_api_object,
           PyCapsule_GetName(c_api_object));
     }
 #   else
     if (PyCObject_Check(c_api_object)) {
-      XbobLearnLinear_API = (void **)PyCObject_AsVoidPtr(c_api_object);
+      BobLearnLinear_API = (void **)PyCObject_AsVoidPtr(c_api_object);
     }
 #   endif
 
     Py_DECREF(c_api_object);
     Py_DECREF(module);
 
-    if (!XbobLearnLinear_API) {
+    if (!BobLearnLinear_API) {
       PyErr_Format(PyExc_ImportError,
 #   if PY_VERSION_HEX >= 0x02070000
           "cannot find C/C++ API capsule at `%s.%s._C_API'",
 #   else
           "cannot find C/C++ API cobject at `%s.%s._C_API'",
 #   endif
-          BOOST_PP_STRINGIZE(XBOB_LEARN_LINEAR_MODULE_PREFIX),
-          BOOST_PP_STRINGIZE(XBOB_LEARN_LINEAR_MODULE_NAME));
+          BOOST_PP_STRINGIZE(BOB_LEARN_LINEAR_MODULE_PREFIX),
+          BOOST_PP_STRINGIZE(BOB_LEARN_LINEAR_MODULE_NAME));
       return -1;
     }
 
     /* Checks that the imported version matches the compiled version */
-    int imported_version = *(int*)PyXbobLearnLinear_API[PyXbobLearnLinear_APIVersion_NUM];
+    int imported_version = *(int*)PyBobLearnLinear_API[PyBobLearnLinear_APIVersion_NUM];
 
-    if (XBOB_LEARN_LINEAR_API_VERSION != imported_version) {
-      PyErr_Format(PyExc_ImportError, "%s.%s import error: you compiled against API version 0x%04x, but are now importing an API with version 0x%04x which is not compatible - check your Python runtime environment for errors", BOOST_PP_STRINGIZE(XBOB_LEARN_LINEAR_MODULE_PREFIX), BOOST_PP_STRINGIZE(XBOB_LEARN_LINEAR_MODULE_NAME), XBOB_LEARN_LINEAR_API_VERSION, imported_version);
+    if (BOB_LEARN_LINEAR_API_VERSION != imported_version) {
+      PyErr_Format(PyExc_ImportError, "%s.%s import error: you compiled against API version 0x%04x, but are now importing an API with version 0x%04x which is not compatible - check your Python runtime environment for errors", BOOST_PP_STRINGIZE(BOB_LEARN_LINEAR_MODULE_PREFIX), BOOST_PP_STRINGIZE(BOB_LEARN_LINEAR_MODULE_NAME), BOB_LEARN_LINEAR_API_VERSION, imported_version);
       return -1;
     }
 
@@ -349,6 +349,6 @@ typedef struct {
 
 # endif //!defined(NO_IMPORT_ARRAY)
 
-#endif /* XBOB_LEARN_LINEAR_MODULE */
+#endif /* BOB_LEARN_LINEAR_MODULE */
 
-#endif /* XBOB_LEARN_LINEAR_H */
+#endif /* BOB_LEARN_LINEAR_H */

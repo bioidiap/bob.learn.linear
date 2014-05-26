@@ -16,10 +16,10 @@ import numpy
 from . import Machine, PCATrainer, FisherLDATrainer, CGLogRegTrainer, \
     WhiteningTrainer, WCCNTrainer
 
-import xbob.io.base
-from xbob.learn.activation import HyperbolicTangent, Identity
-from xbob.io.base import HDF5File
-from xbob.io.base.test_utils import datafile
+import bob.io.base
+from bob.learn.activation import HyperbolicTangent, Identity
+from bob.io.base import HDF5File
+from bob.io.base.test_utils import datafile
 
 def F(f):
   """Returns the test file on the "data" subdirectory"""
@@ -777,11 +777,11 @@ def test_cglogreg_norm():
   # read some real test data;
   # for toy examples the results are quite different...
 
-  pos1 = xbob.io.base.load(datafile('positives_isv.hdf5', __name__))
-  neg1 = xbob.io.base.load(datafile('negatives_isv.hdf5', __name__))
+  pos1 = bob.io.base.load(datafile('positives_isv.hdf5', __name__))
+  neg1 = bob.io.base.load(datafile('negatives_isv.hdf5', __name__))
 
-  pos2 = xbob.io.base.load(datafile('positives_lda.hdf5', __name__))
-  neg2 = xbob.io.base.load(datafile('negatives_lda.hdf5', __name__))
+  pos2 = bob.io.base.load(datafile('positives_lda.hdf5', __name__))
+  neg2 = bob.io.base.load(datafile('negatives_lda.hdf5', __name__))
 
   negatives = numpy.vstack((neg1, neg2)).T
   positives = numpy.vstack((pos1, pos2)).T
@@ -821,11 +821,11 @@ def test_cglogreg_norm():
 @nose.tools.nottest
 def test_cglogreg_norm_slow():
 
-  pos1 = xbob.io.base.load(datafile('positives_isv.hdf5', __name__))
-  neg1 = xbob.io.base.load(datafile('negatives_isv.hdf5', __name__))
+  pos1 = bob.io.base.load(datafile('positives_isv.hdf5', __name__))
+  neg1 = bob.io.base.load(datafile('negatives_isv.hdf5', __name__))
 
-  pos2 = xbob.io.base.load(datafile('positives_lda.hdf5', __name__))
-  neg2 = xbob.io.base.load(datafile('negatives_lda.hdf5', __name__))
+  pos2 = bob.io.base.load(datafile('positives_lda.hdf5', __name__))
+  neg2 = bob.io.base.load(datafile('negatives_lda.hdf5', __name__))
 
   negatives = numpy.vstack((neg1, neg2)).T
   positives = numpy.vstack((pos1, pos2)).T

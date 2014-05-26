@@ -19,11 +19,11 @@
 #ifdef NO_IMPORT_ARRAY
 #undef NO_IMPORT_ARRAY
 #endif
-#include <xbob.blitz/capi.h>
-#include <xbob.blitz/cleanup.h>
-#include <xbob.io.base/config.h>
-#include <xbob.learn.activation/config.h>
-#include <xbob.learn.linear/config.h>
+#include <bob.blitz/capi.h>
+#include <bob.blitz/cleanup.h>
+#include <bob.io.base/config.h>
+#include <bob.learn.activation/config.h>
+#include <bob.learn.linear/config.h>
 
 static int dict_set(PyObject* d, const char* key, const char* value) {
   PyObject* v = Py_BuildValue("s", value);
@@ -99,24 +99,24 @@ static PyObject* numpy_version() {
 }
 
 /**
- * xbob.blitz c/c++ api version
+ * bob.blitz c/c++ api version
  */
-static PyObject* xbob_blitz_version() {
-  return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(XBOB_BLITZ_API_VERSION));
+static PyObject* bob_blitz_version() {
+  return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(BOB_BLITZ_API_VERSION));
 }
 
 /**
- * xbob.io.base c/c++ api version
+ * bob.io.base c/c++ api version
  */
-static PyObject* xbob_io_base_version() {
-  return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(XBOB_IO_BASE_API_VERSION));
+static PyObject* bob_io_base_version() {
+  return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(BOB_IO_BASE_API_VERSION));
 }
 
 /**
- * xbob.io c/c++ api version
+ * bob.io c/c++ api version
  */
-static PyObject* xbob_learn_activation_version() {
-  return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(XBOB_LEARN_ACTIVATION_API_VERSION));
+static PyObject* bob_learn_activation_version() {
+  return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(BOB_LEARN_ACTIVATION_API_VERSION));
 }
 
 static PyObject* build_version_dictionary() {
@@ -130,9 +130,9 @@ static PyObject* build_version_dictionary() {
   if (!dict_steal(retval, "Compiler", compiler_version())) return 0;
   if (!dict_steal(retval, "Python", python_version())) return 0;
   if (!dict_steal(retval, "NumPy", numpy_version())) return 0;
-  if (!dict_steal(retval, "xbob.blitz", xbob_blitz_version())) return 0;
-  if (!dict_steal(retval, "xbob.io", xbob_io_base_version())) return 0;
-  if (!dict_steal(retval, "xbob.learn.activation", xbob_learn_activation_version())) return 0;
+  if (!dict_steal(retval, "bob.blitz", bob_blitz_version())) return 0;
+  if (!dict_steal(retval, "bob.io", bob_io_base_version())) return 0;
+  if (!dict_steal(retval, "bob.learn.activation", bob_learn_activation_version())) return 0;
   if (!dict_steal(retval, "Bob", bob_version())) return 0;
 
   Py_INCREF(retval);
@@ -150,7 +150,7 @@ PyDoc_STRVAR(module_docstr,
 #if PY_VERSION_HEX >= 0x03000000
 static PyModuleDef module_definition = {
   PyModuleDef_HEAD_INIT,
-  XBOB_EXT_MODULE_NAME,
+  BOB_EXT_MODULE_NAME,
   module_docstr,
   -1,
   module_methods,
@@ -163,15 +163,15 @@ static PyObject* create_module (void) {
 # if PY_VERSION_HEX >= 0x03000000
   PyObject* m = PyModule_Create(&module_definition);
 # else
-  PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, module_methods, module_docstr);
+  PyObject* m = Py_InitModule3(BOB_EXT_MODULE_NAME, module_methods, module_docstr);
 # endif
   if (!m) return 0;
   auto m_ = make_safe(m); ///< protects against early returns
 
   /* register version numbers and constants */
-  if (PyModule_AddIntConstant(m, "api", XBOB_LEARN_LINEAR_API_VERSION) < 0)
+  if (PyModule_AddIntConstant(m, "api", BOB_LEARN_LINEAR_API_VERSION) < 0)
     return 0;
-  if (PyModule_AddStringConstant(m, "module", XBOB_EXT_MODULE_VERSION) < 0)
+  if (PyModule_AddStringConstant(m, "module", BOB_EXT_MODULE_VERSION) < 0)
     return 0;
 
   PyObject* externals = build_version_dictionary();
@@ -179,9 +179,9 @@ static PyObject* create_module (void) {
   if (PyModule_AddObject(m, "externals", externals) < 0) return 0;
 
   /* imports dependencies */
-  if (import_xbob_blitz() < 0) {
+  if (import_bob_blitz() < 0) {
     PyErr_Print();
-    PyErr_Format(PyExc_ImportError, "cannot import `%s'", XBOB_EXT_MODULE_NAME);
+    PyErr_Format(PyExc_ImportError, "cannot import `%s'", BOB_EXT_MODULE_NAME);
     return 0;
   }
 
@@ -190,7 +190,7 @@ static PyObject* create_module (void) {
 
 }
 
-PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
+PyMODINIT_FUNC BOB_EXT_ENTRY_NAME (void) {
 # if PY_VERSION_HEX >= 0x03000000
   return
 # endif

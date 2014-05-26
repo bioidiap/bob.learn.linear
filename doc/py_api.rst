@@ -7,8 +7,8 @@
 ============
 
 This section includes information for using the pure Python API of
-``xbob.learn.linear``.
+``bob.learn.linear``.
 
 
-.. automodule:: xbob.learn.linear
+.. automodule:: bob.learn.linear
 

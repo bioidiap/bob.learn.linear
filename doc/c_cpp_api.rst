@@ -6,11 +6,11 @@
  C++ API
 =========
 
-The C++ API of ``xbob.learn.linear`` allows users to leverage from automatic
-converters for classes in :py:class:`xbob.learn.linear`.  To use the C API,
-clients should first, include the header file ``<xbob.learn.linear/api.h>`` on
+The C++ API of ``bob.learn.linear`` allows users to leverage from automatic
+converters for classes in :py:class:`bob.learn.linear`.  To use the C API,
+clients should first, include the header file ``<bob.learn.linear/api.h>`` on
 their compilation units and then, make sure to call once
-``import_xbob_learn_linear()`` at their module instantiation, as explained at
+``import_bob_learn_linear()`` at their module instantiation, as explained at
 the `Python manual
 <http://docs.python.org/2/extending/extending.html#using-capsules>`_.
 
@@ -19,7 +19,7 @@ the import function:
 
 .. code-block:: c++
 
-   #include <xbob.learn.linear/api.h>
+   #include <bob.learn.linear/api.h>
 
    PyMODINIT_FUNC initclient(void) {
 
@@ -27,9 +27,9 @@ the import function:
 
      if (!m) return 0;
 
-     if (import_xbob_blitz() < 0) return 0;
-     if (import_xbob_io() < 0) return 0;
-     if (import_xbob_learn_activation() < 0) return 0;
+     if (import_bob_blitz() < 0) return 0;
+     if (import_bob_io() < 0) return 0;
+     if (import_bob_learn_activation() < 0) return 0;
 
      return m;
 
@@ -38,7 +38,7 @@ the import function:
 .. note::
 
   The include directory can be discovered using
-  :py:func:`xbob.learn.linear.get_include`.
+  :py:func:`bob.learn.linear.get_include`.
 
 Activation Functors
 -------------------

@@ -7,17 +7,17 @@
  * Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
  */
 
-#define XBOB_LEARN_LINEAR_MODULE
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
-#include <xbob.learn.linear/api.h>
+#define BOB_LEARN_LINEAR_MODULE
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
+#include <bob.learn.linear/api.h>
 #include <structmember.h>
 
 /*************************************************
  * Implementation of FisherLDATrainer base class *
  *************************************************/
 
-PyDoc_STRVAR(s_pcatrainer_str, XBOB_EXT_MODULE_PREFIX ".FisherLDATrainer");
+PyDoc_STRVAR(s_pcatrainer_str, BOB_EXT_MODULE_PREFIX ".FisherLDATrainer");
 
 PyDoc_STRVAR(s_pcatrainer_doc,
 "FisherLDATrainer([use_pinv=False [, strip_to_rank=True]]) -> new FisherLDATrainer\n\
@@ -50,7 +50,7 @@ flags indicating a couple of optional parameters:\n\
   strip_to_rank (bool) - defaults to ``True``\n\
      \n\
      Specifies how to calculate the final size of the\n\
-     to-be-trained :py:class:`xbob.learn.linear.Machine`. The\n\
+     to-be-trained :py:class:`bob.learn.linear.Machine`. The\n\
      default setting (``True``), makes the trainer return\n\
      only the K-1 eigen-values/vectors limiting the output to\n\
      the rank of :math:`S_w^{-1} S_b`. If you set this value\n\
@@ -326,11 +326,11 @@ This method also returns the eigen values allowing you to\n\
 implement your own compression scheme.\n\
 \n\
 The user may provide or not an object of type\n\
-:py:class:`xbob.learn.linear.Machine` that will be set by this\n\
+:py:class:`bob.learn.linear.Machine` that will be set by this\n\
 method. If provided, machine should have the correct number of\n\
 inputs and outputs matching, respectively, the number of columns\n\
 in the input data arrays ``X`` and the output of the method\n\
-:py:meth:`xbob.learn.linear.FisherLDATrainer.output_size` (see\n\
+:py:meth:`bob.learn.linear.FisherLDATrainer.output_size` (see\n\
 help).\n\
 \n\
 The value of ``X`` should be a sequence over as many 2D 64-bit\n\
@@ -347,7 +347,7 @@ elements as classes you want to discriminate.\n\
    :py:meth:`bob.trainer.FisherLDATrainer.output_size`\n\
    eigen-values and vectors on the passed machine. You can\n\
    compress the machine output further using\n\
-   :py:meth:`xbob.learn.linear.Machine.resize` if necessary.\n\
+   :py:meth:`bob.learn.linear.Machine.resize` if necessary.\n\
 \n\
 ");
 

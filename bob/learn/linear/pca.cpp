@@ -7,17 +7,17 @@
  * Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
  */
 
-#define XBOB_LEARN_LINEAR_MODULE
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
-#include <xbob.learn.linear/api.h>
+#define BOB_LEARN_LINEAR_MODULE
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
+#include <bob.learn.linear/api.h>
 #include <structmember.h>
 
 /*******************************************
  * Implementation of PCATrainer base class *
  *******************************************/
 
-PyDoc_STRVAR(s_pcatrainer_str, XBOB_EXT_MODULE_PREFIX ".PCATrainer");
+PyDoc_STRVAR(s_pcatrainer_str, BOB_EXT_MODULE_PREFIX ".PCATrainer");
 
 PyDoc_STRVAR(s_pcatrainer_doc,
 "PCATrainer([use_svd=True]) -> new PCATrainer\n\
@@ -113,10 +113,10 @@ corresponds to its eigen values.\n\
    Our implementation uses LAPACK's ``dgesdd`` to compute the\n\
    solution to this linear equation.\n\
 \n\
-The corresponding :py:class:`xbob.learn.Linear.Machine` and\n\
+The corresponding :py:class:`bob.learn.Linear.Machine` and\n\
 returned eigen-values of :math:`\\Sigma`, are pre-sorted in\n\
 descending order (the first eigen-vector - or column - of the\n\
-weight matrix in the :py:class:`xbob.learn.Linear.Machine`\n\
+weight matrix in the :py:class:`bob.learn.Linear.Machine`\n\
 corresponds to the highest eigen value obtained).\n\
 \n\
 .. note::\n\
@@ -311,11 +311,11 @@ rows in ``X`` (samples) and :math:`F` the number of columns\n\
 eigen-value automatically. You don't need to sort the results.\n\
 \n\
 The user may provide or not an object of type\n\
-:py:class:`xbob.learn.linear.Machine` that will be set by this\n\
+:py:class:`bob.learn.linear.Machine` that will be set by this\n\
 method. If provided, machine should have the correct number of\n\
 inputs and outputs matching, respectively, the number of columns\n\
 in the input data array ``X`` and the output of the method\n\
-:py:meth:`xbob.learn.linear.PCATrainer.output_size` (see\n\
+:py:meth:`bob.learn.linear.PCATrainer.output_size` (see\n\
 help).\n\
 \n\
 The input data matrix :math:`X` should correspond to a 64-bit\n\
