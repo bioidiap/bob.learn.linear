@@ -5,9 +5,12 @@
  * @brief Binds configuration information available from bob
  */
 
-#include <Python.h>
+#ifdef NO_IMPORT_ARRAY
+#undef NO_IMPORT_ARRAY
+#endif
+#include <bob.blitz/capi.h>
+#include <bob.blitz/cleanup.h>
 
-#include <bob/config.h>
 
 #include <string>
 #include <cstdlib>
@@ -16,12 +19,9 @@
 #include <boost/version.hpp>
 #include <boost/format.hpp>
 
-#ifdef NO_IMPORT_ARRAY
-#undef NO_IMPORT_ARRAY
-#endif
-#include <bob.blitz/capi.h>
-#include <bob.blitz/cleanup.h>
+#include <bob.core/config.h>
 #include <bob.io.base/config.h>
+#include <bob.math/config.h>
 #include <bob.learn.activation/config.h>
 #include <bob.learn.linear/config.h>
 
@@ -84,13 +84,6 @@ static PyObject* python_version() {
 }
 
 /**
- * Bob version, API version and platform
- */
-static PyObject* bob_version() {
-  return Py_BuildValue("sis", BOB_VERSION, BOB_API_VERSION, BOB_PLATFORM);
-}
-
-/**
  * Numpy version
  */
 static PyObject* numpy_version() {
@@ -106,10 +99,25 @@ static PyObject* bob_blitz_version() {
 }
 
 /**
+ * bob.core c/c++ api version
+ */
+static PyObject* bob_core_version() {
+  return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(BOB_CORE_API_VERSION));
+}
+
+/**
  * bob.io.base c/c++ api version
  */
 static PyObject* bob_io_base_version() {
   return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(BOB_IO_BASE_API_VERSION));
+}
+
+
+/**
+ * bob.math c/c++ api version
+ */
+static PyObject* bob_math_version() {
+  return Py_BuildValue("{ss}", "api", BOOST_PP_STRINGIZE(BOB_MATH_API_VERSION));
 }
 
 /**
@@ -125,15 +133,17 @@ static PyObject* build_version_dictionary() {
   if (!retval) return 0;
   auto retval_ = make_safe(retval);
 
+  if (!dict_steal(retval, "Bob", bob_core_version())) return 0;
   if (!dict_set(retval, "Blitz++", BZ_VERSION)) return 0;
   if (!dict_steal(retval, "Boost", boost_version())) return 0;
   if (!dict_steal(retval, "Compiler", compiler_version())) return 0;
   if (!dict_steal(retval, "Python", python_version())) return 0;
   if (!dict_steal(retval, "NumPy", numpy_version())) return 0;
   if (!dict_steal(retval, "bob.blitz", bob_blitz_version())) return 0;
-  if (!dict_steal(retval, "bob.io", bob_io_base_version())) return 0;
+  if (!dict_steal(retval, "bob.core", bob_core_version())) return 0;
+  if (!dict_steal(retval, "bob.io.base", bob_io_base_version())) return 0;
+  if (!dict_steal(retval, "bob.math", bob_math_version())) return 0;
   if (!dict_steal(retval, "bob.learn.activation", bob_learn_activation_version())) return 0;
-  if (!dict_steal(retval, "Bob", bob_version())) return 0;
 
   Py_INCREF(retval);
   return retval;

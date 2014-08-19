@@ -13,9 +13,9 @@
 #include <algorithm>
 #include <blitz/array.h>
 #include <boost/format.hpp>
-#include <bob/math/stats.h>
-#include <bob/math/svd.h>
-#include <bob/math/eig.h>
+#include <bob.math/stats.h>
+#include <bob.math/svd.h>
+#include <bob.math/eig.h>
 
 #include <bob.learn.linear/pca.h>
 

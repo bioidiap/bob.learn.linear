@@ -10,7 +10,7 @@
 #define BOB_LEARN_LINEAR_MODULE
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
-#include <bob/config.h>
+#include <bob.core/config.h>
 #include <bob.learn.linear/api.h>
 #include <structmember.h>
 

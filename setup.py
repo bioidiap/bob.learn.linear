@@ -3,23 +3,12 @@
 # Andre Anjos <andre.anjos@idiap.ch>
 # Mon 16 Apr 08:18:08 2012 CEST
 
+bob_packages = ['bob.core', 'bob.math', 'bob.io.base', 'bob.learn.activation']
+
 from setuptools import setup, find_packages, dist
-dist.Distribution(dict(setup_requires=['bob.blitz', 'bob.io.base', 'bob.learn.activation']))
-from bob.blitz.extension import Extension
-import bob.io.base
-import bob.learn.activation
+dist.Distribution(dict(setup_requires=['bob.blitz'] + bob_packages))
+from bob.blitz.extension import Extension, Library, build_ext
 
-import os
-package_dir = os.path.dirname(os.path.realpath(__file__))
-package_dir = os.path.join(package_dir, 'bob', 'learn', 'linear', 'include')
-include_dirs = [
-    package_dir,
-    bob.blitz.get_include(),
-    bob.io.base.get_include(),
-    bob.learn.activation.get_include()
-    ]
-
-packages = ['bob-machine >= 2.0.0a2', 'bob-io >= 2.0.0a2']
 version = '2.0.0a0'
 
 setup(
@@ -41,24 +30,39 @@ setup(
     install_requires=[
       'setuptools',
       'bob.blitz',
+      'bob.core',
       'bob.io.base',
+      'bob.math',
       'bob.learn.activation',
     ],
 
     namespace_packages=[
       "bob",
       "bob.learn",
-      ],
+    ],
 
     ext_modules = [
       Extension("bob.learn.linear.version",
         [
           "bob/learn/linear/version.cpp",
-          ],
-        packages = packages,
-        include_dirs = include_dirs,
+        ],
+        bob_packages = bob_packages,
         version = version,
-        ),
+      ),
+
+      Library("bob.learn.linear.bob_learn_linear",
+        [
+          "bob/learn/linear/cpp/machine.cpp",
+          "bob/learn/linear/cpp/pca.cpp",
+          "bob/learn/linear/cpp/lda.cpp",
+          "bob/learn/linear/cpp/logreg.cpp",
+          "bob/learn/linear/cpp/whitening.cpp",
+          "bob/learn/linear/cpp/wccn.cpp",
+        ],
+        bob_packages = bob_packages,
+        version = version,
+      ),
+
       Extension("bob.learn.linear._library",
         [
           "bob/learn/linear/machine.cpp",
@@ -68,23 +72,20 @@ setup(
           "bob/learn/linear/whitening.cpp",
           "bob/learn/linear/wccn.cpp",
           "bob/learn/linear/main.cpp",
-          "bob/learn/linear/cpp/machine.cpp",
-          "bob/learn/linear/cpp/pca.cpp",
-          "bob/learn/linear/cpp/lda.cpp",
-          "bob/learn/linear/cpp/logreg.cpp",
-          "bob/learn/linear/cpp/whitening.cpp",
-          "bob/learn/linear/cpp/wccn.cpp",
           ],
-        packages = packages,
-        include_dirs = include_dirs,
+        bob_packages = bob_packages,
         version = version,
-        ),
-      ],
+      ),
+    ],
+
+    cmdclass = {
+      'build_ext': build_ext
+    },
 
     entry_points={
       'console_scripts': [
-        ],
-      },
+      ],
+    },
 
     classifiers = [
       'Development Status :: 3 - Alpha',
@@ -94,6 +95,6 @@ setup(
       'Programming Language :: Python',
       'Programming Language :: Python :: 3',
       'Topic :: Software Development :: Libraries :: Python Modules',
-      ],
+    ],
 
-    )
+  )

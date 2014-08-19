@@ -11,8 +11,8 @@
 #include <boost/make_shared.hpp>
 #include <boost/format.hpp>
 
-#include <bob/core/array_copy.h>
-#include <bob/math/linear.h>
+#include <bob.core/array_copy.h>
+#include <bob.math/linear.h>
 
 #include <bob.learn.linear/machine.h>
 
@@ -22,7 +22,7 @@ namespace bob { namespace learn { namespace linear {
     : m_input_sub(weight.extent(0)),
     m_input_div(weight.extent(0)),
     m_bias(weight.extent(1)),
-    m_activation(boost::make_shared<bob::machine::IdentityActivation>()),
+    m_activation(boost::make_shared<bob::learn::activation::IdentityActivation>()),
     m_buffer(weight.extent(0))
   {
     m_input_sub = 0.0;
@@ -36,7 +36,7 @@ namespace bob { namespace learn { namespace linear {
     m_input_div(0),
     m_weight(0, 0),
     m_bias(0),
-    m_activation(boost::make_shared<bob::machine::IdentityActivation>()),
+    m_activation(boost::make_shared<bob::learn::activation::IdentityActivation>()),
     m_buffer(0)
   {
   }
@@ -46,7 +46,7 @@ namespace bob { namespace learn { namespace linear {
     m_input_div(n_input),
     m_weight(n_input, n_output),
     m_bias(n_output),
-    m_activation(boost::make_shared<bob::machine::IdentityActivation>()),
+    m_activation(boost::make_shared<bob::learn::activation::IdentityActivation>()),
     m_buffer(n_input)
   {
     m_input_sub = 0.0;
@@ -65,7 +65,7 @@ namespace bob { namespace learn { namespace linear {
   {
   }
 
-  Machine::Machine (bob::io::HDF5File& config) {
+  Machine::Machine (bob::io::base::HDF5File& config) {
     load(config);
   }
 
@@ -106,7 +106,7 @@ namespace bob { namespace learn { namespace linear {
         m_activation->str() == b.m_activation->str());
   }
 
-  void Machine::load (bob::io::HDF5File& config) {
+  void Machine::load (bob::io::base::HDF5File& config) {
 
     //reads all data directly into the member variables
     m_input_sub.reference(config.readArray<double,1>("input_sub"));
@@ -118,12 +118,12 @@ namespace bob { namespace learn { namespace linear {
     //switch between different versions - support for version 1
     if (config.hasAttribute(".", "version")) { //new version
       config.cd("activation");
-      m_activation = bob::machine::load_activation(config);
+      m_activation = bob::learn::activation::load_activation(config);
       config.cd("..");
     }
     else { //old version
       uint32_t act = config.read<uint32_t>("activation");
-      m_activation = bob::machine::make_deprecated_activation(act);
+      m_activation = bob::learn::activation::make_deprecated_activation(act);
     }
 
   }
@@ -138,7 +138,7 @@ namespace bob { namespace learn { namespace linear {
 
   }
 
-  void Machine::save (bob::io::HDF5File& config) const {
+  void Machine::save (bob::io::base::HDF5File& config) const {
 
     config.setAttribute(".", "version", 1);
     config.setArray("input_sub", m_input_sub);
@@ -226,7 +226,7 @@ namespace bob { namespace learn { namespace linear {
 
   }
 
-  void Machine::setActivation (boost::shared_ptr<bob::machine::Activation> a) {
+  void Machine::setActivation (boost::shared_ptr<bob::learn::activation::Activation> a) {
     m_activation = a;
   }
 

@@ -18,8 +18,8 @@
 #define BOB_LEARN_LINEAR_MACHINE_H
 
 #include <blitz/array.h>
-#include <bob/io/HDF5File.h>
-#include <bob/machine/Activation.h>
+#include <bob.io.base/HDF5File.h>
+#include <bob.learn.activation/Activation.h>
 
 namespace bob { namespace learn { namespace linear {
 
@@ -62,7 +62,7 @@ namespace bob { namespace learn { namespace linear {
       /**
        * Starts a new Machine from an existing Configuration object.
        */
-      Machine (bob::io::HDF5File& config);
+      Machine (bob::io::base::HDF5File& config);
 
       /**
        * Just to virtualise the destructor
@@ -92,12 +92,12 @@ namespace bob { namespace learn { namespace linear {
        * Loads data from an existing configuration object. Resets the current
        * state.
        */
-      void load (bob::io::HDF5File& config);
+      void load (bob::io::base::HDF5File& config);
 
       /**
        * Saves an existing machine to a Configuration object.
        */
-      void save (bob::io::HDF5File& config) const;
+      void save (bob::io::base::HDF5File& config) const;
 
       /**
        * Forwards data through the network, outputs the values of each linear
@@ -247,12 +247,12 @@ namespace bob { namespace learn { namespace linear {
       /**
        * Returns the currently set activation function
        */
-      inline boost::shared_ptr<bob::machine::Activation> getActivation() const { return m_activation; }
+      inline boost::shared_ptr<bob::learn::activation::Activation> getActivation() const { return m_activation; }
 
       /**
        * Sets the activation function for each of the outputs.
        */
-      void setActivation(boost::shared_ptr<bob::machine::Activation> a);
+      void setActivation(boost::shared_ptr<bob::learn::activation::Activation> a);
 
     private: //representation
 
@@ -262,7 +262,7 @@ namespace bob { namespace learn { namespace linear {
       blitz::Array<double, 1> m_input_div; ///< input division
       blitz::Array<double, 2> m_weight; ///< weights
       blitz::Array<double, 1> m_bias; ///< biases for the output
-      boost::shared_ptr<bob::machine::Activation> m_activation; ///< currently set activation type
+      boost::shared_ptr<bob::learn::activation::Activation> m_activation; ///< currently set activation type
 
       mutable blitz::Array<double, 1> m_buffer; ///< a buffer for speed
 

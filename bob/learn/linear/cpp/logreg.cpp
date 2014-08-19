@@ -5,8 +5,8 @@
  * Copyright (C) Idiap Research Institute, Martigny, Switzerland
  */
 
-#include <bob/core/logging.h>
-#include <bob/math/linear.h>
+#include <bob.core/logging.h>
+#include <bob.math/linear.h>
 #include <limits>
 
 #include <bob.learn.linear/logreg.h>

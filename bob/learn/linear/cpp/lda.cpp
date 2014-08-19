@@ -11,10 +11,10 @@
  */
 
 #include <boost/format.hpp>
-#include <bob/math/pinv.h>
-#include <bob/math/eig.h>
-#include <bob/math/linear.h>
-#include <bob/math/stats.h>
+#include <bob.math/pinv.h>
+#include <bob.math/eig.h>
+#include <bob.math/linear.h>
+#include <bob.math/stats.h>
 
 #include <bob.learn.linear/lda.h>
 

@@ -567,9 +567,7 @@ PyObject* PyBobLearnLinearMachine_Repr(PyBobLearnLinearMachineObject* self) {
    * <bob.learn.linear.Machine float64@(3, 2) [act: f(z) = tanh(z)]>
    */
 
-  using bob::machine::IdentityActivation;
-
-  static const std::string identity_str = IdentityActivation().str();
+  static const std::string identity_str = bob::learn::activation::IdentityActivation().str();
 
   auto weights = make_safe(PyBobLearnLinearMachine_getWeights(self, 0));
   if (!weights) return 0;
@@ -616,9 +614,7 @@ PyObject* PyBobLearnLinearMachine_Str(PyBobLearnLinearMachineObject* self) {
    *  [ 0.2  0.7]]
    */
 
-  using bob::machine::IdentityActivation;
-
-  static const std::string identity_str = IdentityActivation().str();
+  static const std::string identity_str = bob::learn::activation::IdentityActivation().str();
 
   boost::shared_ptr<PyObject> act;
   if (self->cxx->getActivation()->str() != identity_str) {

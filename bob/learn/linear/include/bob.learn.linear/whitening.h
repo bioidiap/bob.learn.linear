@@ -8,7 +8,7 @@
 #ifndef BOB_LEARN_LINEAR_WHITENING_H
 #define BOB_LEARN_LINEAR_WHITENING_H
 
-#include "machine.h"
+#include <bob.learn.linear/machine.h>
 
 namespace bob { namespace learn { namespace linear {
 

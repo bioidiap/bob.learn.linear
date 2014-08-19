@@ -12,7 +12,7 @@
 #define BOB_LEARN_LINEAR_LOGREG_H
 
 #include <boost/format.hpp>
-#include "machine.h"
+#include <bob.learn.linear/machine.h>
 
 namespace bob { namespace learn { namespace linear {
 

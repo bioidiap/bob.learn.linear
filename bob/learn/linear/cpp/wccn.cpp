@@ -7,9 +7,9 @@
  */
 
 #include <boost/make_shared.hpp>
-#include <bob/math/inv.h>
-#include <bob/math/lu.h>
-#include <bob/math/stats.h>
+#include <bob.math/inv.h>
+#include <bob.math/lu.h>
+#include <bob.math/stats.h>
 
 #include <bob.learn.linear/wccn.h>
 
@@ -97,7 +97,7 @@ namespace bob { namespace learn { namespace linear {
   machine.setInputDivision(1.);
   machine.setWeights(buf1);
   machine.setBiases(0);
-  machine.setActivation(boost::make_shared<bob::machine::IdentityActivation>());
+  machine.setActivation(boost::make_shared<bob::learn::activation::IdentityActivation>());
 
   }
 
