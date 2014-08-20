@@ -9,6 +9,9 @@ from setuptools import setup, find_packages, dist
 dist.Distribution(dict(setup_requires=['bob.blitz'] + bob_packages))
 from bob.blitz.extension import Extension, Library, build_ext
 
+packages = ['boost']
+boost_modules = ['system']
+
 version = '2.0.0a0'
 
 setup(
@@ -48,6 +51,8 @@ setup(
         ],
         bob_packages = bob_packages,
         version = version,
+        packages = packages,
+        boost_modules = boost_modules,
       ),
 
       Library("bob.learn.linear.bob_learn_linear",
@@ -61,6 +66,8 @@ setup(
         ],
         bob_packages = bob_packages,
         version = version,
+        packages = packages,
+        boost_modules = boost_modules,
       ),
 
       Extension("bob.learn.linear._library",
@@ -75,6 +82,8 @@ setup(
           ],
         bob_packages = bob_packages,
         version = version,
+        packages = packages,
+        boost_modules = boost_modules,
       ),
     ],
 
