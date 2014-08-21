@@ -35,10 +35,6 @@ the import function:
 
    }
 
-.. note::
-
-  The include directory can be discovered using
-  :py:func:`bob.learn.linear.get_include`.
 
 Activation Functors
 -------------------
