@@ -287,7 +287,7 @@ static PyObject* PyBobLearnLinearWCCNTrainer_Train
 
   // checks all elements in X have the same number of columns
   Py_ssize_t ncol = Xseq_[0]->shape[1];
-  for (Py_ssize_t k=1; k<Xseq.size(); ++k) {
+  for (Py_ssize_t k=1; k<(Py_ssize_t)Xseq.size(); ++k) {
     if (Xseq_[k]->shape[1] != ncol) {
       PyErr_Format(PyExc_RuntimeError, "`%s' requires all matrices in input sequence `X' to have the same number of columns, but entry at position 0 has %" PY_FORMAT_SIZE_T "d columns white entry in position %" PY_FORMAT_SIZE_T "d has %" PY_FORMAT_SIZE_T "d columns", Py_TYPE(self)->tp_name, ncol, k, Xseq_[k]->shape[1]);
       return 0;
