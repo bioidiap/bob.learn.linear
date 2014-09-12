@@ -6,8 +6,11 @@
 bob_packages = ['bob.core', 'bob.math', 'bob.io.base', 'bob.learn.activation']
 
 from setuptools import setup, find_packages, dist
-dist.Distribution(dict(setup_requires=['bob.blitz'] + bob_packages))
+dist.Distribution(dict(setup_requires=['bob.extension', 'bob.blitz'] + bob_packages))
 from bob.blitz.extension import Extension, Library, build_ext
+
+from bob.extension.utils import load_requirements
+build_requires = load_requirements()
 
 packages = ['boost']
 boost_modules = ['system']
@@ -30,14 +33,8 @@ setup(
     include_package_data=True,
     zip_safe=False,
 
-    install_requires=[
-      'setuptools',
-      'bob.blitz',
-      'bob.core',
-      'bob.io.base',
-      'bob.math',
-      'bob.learn.activation',
-    ],
+    setup_requires = build_requires,
+    install_requires = build_requires,
 
     namespace_packages=[
       "bob",

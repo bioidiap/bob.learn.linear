@@ -1,0 +1,7 @@
+setuptools
+bob.extension
+bob.blitz
+bob.core
+bob.io.base
+bob.math
+bob.learn.activation
