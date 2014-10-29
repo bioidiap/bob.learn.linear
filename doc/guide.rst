@@ -58,13 +58,12 @@ in double-precision. Here is how to use a
   array([ 0.55,  0.55])
 
 As was shown in the above example, the way to pass data through a machine is to
-call its :py:meth:`bob.learn.linear.Machine.__call__()` operator.
+call its :py:meth:`bob.learn.linear.Machine.forward` function, for which the :py:meth:`bob.learn.linear.Machine.__call__` funciton is an alias.
 
 The first thing to notice about machines is that they can be stored and
-retrieved in HDF5 files (for more details in manipulating HDF5 files, please
-consult the documentation for :py:mod:`bob.io.base`. To save the before
+retrieved in :py:class:`bob.io.base.HDF5File`. To save the before
 metioned machine to a file, just use the machine's
-:py:meth:`bob.learn.linear.Machine.save`` command. Because several machines
+:py:meth:`bob.learn.linear.Machine.save` command. Because several machines
 can be stored on the same :py:class:`bob.io.base.HDF5File`, we let the user
 open the file and set it up before the machine can write to it:
 

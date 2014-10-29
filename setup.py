@@ -21,7 +21,7 @@ setup(
 
     name='bob.learn.linear',
     version=version,
-    description='Bindings for bob.machine\'s LinearMachine and Trainers',
+    description='Bob\'s Linear Machine and its Trainers',
     url='http://github.com/bioidiap/bob.learn.linear',
     license='BSD',
     author='Andre Anjos',
@@ -94,7 +94,8 @@ setup(
     },
 
     classifiers = [
-      'Development Status :: 3 - Alpha',
+      'Framework :: Bob',
+      'Development Status :: 4 - Beta',
       'Intended Audience :: Developers',
       'License :: OSI Approved :: BSD License',
       'Natural Language :: English',
@@ -103,4 +104,4 @@ setup(
       'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 
-  )
+)

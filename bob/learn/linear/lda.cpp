@@ -23,7 +23,7 @@ PyDoc_STRVAR(s_pcatrainer_doc,
 "FisherLDATrainer([use_pinv=False [, strip_to_rank=True]]) -> new FisherLDATrainer\n\
 FisherLDATrainer(other) -> new FisherLDATrainer\n\
 \n\
-Trains a :py:class:`bob.machine.LinearMachine` to perform\n\
+Trains a :py:class:`bob.learn.linear.Machine` to perform\n\
 Fisher's Linear Discriminant Analysis (LDA).\n\
 \n\
 Objects of this class can be initialized in two ways. In the\n\
@@ -344,7 +344,7 @@ elements as classes you want to discriminate.\n\
 .. note::\n\
    \n\
    We set at most\n\
-   :py:meth:`bob.trainer.FisherLDATrainer.output_size`\n\
+   :py:meth:`bob.learn.linear.FisherLDATrainer.output_size`\n\
    eigen-values and vectors on the passed machine. You can\n\
    compress the machine output further using\n\
    :py:meth:`bob.learn.linear.Machine.resize` if necessary.\n\

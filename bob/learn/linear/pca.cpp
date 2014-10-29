@@ -113,10 +113,10 @@ corresponds to its eigen values.\n\
    Our implementation uses LAPACK's ``dgesdd`` to compute the\n\
    solution to this linear equation.\n\
 \n\
-The corresponding :py:class:`bob.learn.Linear.Machine` and\n\
+The corresponding :py:class:`bob.learn.linear.Machine` and\n\
 returned eigen-values of :math:`\\Sigma`, are pre-sorted in\n\
 descending order (the first eigen-vector - or column - of the\n\
-weight matrix in the :py:class:`bob.learn.Linear.Machine`\n\
+weight matrix in the :py:class:`bob.learn.linear.Machine`\n\
 corresponds to the highest eigen value obtained).\n\
 \n\
 .. note::\n\

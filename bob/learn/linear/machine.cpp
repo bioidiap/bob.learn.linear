@@ -807,7 +807,7 @@ PyDoc_STRVAR(s_load_str, "load");
 PyDoc_STRVAR(s_load_doc,
 "o.load(f) -> None\n\
 \n\
-Loads itself from a :py:class:`bob.io.HDF5File`\n\
+Loads itself from a :py:class:`bob.io.base.HDF5File`\n\
 \n\
 ");
 
@@ -841,7 +841,7 @@ PyDoc_STRVAR(s_save_str, "save");
 PyDoc_STRVAR(s_save_doc,
 "o.save(f) -> None\n\
 \n\
-Saves itself at a :py:class:`bob.io.HDF5File`\n\
+Saves itself at a :py:class:`bob.io.base.HDF5File`\n\
 \n\
 ");
 
