@@ -6,6 +6,8 @@
  C++ API
 =========
 
+.. todo:: Correct the C++ API (it seems to be a copy of bob.learn.activation)
+
 The C++ API of ``bob.learn.linear`` allows users to leverage from automatic
 converters for classes in :py:class:`bob.learn.linear`.  To use the C API,
 clients should first, include the header file ``<bob.learn.linear/api.h>`` on
