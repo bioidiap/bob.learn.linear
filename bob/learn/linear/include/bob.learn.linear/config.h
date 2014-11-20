@@ -9,6 +9,6 @@
 #define BOB_LEARN_LINEAR_CONFIG_H
 
 /* Macros that define versions and important names */
-#define BOB_LEARN_LINEAR_API_VERSION 0x0200
+#define BOB_LEARN_LINEAR_API_VERSION 0x0201
 
 #endif /* BOB_LEARN_LINEAR_CONFIG_H */

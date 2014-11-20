@@ -35,6 +35,8 @@ static PyModuleDef module_definition = {
 };
 #endif
 
+extern bool init_BobLearnLinearBIC(PyObject* module);
+
 static PyObject* create_module (void) {
 
   PyBobLearnLinearMachine_Type.tp_new = PyType_GenericNew;
@@ -85,6 +87,8 @@ static PyObject* create_module (void) {
 
   Py_INCREF(&PyBobLearnLinearWCCNTrainer_Type);
   if (PyModule_AddObject(m, "WCCNTrainer", (PyObject *)&PyBobLearnLinearWCCNTrainer_Type) < 0) return 0;
+
+  if (!init_BobLearnLinearBIC(m)) return 0;
 
   static void* PyBobLearnLinear_API[PyBobLearnLinear_API_pointers];
 

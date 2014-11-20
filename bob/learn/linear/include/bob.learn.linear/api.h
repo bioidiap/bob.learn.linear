@@ -16,6 +16,7 @@
 #include <bob.learn.linear/logreg.h>
 #include <bob.learn.linear/whitening.h>
 #include <bob.learn.linear/wccn.h>
+#include <bob.learn.linear/bic.h>
 
 #define BOB_LEARN_LINEAR_MODULE_PREFIX bob.learn.linear
 #define BOB_LEARN_LINEAR_MODULE_NAME _library
@@ -46,6 +47,12 @@ enum _PyBobLearnLinear_ENUM{
   // Bindings for bob.learn.linear.WCCNTrainer
   PyBobLearnLinearWCCNTrainer_Type_NUM,
   PyBobLearnLinearWCCNTrainer_Check_NUM,
+  // Bindings for bob.learn.linear.BICMachine
+  PyBobLearnLinearBICMachine_Type_NUM,
+  PyBobLearnLinearBICMachine_Check_NUM,
+  // Bindings for bob.learn.linear.BICTrainer
+  PyBobLearnLinearBICTrainer_Type_NUM,
+  PyBobLearnLinearBICTrainer_Check_NUM,
   // Total number of C API pointers
   PyBobLearnLinear_API_pointers
 };
@@ -144,6 +151,36 @@ typedef struct {
 #define PyBobLearnLinearWCCNTrainer_Check_PROTO (PyObject* o)
 
 
+/**********************************************
+ * Bindings for bob.learn.linear.BICMachine *
+ **********************************************/
+
+typedef struct {
+  PyObject_HEAD
+  boost::shared_ptr<bob::learn::linear::BICMachine> cxx;
+} PyBobLearnLinearBICMachineObject;
+
+#define PyBobLearnLinearBICMachine_Type_TYPE PyTypeObject
+
+#define PyBobLearnLinearBICMachine_Check_RET int
+#define PyBobLearnLinearBICMachine_Check_PROTO (PyObject* o)
+
+
+/**********************************************
+ * Bindings for bob.learn.linear.BICTrainer *
+ **********************************************/
+
+typedef struct {
+  PyObject_HEAD
+  boost::shared_ptr<bob::learn::linear::BICTrainer> cxx;
+} PyBobLearnLinearBICTrainerObject;
+
+#define PyBobLearnLinearBICTrainer_Type_TYPE PyTypeObject
+
+#define PyBobLearnLinearBICTrainer_Check_RET int
+#define PyBobLearnLinearBICTrainer_Check_PROTO (PyObject* o)
+
+
 #ifdef BOB_LEARN_LINEAR_MODULE
 
   /* This section is used when compiling `bob.learn.linear' itself */
@@ -203,6 +240,22 @@ typedef struct {
   extern PyBobLearnLinearWCCNTrainer_Type_TYPE PyBobLearnLinearWCCNTrainer_Type;
 
   PyBobLearnLinearWCCNTrainer_Check_RET PyBobLearnLinearWCCNTrainer_Check PyBobLearnLinearWCCNTrainer_Check_PROTO;
+
+  /**********************************************
+   * Bindings for bob.learn.linear.BICMachine *
+   **********************************************/
+
+  extern PyBobLearnLinearBICMachine_Type_TYPE PyBobLearnLinearBICMachine_Type;
+
+  PyBobLearnLinearBICMachine_Check_RET PyBobLearnLinearBICMachine_Check PyBobLearnLinearBICMachine_Check_PROTO;
+
+  /**********************************************
+   * Bindings for bob.learn.linear.BICTrainer *
+   **********************************************/
+
+  extern PyBobLearnLinearBICTrainer_Type_TYPE PyBobLearnLinearBICTrainer_Type;
+
+  PyBobLearnLinearBICTrainer_Check_RET PyBobLearnLinearBICTrainer_Check PyBobLearnLinearBICTrainer_Check_PROTO;
 
 #else
 
@@ -285,6 +338,22 @@ typedef struct {
 # define PyBobLearnLinearWCCNTrainer_Type (*(PyBobLearnLinearWCCNTrainer_Type_TYPE *)PyBobLearnLinear_API[PyBobLearnLinearWCCNTrainer_Type_NUM])
 
 # define PyBobLearnLinearWCCNTrainer_Check (*(PyBobLearnLinearWCCNTrainer_Check_RET (*)PyBobLearnLinearWCCNTrainer_Check_PROTO) PyBobLearnLinear_API[PyBobLearnLinearWCCNTrainer_Check_NUM])
+
+  /**********************************************
+   * Bindings for bob.learn.linear.BICMachine *
+   **********************************************/
+
+# define PyBobLearnLinearBICMachine_Type (*(PyBobLearnLinearBICMachine_Type_TYPE *)PyBobLearnLinear_API[PyBobLearnLinearBICMachine_Type_NUM])
+
+# define PyBobLearnLinearBICMachine_Check (*(PyBobLearnLinearBICMachine_Check_RET (*)PyBobLearnLinearBICMachine_Check_PROTO) PyBobLearnLinear_API[PyBobLearnLinearBICMachine_Check_NUM])
+
+  /**********************************************
+   * Bindings for bob.learn.linear.BICTrainer *
+   **********************************************/
+
+# define PyBobLearnLinearBICTrainer_Type (*(PyBobLearnLinearBICTrainer_Type_TYPE *)PyBobLearnLinear_API[PyBobLearnLinearBICTrainer_Type_NUM])
+
+# define PyBobLearnLinearBICTrainer_Check (*(PyBobLearnLinearBICTrainer_Check_RET (*)PyBobLearnLinearBICTrainer_Check_PROTO) PyBobLearnLinear_API[PyBobLearnLinearBICTrainer_Check_NUM])
 
 # if !defined(NO_IMPORT_ARRAY)
 
