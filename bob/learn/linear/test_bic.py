@@ -99,7 +99,10 @@ def test_BIC():
   assert machine(eval_data(1)) > 0.
 
   machine2 = trainer.train(intra_data, extra_data)
-  assert machine == machine2
+  # For some reason, the == test fails on 32 bit machines
+#  assert machine == machine2
+  # But, in fact the machines should be identical.
+  assert machine.is_similar_to(machine2, 1e-10, 1e-15)
 
 
 if __name__ == '__main__':
