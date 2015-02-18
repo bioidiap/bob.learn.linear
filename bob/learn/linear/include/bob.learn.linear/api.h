@@ -384,7 +384,7 @@ typedef struct {
     }
 #   else
     if (PyCObject_Check(c_api_object)) {
-      BobLearnLinear_API = (void **)PyCObject_AsVoidPtr(c_api_object);
+      PyBobLearnLinear_API = (void **)PyCObject_AsVoidPtr(c_api_object);
     }
 #   endif
 
