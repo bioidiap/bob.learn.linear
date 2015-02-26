@@ -10,6 +10,7 @@
 #define BOB_LEARN_LINEAR_MODULE
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
+#include <bob.extension/defines.h>
 #include <bob.io.base/api.h>
 #include <bob.learn.activation/api.h>
 #include <bob.learn.linear/api.h>
@@ -208,7 +209,7 @@ static int PyBobLearnLinearMachine_init(PyBobLearnLinearMachineObject* self,
           return PyBobLearnLinearMachine_init_weights(self, args, kwds);
         }
 
-        if (PyNumber_Check(arg)) {
+        if (PyInt_Check(arg)) {
           return PyBobLearnLinearMachine_init_sizes(self, args, kwds);
         }
 
