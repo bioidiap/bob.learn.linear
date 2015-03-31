@@ -6,9 +6,29 @@
  Python API
 ============
 
-This section includes information for using the pure Python API of
-``bob.learn.linear``.
+This section includes information for using the pure Python API of ``bob.learn.linear``.
+
+
+Classes
+-------
+
+.. autosummary::
+   bob.learn.linear.Machine
+   bob.learn.linear.PCATrainer
+   bob.learn.linear.FisherLDATrainer
+   bob.learn.linear.WCCNTrainer
+   bob.learn.linear.WhiteningTrainer
+   bob.learn.linear.CGLogRegTrainer
+
+   bob.learn.linear.BICMachine
+   bob.learn.linear.BICTrainer
+
+Functions
+---------
+
+.. autosummary::
+   bob.learn.linear.get_config
+   bob.learn.linear.bic_intra_extra_pairs
 
 
 .. automodule:: bob.learn.linear
-

@@ -104,6 +104,31 @@ def test_BIC():
   # But, in fact the machines should be identical.
   assert machine.is_similar_to(machine2, 1e-10, 1e-15)
 
+def test_bic_split():
+  # Tests the auxiliary function bic_intra_extra_pairs
+  data = [[1,2,3],[4,5,6],[7,8,9]]
+  intra_pairs, extra_pairs = bob.learn.linear.bic_intra_extra_pairs(data)
+
+  # check number of pairs
+  assert len(intra_pairs) == 9
+  assert len(extra_pairs) == 27
+
+  # check exact intra pairs
+  for c in data:
+    for v1 in c:
+      for v2 in c:
+        if v1 != v2:
+          # check that exactly one of the two possible pairs are inside
+          assert ((v1,v2) in intra_pairs) != ((v2,v1) in intra_pairs)
+
+  # check extra_pairs
+  for c1 in data:
+    for c2 in data:
+      if c1 != c2:
+        for v1 in c1:
+          for v2 in c2:
+            # check that exactly one of the two possible pairs is inside
+            assert ((v1,v2) in extra_pairs) != ((v2,v1) in extra_pairs)
 
 if __name__ == '__main__':
   test_IEC()

@@ -12,6 +12,8 @@ from . import version
 from .version import module as __version__
 from .version import api as __api_version__
 
+from .auxiliary import *
+
 def get_config():
   """Returns a string containing the configuration information.
   """

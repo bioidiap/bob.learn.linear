@@ -47,8 +47,8 @@ static auto BICMachine_doc = bob::extension::ClassDoc(
   .add_prototype("bic", "")
   .add_prototype("hdf5", "")
   .add_parameter("use_DFFS", "bool", "[default: ``False``] Use the *Distance From Feature Space* measure as described in [Teixeira2003]_")
-  .add_parameter("bic", ":py:class:`bob.learn.linear.BICMachine`", "Another BICMachine to copy")
-  .add_parameter("hdf5", ":py:class:`bob.io.base.HD5File`", "An HDF5 file open for reading to load the Gabor jet from")
+  .add_parameter("bic", ":py:class:`bob.learn.linear.BICMachine`", "Another machine to copy")
+  .add_parameter("hdf5", ":py:class:`bob.io.base.HDF5File`", "An HDF5 file open for reading")
 );
 
 static int PyBobLearnLinearBICMachine_init(PyBobLearnLinearBICMachineObject* self, PyObject* args, PyObject* kwargs) {
@@ -376,20 +376,19 @@ static auto train_doc = bob::extension::FunctionDoc(
   "train",
   "Trains the given machine to classify intrapersonal (image) difference vectors vs. extrapersonal ones",
   "The given difference vectors might be the result of any (image) comparison function, e.g., the pixel difference of two images. "
-  "In any case, all distance vectors must have the same length",
+  "In any case, all distance vectors must have the same length.",
   true
 )
-.add_prototype("intra_differences, extra_differences, machine")
-.add_prototype("intra_differences, extra_differences", "machine")
+.add_prototype("intra_differences, extra_differences, [machine]", "machine")
 .add_parameter("intra_differences", "array_like (float, 2D)", "The input vectors, which are the result of intrapersonal (facial image) comparisons, in shape ``(#features, length)``")
 .add_parameter("extra_differences", "array_like (float, 2D)", "The input vectors, which are the result of extrapersonal (facial image) comparisons, in shape ``(#features, length)``")
-.add_parameter("machine", ":py:class:`bob.lear.linear.BICMachine`", "The machine to be trained")
-.add_return("machine", ":py:class:`bob.lear.linear.BICMachine`", "A newly generated and trained BIC machine, where the `bob.lear.linear.BICMachine.use_DFFS` flag is set to ``False``")
+.add_parameter("machine", ":py:class:`bob.learn.linear.BICMachine`", "The machine to be trained")
+.add_return("machine", ":py:class:`bob.learn.linear.BICMachine`", "A newly generated and trained BIC machine, where the `bob.lear.linear.BICMachine.use_DFFS` flag is set to ``False``")
 ;
 
 static PyObject* PyBobLearnLinearBICTrainer_train(PyBobLearnLinearBICTrainerObject* self, PyObject* args, PyObject* kwargs) {
   try{
-    static char* kwlist[] = {c("intra"), c("extra"), c("machine"), 0};
+    char** kwlist = train_doc.kwlist();
 
     PyBlitzArrayObject* intra,* extra;
     PyBobLearnLinearBICMachineObject* machine = 0;
@@ -505,4 +504,3 @@ bool init_BobLearnLinearBIC(PyObject* module)
     PyModule_AddObject(module, "BICMachine", (PyObject*)&PyBobLearnLinearBICMachine_Type) >= 0 &&
     PyModule_AddObject(module, "BICTrainer", (PyObject*)&PyBobLearnLinearBICTrainer_Type) >= 0;
 }
-
