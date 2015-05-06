@@ -200,12 +200,29 @@ int PyBobLearnLinearBICMachine_setDFFS(PyBobLearnLinearBICMachineObject* self, P
   return 0;
 }
 
+static auto input_size_doc = bob::extension::VariableDoc(
+  "input_size",
+  "int",
+  "The expected input dimensionality, read-only"
+);
+PyObject* PyBobLearnLinearBICMachine_getInputSize(PyBobLearnLinearBICMachineObject* self, void*){
+  return Py_BuildValue("i", self->cxx->input_size());
+}
+
+
 static PyGetSetDef PyBobLearnLinearBICMachine_getseters[] = {
   {
     dffs_doc.name(),
     (getter)PyBobLearnLinearBICMachine_getDFFS,
     (setter)PyBobLearnLinearBICMachine_setDFFS,
     dffs_doc.doc(),
+    0
+  },
+  {
+    input_size_doc.name(),
+    (getter)PyBobLearnLinearBICMachine_getInputSize,
+    0,
+    input_size_doc.doc(),
     0
   },
   {0}  /* Sentinel */

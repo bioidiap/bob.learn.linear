@@ -87,6 +87,8 @@ def test_BIC():
   # First, train the machine with intrapersonal data only
   trainer.train(intra_data, intra_data, machine)
 
+  assert machine.input_size == 5
+
   # => every result should be zero
   assert abs(machine(eval_data(0))) < eps
   assert abs(machine(eval_data(1))) < eps

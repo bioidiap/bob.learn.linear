@@ -79,6 +79,9 @@ namespace bob { namespace learn { namespace linear {
       //! Use the Distance From Feature Space
       bool use_DFFS() const {return m_use_DFFS;}
 
+      //! Expected input dimensionality
+      int input_size() const {return m_mu_I.extent(0);}
+
     private:
 
       //! initializes internal data storages for the given class
