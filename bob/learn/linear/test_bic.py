@@ -14,9 +14,6 @@ import bob.learn.linear
 
 eps = 1e-5
 
-def equals(x, y, epsilon):
-  return (abs(x - y) < epsilon).all()
-
 def training_data():
   data = numpy.array([
     [10., 4., 6., 8., 2.],
@@ -131,6 +128,3 @@ def test_bic_split():
           for v2 in c2:
             # check that exactly one of the two possible pairs is inside
             assert ((v1,v2) in extra_pairs) != ((v2,v1) in extra_pairs)
-
-if __name__ == '__main__':
-  test_IEC()
