@@ -178,10 +178,8 @@ static PyObject* create_module (void) {
   auto m_ = make_safe(m); ///< protects against early returns
 
   /* register version numbers and constants */
-  if (PyModule_AddIntConstant(m, "api", BOB_LEARN_LINEAR_API_VERSION) < 0)
-    return 0;
-  if (PyModule_AddStringConstant(m, "module", BOB_EXT_MODULE_VERSION) < 0)
-    return 0;
+  if (PyModule_AddIntConstant(m, "api", BOB_LEARN_LINEAR_API_VERSION) < 0) return 0;
+  if (PyModule_AddStringConstant(m, "module", BOB_EXT_MODULE_VERSION) < 0) return 0;
 
   PyObject* externals = build_version_dictionary();
   if (!externals) return 0;
@@ -194,9 +192,7 @@ static PyObject* create_module (void) {
     return 0;
   }
 
-  Py_INCREF(m);
-  return m;
-
+  return Py_BuildValue("O", m);
 }
 
 PyMODINIT_FUNC BOB_EXT_ENTRY_NAME (void) {
