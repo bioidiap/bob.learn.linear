@@ -13,6 +13,7 @@
 #endif
 #include <bob.blitz/capi.h>
 #include <bob.blitz/cleanup.h>
+#include <bob.core/api.h>
 #include <bob.io.base/api.h>
 #include <bob.learn.activation/api.h>
 
@@ -162,23 +163,10 @@ static PyObject* create_module (void) {
   if (c_api_object) PyModule_AddObject(m, "_C_API", c_api_object);
 
   /* imports dependencies */
-  if (import_bob_blitz() < 0) {
-    PyErr_Print();
-    PyErr_Format(PyExc_ImportError, "cannot import `%s'", BOB_EXT_MODULE_NAME);
-    return 0;
-  }
-
-  if (import_bob_io_base() < 0) {
-    PyErr_Print();
-    PyErr_Format(PyExc_ImportError, "cannot import `%s'", BOB_EXT_MODULE_NAME);
-    return 0;
-  }
-
-  if (import_bob_learn_activation() < 0) {
-    PyErr_Print();
-    PyErr_Format(PyExc_ImportError, "cannot import `%s'", BOB_EXT_MODULE_NAME);
-    return 0;
-  }
+  if (import_bob_blitz() < 0) return 0;
+  if (import_bob_core_logging() < 0) return 0;
+  if (import_bob_io_base() < 0) return 0;
+  if (import_bob_learn_activation() < 0) return 0;
 
   return Py_BuildValue("O", m);
 }
