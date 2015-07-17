@@ -74,7 +74,7 @@ References:\n\
 1. A comparison of numerical optimizers for logistic regression,\n\
    T. Minka, (`See Microsoft Research paper\n\
    <http://research.microsoft.com/en-us/um/people/minka/papers/logreg/>`_)\n\
-2. FoCal, http://www.dsp.sun.ac.za/~nbrummer/focal/\n\
+2. FoCal, https://sites.google.com/site/nikobrummer/focal\n\
 \n\
 ");
 
