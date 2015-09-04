@@ -21,7 +21,7 @@ PyDoc_STRVAR(s_logregtrainer_str, BOB_EXT_MODULE_PREFIX ".CGLogRegTrainer");
 
 PyDoc_STRVAR(s_logregtrainer_doc,
 "CGLogRegTrainer([prior=0.5, [convergence_threshold=1e-5,\n\
-                 [max_iterations=10000, [lambda=0.,\n\
+                 [max_iterations=10000, [reg=0.,\n\
                  [mean_std_norm=False]]]]]) -> new CGLogRegTrainer\n\
 \n\
 CGLogRegTrainer(other) -> new CGLogRegTrainer\n\
@@ -54,7 +54,7 @@ max_iterations, int (optional)\n\
   The maximum number of iterations for the conjugate gradient\n\
   algorithm\n\
 \n\
-lambda, float (optional)\n\
+reg, float (optional)\n\
   The regularization factor lambda. If you set this to the value of\n\
   ``0.0`` (the default), then the algorithm will apply **no**\n\
   regularization whatsoever.\n\
@@ -86,7 +86,7 @@ static int PyBobLearnLinearCGLogRegTrainer_init_parameters
     "prior",
     "convergence_threshold",
     "max_iterations",
-    "lambda",
+    "reg",
     "mean_std_norm",
     0
   };
@@ -420,7 +420,7 @@ static int PyBobLearnLinearCGLogRegTrainer_setMaxIterations
 
 }
 
-PyDoc_STRVAR(s_lambda_str, "lambda");
+PyDoc_STRVAR(s_lambda_str, "reg");
 PyDoc_STRVAR(s_lambda_doc,
 "The regularization factor lambda. If you set this to the value of\n\
 ``0.0`` (the default), then the algorithm will apply **no**\n\
@@ -448,7 +448,7 @@ static int PyBobLearnLinearCGLogRegTrainer_setLambda
     return -1;
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot set lambda on `%s' with value `%g': unknown exception caught", Py_TYPE(self)->tp_name, v);
+    PyErr_Format(PyExc_RuntimeError, "cannot set reg on `%s' with value `%g': unknown exception caught", Py_TYPE(self)->tp_name, v);
     return -1;
   }
 
