@@ -6,10 +6,10 @@
    :target: http://pythonhosted.org/bob.learn.linear/index.html
 .. image:: http://img.shields.io/badge/docs-latest-orange.png
    :target: https://www.idiap.ch/software/bob/docs/latest/bioidiap/bob.learn.linear/master/index.html
-.. image:: https://travis-ci.org/bioidiap/bob.learn.linear.svg?branch=master
-   :target: https://travis-ci.org/bioidiap/bob.learn.linear?branch=master
-.. image:: https://coveralls.io/repos/bioidiap/bob.learn.linear/badge.png?branch=master
-   :target: https://coveralls.io/r/bioidiap/bob.learn.linear?branch=master
+.. image:: https://travis-ci.org/bioidiap/bob.learn.linear.svg?branch=v2.0.6
+   :target: https://travis-ci.org/bioidiap/bob.learn.linear?branch=v2.0.6
+.. image:: https://coveralls.io/repos/bioidiap/bob.learn.linear/badge.png?branch=v2.0.6
+   :target: https://coveralls.io/r/bioidiap/bob.learn.linear?branch=v2.0.6
 .. image:: https://img.shields.io/badge/github-master-0000c0.png
    :target: https://github.com/bioidiap/bob.learn.linear/tree/master
 .. image:: http://img.shields.io/pypi/v/bob.learn.linear.png
