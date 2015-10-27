@@ -128,3 +128,30 @@ def test_bic_split():
           for v2 in c2:
             # check that exactly one of the two possible pairs is inside
             assert ((v1,v2) in extra_pairs) != ((v2,v1) in extra_pairs)
+
+def test_bic_split_between_factors():
+  # Tests the auxiliary function bic_intra_extra_pairs_between_factors
+  factor1 = [[1,2,3],[4,5,6],[7,8,9]]
+  factor2 = [[11,12,13],[14,15,16],[17,18,19]]
+  intra_pairs, extra_pairs = bob.learn.linear.bic_intra_extra_pairs_between_factors(factor1, factor2)
+
+  # check number of pairs
+  assert len(intra_pairs) == 27
+  assert len(extra_pairs) == 54
+
+  # assert that all pairs are taken from factor 1 and factor 2, in the right order
+  assert all(p[0] < 10 and p[1] > 10 for pairs in (intra_pairs,extra_pairs) for p in pairs)
+
+  # check intra pairs
+  for c1, c2 in zip(factor1, factor2):
+    for f1 in c1:
+      for f2 in c2:
+        assert (f1, f2) in intra_pairs
+
+  # check extra pairs
+  for i1 in range(3):
+    for i2 in range(3):
+      if i1 != i2:
+        for f1 in factor1[i1]:
+          for f2 in factor2[i2]:
+            assert (f1, f2) in extra_pairs
