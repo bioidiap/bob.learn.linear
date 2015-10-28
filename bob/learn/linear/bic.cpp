@@ -14,12 +14,6 @@
 #include <bob.io.base/api.h>
 #include <bob.extension/documentation.h>
 
-static inline char* c(const char* o){return const_cast<char*>(o);}
-
-#if PY_VERSION_HEX >= 0x03000000
-#define PyInt_Check PyLong_Check
-#endif
-
 /******************************************************************/
 /************ Constructor Section *********************************/
 /******************************************************************/
@@ -52,10 +46,10 @@ static auto BICMachine_doc = bob::extension::ClassDoc(
 );
 
 static int PyBobLearnLinearBICMachine_init(PyBobLearnLinearBICMachineObject* self, PyObject* args, PyObject* kwargs) {
-
-  char* kwlist0[] = {c("use_DFFS"), NULL};
-  char* kwlist1[] = {c("bic"), NULL};
-  char* kwlist2[] = {c("hdf5"), NULL};
+BOB_TRY
+  char** kwlist0 = BICMachine_doc.kwlist(0);
+  char** kwlist1 = BICMachine_doc.kwlist(1);
+  char** kwlist2 = BICMachine_doc.kwlist(2);
 
   // two ways to call
   PyObject* k1 = Py_BuildValue("s", kwlist1[0]),* k2 = Py_BuildValue("s", kwlist2[0]);
@@ -87,6 +81,7 @@ static int PyBobLearnLinearBICMachine_init(PyBobLearnLinearBICMachineObject* sel
     self->cxx.reset(new bob::learn::linear::BICMachine(dffs && PyObject_IsTrue(dffs)));
   }
   return 0;
+BOB_CATCH_MEMBER("constructor",-1)
 }
 
 static void PyBobLearnLinearBICMachine_delete(PyBobLearnLinearBICMachineObject* self) {
@@ -146,9 +141,8 @@ static auto BICTrainer_doc = bob::extension::ClassDoc(
 );
 
 static int PyBobLearnLinearBICTrainer_init(PyBobLearnLinearBICTrainerObject* self, PyObject* args, PyObject* kwargs) {
-
-  char* kwlist[] = {c("intra_dim"), c("extra_dim"), NULL};
-
+BOB_TRY
+  char** kwlist = BICTrainer_doc.kwlist(1);
 
   Py_ssize_t nargs = (args?PyTuple_Size(args):0) + (kwargs?PyDict_Size(kwargs):0);
 
@@ -170,6 +164,7 @@ static int PyBobLearnLinearBICTrainer_init(PyBobLearnLinearBICTrainerObject* sel
       PyErr_Format(PyExc_RuntimeError, "`%s' constructor called with an unsupported number of arguments", Py_TYPE(self)->tp_name);
       return -1;
   }
+BOB_CATCH_MEMBER("constructor", -1)
 }
 
 static void PyBobLearnLinearBICTrainer_delete(PyBobLearnLinearBICTrainerObject* self) {
@@ -192,12 +187,16 @@ static auto dffs_doc = bob::extension::VariableDoc(
   "Use the Distance From Feature Space during forwarding?"
 );
 PyObject* PyBobLearnLinearBICMachine_getDFFS(PyBobLearnLinearBICMachineObject* self, void*){
+BOB_TRY
   if (self->cxx->use_DFFS()) Py_RETURN_TRUE;
   else Py_RETURN_FALSE;
+BOB_CATCH_MEMBER("use_DFFS", 0)
 }
 int PyBobLearnLinearBICMachine_setDFFS(PyBobLearnLinearBICMachineObject* self, PyObject* value, void*){
+BOB_TRY
   self->cxx->use_DFFS(PyObject_IsTrue(value));
   return 0;
+BOB_CATCH_MEMBER("use_DFFS", -1)
 }
 
 static auto input_size_doc = bob::extension::VariableDoc(
@@ -206,7 +205,9 @@ static auto input_size_doc = bob::extension::VariableDoc(
   "The expected input dimensionality, read-only"
 );
 PyObject* PyBobLearnLinearBICMachine_getInputSize(PyBobLearnLinearBICMachineObject* self, void*){
+BOB_TRY
   return Py_BuildValue("i", self->cxx->input_size());
+BOB_CATCH_MEMBER("input_size", 0)
 }
 
 
@@ -246,29 +247,21 @@ static auto forward_doc = bob::extension::FunctionDoc(
 ;
 
 static PyObject* PyBobLearnLinearBICMachine_forward(PyBobLearnLinearBICMachineObject* self, PyObject* args, PyObject* kwargs) {
-  try{
-    static char* kwlist[] = {c("input"), 0};
+BOB_TRY
+  char** kwlist = forward_doc.kwlist();
 
-    PyBlitzArrayObject* input;
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O&", kwlist, &PyBlitzArray_Converter, &input)) return 0;
-    auto input_ = make_safe(input);
+  PyBlitzArrayObject* input;
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O&", kwlist, &PyBlitzArray_Converter, &input)) return 0;
+  auto input_ = make_safe(input);
 
-    if (input->ndim != 1 || input->type_num != NPY_FLOAT64){
-      PyErr_Format(PyExc_TypeError, "`%s' only supports 1D 64-bit float arrays for 'input'", Py_TYPE(self)->tp_name);
-      return 0;
-    }
-
-    double score = self->cxx->forward(*PyBlitzArrayCxx_AsBlitz<double,1>(input));
-    return Py_BuildValue("d", score);
-  }
-  catch (std::exception& e) {
-    PyErr_SetString(PyExc_RuntimeError, e.what());
+  if (input->ndim != 1 || input->type_num != NPY_FLOAT64){
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 1D 64-bit float arrays for 'input'", Py_TYPE(self)->tp_name);
     return 0;
   }
-  catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "%s cannot forward data: unknown exception caught", Py_TYPE(self)->tp_name);
-    return 0;
-  }
+
+  double score = self->cxx->forward(*PyBlitzArrayCxx_AsBlitz<double,1>(input));
+  return Py_BuildValue("d", score);
+BOB_CATCH_MEMBER("forward", 0)
 }
 
 static auto similar_doc = bob::extension::FunctionDoc(
@@ -283,8 +276,8 @@ static auto similar_doc = bob::extension::FunctionDoc(
 .add_parameter("a_epsilon", "float", "[Default: ``1e-8``] The absolute precision")
 ;
 static PyObject* PyBobLearnLinearBICMachine_similar(PyBobLearnLinearBICMachineObject* self, PyObject* args, PyObject* kwargs) {
-
-  static char* kwlist[] = {c("other"), c("r_epsilon"), c("a_epsilon"), 0};
+BOB_TRY
+  char** kwlist = similar_doc.kwlist();
 
   PyBobLearnLinearBICMachineObject* other = 0;
   double r_epsilon = 1.e-5;
@@ -296,6 +289,7 @@ static PyObject* PyBobLearnLinearBICMachine_similar(PyBobLearnLinearBICMachineOb
     Py_RETURN_TRUE;
   else
     Py_RETURN_FALSE;
+BOB_CATCH_MEMBER("is_similar_to", 0)
 }
 
 static auto load_doc = bob::extension::FunctionDoc(
@@ -309,22 +303,15 @@ static auto load_doc = bob::extension::FunctionDoc(
 ;
 
 static PyObject* PyBobLearnLinearBICMachine_load(PyBobLearnLinearBICMachineObject* self, PyObject* args, PyObject* kwargs) {
-  // get list of arguments
-  char* kwlist[] = {c("hdf5"), NULL};
+BOB_TRY
+  char** kwlist = load_doc.kwlist();
   PyBobIoHDF5FileObject* file;
   if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O&", kwlist, PyBobIoHDF5File_Converter, &file)) return 0;
 
   auto file_ = make_safe(file);
-  try{
-    self->cxx->load(*file->f);
-  } catch (std::exception& e) {
-    PyErr_SetString(PyExc_RuntimeError, e.what());
-    return 0;
-  }catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "%s cannot load BIC machine: unknown exception caught", Py_TYPE(self)->tp_name);
-    return 0;
-  }
+  self->cxx->load(*file->f);
   Py_RETURN_NONE;
+BOB_CATCH_MEMBER("load", 0)
 }
 
 
@@ -339,23 +326,15 @@ static auto save_doc = bob::extension::FunctionDoc(
 ;
 
 static PyObject* PyBobLearnLinearBICMachine_save(PyBobLearnLinearBICMachineObject* self, PyObject* args, PyObject* kwargs) {
-  // get list of arguments
-  char* kwlist[] = {c("hdf5"), NULL};
+BOB_TRY
+  char** kwlist = save_doc.kwlist();
   PyBobIoHDF5FileObject* file;
   if (!PyArg_ParseTupleAndKeywords(args, kwargs,"O&", kwlist, PyBobIoHDF5File_Converter, &file)) return 0;
 
   auto file_ = make_safe(file);
-  try{
-    self->cxx->save(*file->f);
-  } catch (std::exception& e) {
-    PyErr_SetString(PyExc_RuntimeError, e.what());
-    return 0;
-  }catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "%s cannot save BIC machine: unknown exception caught", Py_TYPE(self)->tp_name);
-    return 0;
-  }
-
+  self->cxx->save(*file->f);
   Py_RETURN_NONE;
+BOB_CATCH_MEMBER("save", 0)
 }
 
 
@@ -404,49 +383,40 @@ static auto train_doc = bob::extension::FunctionDoc(
 ;
 
 static PyObject* PyBobLearnLinearBICTrainer_train(PyBobLearnLinearBICTrainerObject* self, PyObject* args, PyObject* kwargs) {
-  try{
-    char** kwlist = train_doc.kwlist();
+BOB_TRY
+  char** kwlist = train_doc.kwlist();
 
-    PyBlitzArrayObject* intra,* extra;
-    PyBobLearnLinearBICMachineObject* machine = 0;
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O&O&|O!", kwlist, &PyBlitzArray_Converter, &intra, &PyBlitzArray_Converter, &extra, &PyBobLearnLinearBICMachine_Type, &machine)) return 0;
+  PyBlitzArrayObject* intra,* extra;
+  PyBobLearnLinearBICMachineObject* machine = 0;
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O&O&|O!", kwlist, &PyBlitzArray_Converter, &intra, &PyBlitzArray_Converter, &extra, &PyBobLearnLinearBICMachine_Type, &machine)) return 0;
 
-    auto intra_ = make_safe(intra), extra_ = make_safe(extra);
-    boost::shared_ptr<PyBobLearnLinearBICMachineObject> machine_;
+  auto intra_ = make_safe(intra), extra_ = make_safe(extra);
+  boost::shared_ptr<PyBobLearnLinearBICMachineObject> machine_;
 
-    if (intra->ndim != 2 || intra->type_num != NPY_FLOAT64){
-      PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for 'intra_differences'", Py_TYPE(self)->tp_name);
-      return 0;
-    }
-    if (extra->ndim != 2 || extra->type_num != NPY_FLOAT64){
-      PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for 'extra_differences'", Py_TYPE(self)->tp_name);
-      return 0;
-    }
-    if (intra->shape[1] != extra->shape[1]){
-      PyErr_Format(PyExc_TypeError, "`%s' The lenght of the feature vectors differ", Py_TYPE(self)->tp_name);
-      return 0;
-    }
-
-    if (!machine){
-      // create machine if not given
-      machine = (PyBobLearnLinearBICMachineObject*)PyBobLearnLinearBICMachine_Type.tp_alloc(&PyBobLearnLinearBICMachine_Type, 0);
-      machine_ = make_safe(machine);
-      machine->cxx.reset(new bob::learn::linear::BICMachine());
-    }
-
-    // train it
-    self->cxx->train(*machine->cxx, *PyBlitzArrayCxx_AsBlitz<double,2>(intra), *PyBlitzArrayCxx_AsBlitz<double,2>(extra));
-
-    return Py_BuildValue("O", machine);
-  }
-  catch (std::exception& e) {
-    PyErr_SetString(PyExc_RuntimeError, e.what());
+  if (intra->ndim != 2 || intra->type_num != NPY_FLOAT64){
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for 'intra_differences'", Py_TYPE(self)->tp_name);
     return 0;
   }
-  catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "%s cannot train: unknown exception caught", Py_TYPE(self)->tp_name);
+  if (extra->ndim != 2 || extra->type_num != NPY_FLOAT64){
+    PyErr_Format(PyExc_TypeError, "`%s' only supports 2D 64-bit float arrays for 'extra_differences'", Py_TYPE(self)->tp_name);
     return 0;
   }
+  if (intra->shape[1] != extra->shape[1]){
+    PyErr_Format(PyExc_TypeError, "`%s' The lenght of the feature vectors differ", Py_TYPE(self)->tp_name);
+    return 0;
+  }
+
+  if (!machine){
+    // create machine if not given
+    machine = (PyBobLearnLinearBICMachineObject*)PyBobLearnLinearBICMachine_Type.tp_alloc(&PyBobLearnLinearBICMachine_Type, 0);
+    machine_ = make_safe(machine);
+    machine->cxx.reset(new bob::learn::linear::BICMachine());
+  }
+
+  // train it
+  self->cxx->train(*machine->cxx, *PyBlitzArrayCxx_AsBlitz<double,2>(intra), *PyBlitzArrayCxx_AsBlitz<double,2>(extra));
+  return Py_BuildValue("O", machine);
+BOB_CATCH_MEMBER("train", 0)
 }
 
 static PyMethodDef PyBobLearnLinearBICTrainer_methods[] = {
