@@ -234,6 +234,10 @@ def test_pca_settings():
   assert T.use_svd == True
   T.use_svd = False
   assert T.use_svd == False
+  T.safe_svd = True
+  assert T.safe_svd == True
+  T.safe_svd = False
+  assert T.safe_svd == False
 
   T = PCATrainer(False)
   assert T.use_svd == False

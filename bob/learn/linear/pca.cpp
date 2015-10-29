@@ -299,7 +299,7 @@ BOB_TRY
   int istrue = PyObject_IsTrue(o);
 
   if (istrue == -1) return -1;
-  self->cxx->setUseSVD(istrue);
+  self->cxx->setUseSVD(istrue?true:false);
   return 0;
 BOB_CATCH_MEMBER("use_svd", -1)
 }
@@ -325,7 +325,7 @@ BOB_TRY
   int istrue = PyObject_IsTrue(o);
 
   if (istrue == -1) return -1;
-  self->cxx->setSafeSVD(istrue);
+  self->cxx->setSafeSVD(istrue?true:false);
   return 0;
 BOB_CATCH_MEMBER("safe_svd", -1)
 }
