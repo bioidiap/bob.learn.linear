@@ -270,10 +270,11 @@ static auto similar_doc = bob::extension::FunctionDoc(
   "The optional values ``r_epsilon`` and ``a_epsilon`` refer to the relative and absolute precision, similarly to :py:func:`numpy.allclose`.",
   true
 )
-.add_prototype("other, [r_epsilon], [a_epsilon]")
+.add_prototype("other, [r_epsilon], [a_epsilon]", "similar")
 .add_parameter("other", ":py:class:`bob.learn.linear.BICMachine`", "The other BICMachine to compare with")
 .add_parameter("r_epsilon", "float", "[Default: ``1e-5``] The relative precision")
 .add_parameter("a_epsilon", "float", "[Default: ``1e-8``] The absolute precision")
+.add_return("similar", "bool", "``True`` if the ``other`` machine is similar to this one, otherwise ``False``")
 ;
 static PyObject* PyBobLearnLinearBICMachine_similar(PyBobLearnLinearBICMachineObject* self, PyObject* args, PyObject* kwargs) {
 BOB_TRY

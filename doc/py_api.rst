@@ -29,6 +29,7 @@ Functions
 .. autosummary::
    bob.learn.linear.get_config
    bob.learn.linear.bic_intra_extra_pairs
+   bob.learn.linear.bic_intra_extra_pairs_between_factors
 
 
 .. automodule:: bob.learn.linear
