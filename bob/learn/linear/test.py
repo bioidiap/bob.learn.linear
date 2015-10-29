@@ -362,16 +362,12 @@ def test_pca_trainer_comparisons():
   t3 = PCATrainer(t2)
   t4 = t3
   assert t1 == t2
-  assert t1.is_similar_to(t2)
   assert t1 == t3
-  assert t1.is_similar_to(t3)
   assert t1 == t4
-  assert t1.is_similar_to(t4)
 
   t5 = PCATrainer(False)
   t6 = PCATrainer(False)
   assert t5 == t6
-  assert t5.is_similar_to(t6)
   assert t5 != t1
 
   t7 = PCATrainer(t1)
@@ -459,21 +455,25 @@ def test_pca_svd_vs_cov_random_2_safe():
 def test_fisher_lda_settings():
 
   t = FisherLDATrainer()
-  assert t.use_pinv == False
-  assert t.strip_to_rank == True
+  assert not t.use_pinv
+  assert t.strip_to_rank
 
   t.use_pinv = True
   assert t.use_pinv
   t.strip_to_rank = False
-  assert t.strip_to_rank == False
+  assert not t.strip_to_rank
 
   t = FisherLDATrainer(use_pinv=True)
   assert t.use_pinv
   assert t.strip_to_rank
 
   t = FisherLDATrainer(strip_to_rank=False)
-  assert t.use_pinv == False
-  assert t.strip_to_rank == False
+  assert not t.use_pinv
+  assert not t.strip_to_rank
+
+  t = FisherLDATrainer(use_pinv=True, strip_to_rank=False)
+  assert t.use_pinv
+  assert not t.strip_to_rank
 
 def test_fisher_lda():
 
@@ -583,18 +583,13 @@ def test_fisher_lda_comparisons():
   t3 = FisherLDATrainer(t2)
   t4 = t3
   assert t1 == t2
-  assert t1.is_similar_to(t2)
   assert t1 == t3
-  assert t1.is_similar_to(t3)
   assert t1 == t4
-  assert t1.is_similar_to(t4)
 
   t3 = FisherLDATrainer(use_pinv=True)
   t4 = FisherLDATrainer(use_pinv=True)
   assert t3 == t4
-  assert t3.is_similar_to(t4)
   assert t3 != t1
-  assert not t3.is_similar_to(t2)
 
 def test_whitening_initialization():
 

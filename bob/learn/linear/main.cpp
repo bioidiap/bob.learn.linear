@@ -36,18 +36,12 @@ static PyModuleDef module_definition = {
 };
 #endif
 
+extern bool init_BobLearnLinearMachine(PyObject* module);
+extern bool init_BobLearnLinearPCA(PyObject* module);
+extern bool init_BobLearnLinearLDA(PyObject* module);
 extern bool init_BobLearnLinearBIC(PyObject* module);
 
 static PyObject* create_module (void) {
-
-  PyBobLearnLinearMachine_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearMachine_Type) < 0) return 0;
-
-  PyBobLearnLinearPCATrainer_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearPCATrainer_Type) < 0) return 0;
-
-  PyBobLearnLinearFisherLDATrainer_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearFisherLDATrainer_Type) < 0) return 0;
 
   PyBobLearnLinearCGLogRegTrainer_Type.tp_new = PyType_GenericNew;
   if (PyType_Ready(&PyBobLearnLinearCGLogRegTrainer_Type) < 0) return 0;
@@ -67,15 +61,6 @@ static PyObject* create_module (void) {
   auto m_ = make_safe(m);
 
   /* register the types to python */
-  Py_INCREF(&PyBobLearnLinearMachine_Type);
-  if (PyModule_AddObject(m, "Machine", (PyObject *)&PyBobLearnLinearMachine_Type) < 0) return 0;
-
-  Py_INCREF(&PyBobLearnLinearPCATrainer_Type);
-  if (PyModule_AddObject(m, "PCATrainer", (PyObject *)&PyBobLearnLinearPCATrainer_Type) < 0) return 0;
-
-  Py_INCREF(&PyBobLearnLinearFisherLDATrainer_Type);
-  if (PyModule_AddObject(m, "FisherLDATrainer", (PyObject *)&PyBobLearnLinearFisherLDATrainer_Type) < 0) return 0;
-
   Py_INCREF(&PyBobLearnLinearCGLogRegTrainer_Type);
   if (PyModule_AddObject(m, "CGLogRegTrainer", (PyObject *)&PyBobLearnLinearCGLogRegTrainer_Type) < 0) return 0;
 
@@ -85,6 +70,9 @@ static PyObject* create_module (void) {
   Py_INCREF(&PyBobLearnLinearWCCNTrainer_Type);
   if (PyModule_AddObject(m, "WCCNTrainer", (PyObject *)&PyBobLearnLinearWCCNTrainer_Type) < 0) return 0;
 
+  if (!init_BobLearnLinearMachine(m)) return 0;
+  if (!init_BobLearnLinearPCA(m)) return 0;
+  if (!init_BobLearnLinearLDA(m)) return 0;
   if (!init_BobLearnLinearBIC(m)) return 0;
 
   static void* PyBobLearnLinear_API[PyBobLearnLinear_API_pointers];

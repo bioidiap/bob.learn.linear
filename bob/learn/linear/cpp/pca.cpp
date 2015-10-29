@@ -54,11 +54,6 @@ namespace bob { namespace learn { namespace linear {
 
   }
 
-  bool PCATrainer::is_similar_to (const PCATrainer& other, const double r_epsilon,
-      const double a_epsilon) const {
-    return this->operator==(other);
-  }
-
   /**
    * Sets up the machine calculating the PC's via the Covariance Matrix
    */

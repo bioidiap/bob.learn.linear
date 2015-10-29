@@ -74,12 +74,6 @@ namespace bob { namespace learn { namespace linear {
       bool operator!=(const FisherLDATrainer& other) const;
 
       /**
-       * @brief Similar to
-       */
-      bool is_similar_to(const FisherLDATrainer& other,
-          const double r_epsilon=1e-5, const double a_epsilon=1e-8) const;
-
-      /**
        * @brief Gets the pseudo-inverse flag
        */
       bool getUsePseudoInverse () const { return m_use_pinv; }

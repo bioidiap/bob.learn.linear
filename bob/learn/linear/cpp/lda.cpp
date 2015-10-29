@@ -62,13 +62,6 @@ namespace bob { namespace learn { namespace linear {
       return !(this->operator==(other));
     }
 
-  bool FisherLDATrainer::is_similar_to
-    (const FisherLDATrainer& other, const double r_epsilon,
-     const double a_epsilon) const
-    {
-      return this->operator==(other);
-    }
-
   /**
    * Returns the indexes for sorting a given blitz::Array<double,1>
    */
