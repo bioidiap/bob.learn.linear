@@ -84,7 +84,7 @@ BOB_TRY
   int use_svd_ = PyObject_IsTrue(use_svd);
   if (use_svd_ == -1) return -1; //error on conversion
 
-  self->cxx = new bob::learn::linear::PCATrainer(use_svd_?true:false);
+  self->cxx = new bob::learn::linear::PCATrainer(use_svd_);
 
   return 0;
 BOB_CATCH_MEMBER("constructor", -1)
@@ -207,7 +207,7 @@ BOB_TRY
   // evaluates the expected rank for the output, allocate eigens value array
   auto X_bz = PyBlitzArrayCxx_AsBlitz<double,2>(X);
   Py_ssize_t rank = self->cxx->output_size(*X_bz);
-  auto eigval = PyBlitzArray_SimpleNew(NPY_FLOAT64, 1, &rank);
+  auto eigval = reinterpret_cast<PyBlitzArrayObject*>(PyBlitzArray_SimpleNew(NPY_FLOAT64, 1, &rank));
   auto eigval_ = make_safe(eigval); ///< auto-delete in case of problems
 
   // allocates a new machine if that was not given by the user
@@ -219,11 +219,11 @@ BOB_TRY
 
   auto pymac = reinterpret_cast<PyBobLearnLinearMachineObject*>(machine);
 
-  auto eigval_bz = PyBlitzArrayCxx_AsBlitz<double,1>(reinterpret_cast<PyBlitzArrayObject*>(eigval));
+  auto eigval_bz = PyBlitzArrayCxx_AsBlitz<double,1>(eigval);
   self->cxx->train(*pymac->cxx, *eigval_bz, *X_bz);
 
   // all went fine, pack machine and eigen-values to return
-  return Py_BuildValue("OO", machine, PyBlitzArray_NUMPY_WRAP(eigval));
+  return Py_BuildValue("ON", machine, PyBlitzArray_AsNumpyArray(eigval, 0));
 BOB_CATCH_MEMBER("train", 0)
 }
 
@@ -299,7 +299,7 @@ BOB_TRY
   int istrue = PyObject_IsTrue(o);
 
   if (istrue == -1) return -1;
-  self->cxx->setUseSVD(istrue?true:false);
+  self->cxx->setUseSVD(istrue);
   return 0;
 BOB_CATCH_MEMBER("use_svd", -1)
 }
@@ -325,7 +325,7 @@ BOB_TRY
   int istrue = PyObject_IsTrue(o);
 
   if (istrue == -1) return -1;
-  self->cxx->setSafeSVD(istrue?true:false);
+  self->cxx->setSafeSVD(istrue);
   return 0;
 BOB_CATCH_MEMBER("safe_svd", -1)
 }

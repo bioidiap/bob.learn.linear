@@ -255,7 +255,7 @@ BOB_TRY
 
   // evaluates the expected rank for the output, allocate eigens value array
   Py_ssize_t rank = self->cxx->output_size(Xseq);
-  auto eigval = PyBlitzArray_SimpleNew(NPY_FLOAT64, 1, &rank);
+  auto eigval = reinterpret_cast<PyBlitzArrayObject*>(PyBlitzArray_SimpleNew(NPY_FLOAT64, 1, &rank));
   auto eigval_ = make_safe(eigval); ///< auto-delete in case of problems
 
   // allocates a new machine if that was not given by the user
@@ -267,11 +267,11 @@ BOB_TRY
 
   auto pymac = reinterpret_cast<PyBobLearnLinearMachineObject*>(machine);
 
-  auto eigval_bz = PyBlitzArrayCxx_AsBlitz<double,1>(reinterpret_cast<PyBlitzArrayObject*>(eigval));
+  auto eigval_bz = PyBlitzArrayCxx_AsBlitz<double,1>(eigval);
   self->cxx->train(*pymac->cxx, *eigval_bz, Xseq);
 
   // all went fine, pack machine and eigen-values to return
-  return Py_BuildValue("OO", machine, PyBlitzArray_NUMPY_WRAP(eigval));
+  return Py_BuildValue("ON", machine, PyBlitzArray_AsNumpyArray(eigval, 0));
 BOB_CATCH_FUNCTION("train", 0)
 }
 
