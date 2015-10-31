@@ -39,18 +39,14 @@ static PyModuleDef module_definition = {
 extern bool init_BobLearnLinearMachine(PyObject* module);
 extern bool init_BobLearnLinearPCA(PyObject* module);
 extern bool init_BobLearnLinearLDA(PyObject* module);
+extern bool init_BobLearnLinearCGLogReg(PyObject* module);
+extern bool init_BobLearnLinearWCCN(PyObject* module);
 extern bool init_BobLearnLinearBIC(PyObject* module);
 
 static PyObject* create_module (void) {
 
-  PyBobLearnLinearCGLogRegTrainer_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearCGLogRegTrainer_Type) < 0) return 0;
-
   PyBobLearnLinearWhiteningTrainer_Type.tp_new = PyType_GenericNew;
   if (PyType_Ready(&PyBobLearnLinearWhiteningTrainer_Type) < 0) return 0;
-
-  PyBobLearnLinearWCCNTrainer_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearWCCNTrainer_Type) < 0) return 0;
 
 # if PY_VERSION_HEX >= 0x03000000
   PyObject* m = PyModule_Create(&module_definition);
@@ -61,20 +57,15 @@ static PyObject* create_module (void) {
   auto m_ = make_safe(m);
 
   /* register the types to python */
-  Py_INCREF(&PyBobLearnLinearCGLogRegTrainer_Type);
-  if (PyModule_AddObject(m, "CGLogRegTrainer", (PyObject *)&PyBobLearnLinearCGLogRegTrainer_Type) < 0) return 0;
-
   Py_INCREF(&PyBobLearnLinearWhiteningTrainer_Type);
   if (PyModule_AddObject(m, "WhiteningTrainer", (PyObject *)&PyBobLearnLinearWhiteningTrainer_Type) < 0) return 0;
-
-  Py_INCREF(&PyBobLearnLinearWCCNTrainer_Type);
-  if (PyModule_AddObject(m, "WCCNTrainer", (PyObject *)&PyBobLearnLinearWCCNTrainer_Type) < 0) return 0;
 
   if (!init_BobLearnLinearMachine(m)) return 0;
   if (!init_BobLearnLinearPCA(m)) return 0;
   if (!init_BobLearnLinearLDA(m)) return 0;
+  if (!init_BobLearnLinearCGLogReg(m)) return 0;
+  if (!init_BobLearnLinearWCCN(m)) return 0;
   if (!init_BobLearnLinearBIC(m)) return 0;
-
   static void* PyBobLearnLinear_API[PyBobLearnLinear_API_pointers];
 
   /* exhaustive list of C APIs */

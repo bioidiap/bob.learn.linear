@@ -35,11 +35,6 @@ namespace bob { namespace learn { namespace linear {
     return !(this->operator==(other));
   }
 
-  bool WCCNTrainer::is_similar_to (const WCCNTrainer& other,
-      const double r_epsilon, const double a_epsilon) const {
-    return true;
-  }
-
 
   void WCCNTrainer::train(Machine& machine,
       const std::vector<blitz::Array<double, 2> >& data) const {

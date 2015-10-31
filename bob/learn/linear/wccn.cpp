@@ -12,114 +12,67 @@
 #include <bob.blitz/cleanup.h>
 #include <bob.core/config.h>
 #include <bob.learn.linear/api.h>
+#include <bob.extension/documentation.h>
 #include <structmember.h>
 
 /*************************************************
  * Implementation of WCCNTrainer base class *
  *************************************************/
 
-PyDoc_STRVAR(s_wccntrainer_str, BOB_EXT_MODULE_PREFIX ".WCCNTrainer");
-
-PyDoc_STRVAR(s_wccntrainer_doc,
-"WCCNTrainer() -> new WCCNTrainer\n\
-\n\
-Trains a linear machine to perform Within-Class Covariance Normalisation (WCCN).\n\
-\n\
-WCCN finds the projection matrix W that allows us to linearly\n\
-project the data matrix X to another (sub) space such that:\n\
-\n\
-.. math::\n\
-   \n\
-   (1/N) S_{w} = W W^T\n\
-\n\
-where W is an upper triangular matrix computed using Cholesky\n\
-Decomposition:\n\
-\n\
-.. math::\n\
-   \n\
-   W = cholesky([(1/K) S_{w} ]^{-1})\n\
-\n\
-where:\n\
-\n\
-:math:`K`\n\
-\n\
-  the number of classes\n\
-\n\
-:math:`S_w`\n\
-\n\
-   the within-class scatter; it also has dimensions\n\
-   ``(X.shape[0], X.shape[0])`` and is defined as\n\
-   :math:`S_w = \\sum_{k=1}^K \\sum_{n \\in C_k} (x_n-m_k)(x_n-m_k)^T`,\n\
-   :math:`C_k` a set representing all samples for class k.\n\
-\n\
-:math:`m_k`\n\
-  \n\
-   the class *k* empirical mean, defined as\n\
-   :math:`m_k = \\frac{1}{N_k}\\sum_{n \\in C_k} x_n`\n\
-\n\
-References:\n\
-\n\
-1. Andrew O. Hatch, Sachin Kajarekar, and Andreas Stolcke, Within-class covariance normalization for SVM-based speaker recognition, In INTERSPEECH, 2006.\n\
-2. http://en.wikipedia.org/wiki/Cholesky_decomposition\n\
-\n\
-");
-
+static auto WCCN_doc = bob::extension::ClassDoc(
+  BOB_EXT_MODULE_PREFIX ".WCCNTrainer",
+  "Trains a linear machine to perform Within-Class Covariance Normalization (WCCN)",
+  "WCCN finds the projection matrix W that allows us to linearly project the data matrix X to another (sub) space such that:\n\n"
+  ".. math::\n\n"
+  "   (1/N) S_{w} = W W^T\n\n"
+  "where :math:`W` is an upper triangular matrix computed using Cholesky Decomposition:\n\n"
+  ".. math::\n\n"
+  "   W = cholesky([(1/K) S_{w} ]^{-1})\n\n"
+  "where:\n\n"
+  ":math:`K`\n\n  the number of classes\n\n"
+  ":math:`S_w`\n\n the within-class scatter; it also has dimensions ``(X.shape[0], X.shape[0])`` and is defined as :math:`S_w = \\sum_{k=1}^K \\sum_{n \\in C_k} (x_n-m_k)(x_n-m_k)^T`, with :math:`C_k` being a set representing all samples for class k.\n\n"
+  ":math:`m_k`\n\n  the class *k* empirical mean, defined as :math:`m_k = \\frac{1}{N_k}\\sum_{n \\in C_k} x_n`\n\n"
+  "References:\n\n"
+  "1. Within-class covariance normalization for SVM-based speaker recognition, Andrew O. Hatch, Sachin Kajarekar, and Andreas Stolcke, In INTERSPEECH, 2006.\n"
+  "2. http://en.wikipedia.org/wiki/Cholesky_decomposition"
+)
+.add_constructor(bob::extension::FunctionDoc(
+  "WCCNTrainer",
+  "Constructs a new trainer to train a linear machine to perform WCCN"
+)
+.add_prototype("","")
+.add_prototype("other","")
+.add_parameter("other", ":py:class:`WCCNTrainer`", "Another WCCN trainer to copy")
+);
 static int PyBobLearnLinearWCCNTrainer_init_default
 (PyBobLearnLinearWCCNTrainerObject* self, PyObject* args, PyObject* kwds) {
-
-  try {
-    self->cxx = new bob::learn::linear::WCCNTrainer();
-  }
-  catch (std::exception& ex) {
-    PyErr_SetString(PyExc_RuntimeError, ex.what());
-    return -1;
-  }
-  catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
-    return -1;
-  }
-
+BOB_TRY
+  self->cxx = new bob::learn::linear::WCCNTrainer();
   return 0;
-
+BOB_CATCH_MEMBER("constructor", -1)
 }
 
 static int PyBobLearnLinearWCCNTrainer_init_copy
 (PyBobLearnLinearWCCNTrainerObject* self, PyObject* args, PyObject* kwds) {
-
+BOB_TRY
   /* Parses input arguments in a single shot */
-  static const char* const_kwlist[] = {"other", 0};
-  static char** kwlist = const_cast<char**>(const_kwlist);
+  char** kwlist = WCCN_doc.kwlist(1);
 
-  PyObject* other = 0;
+  PyBobLearnLinearWCCNTrainerObject* other = 0;
 
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "O!", kwlist,
         &PyBobLearnLinearWCCNTrainer_Type, &other)) return -1;
 
-  auto copy = reinterpret_cast<PyBobLearnLinearWCCNTrainerObject*>(other);
-
-  try {
-    self->cxx = new bob::learn::linear::WCCNTrainer(*(copy->cxx));
-  }
-  catch (std::exception& ex) {
-    PyErr_SetString(PyExc_RuntimeError, ex.what());
-    return -1;
-  }
-  catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", Py_TYPE(self)->tp_name);
-    return -1;
-  }
-
+  self->cxx = new bob::learn::linear::WCCNTrainer(*other->cxx);
   return 0;
-
+BOB_CATCH_MEMBER("constructor", -1)
 }
 
 int PyBobLearnLinearWCCNTrainer_Check(PyObject* o) {
   return PyObject_IsInstance(o, reinterpret_cast<PyObject*>(&PyBobLearnLinearWCCNTrainer_Type));
 }
 
-static int PyBobLearnLinearWCCNTrainer_init
-(PyBobLearnLinearWCCNTrainerObject* self, PyObject* args, PyObject* kwds) {
-
+static int PyBobLearnLinearWCCNTrainer_init(PyBobLearnLinearWCCNTrainerObject* self, PyObject* args, PyObject* kwds) {
   Py_ssize_t nargs = (args?PyTuple_Size(args):0) + (kwds?PyDict_Size(kwds):0);
 
   if (nargs == 1) {
@@ -127,20 +80,14 @@ static int PyBobLearnLinearWCCNTrainer_init
   }
 
   return PyBobLearnLinearWCCNTrainer_init_default(self, args, kwds);
-
 }
 
-static void PyBobLearnLinearWCCNTrainer_delete
-(PyBobLearnLinearWCCNTrainerObject* self) {
-
+static void PyBobLearnLinearWCCNTrainer_delete(PyBobLearnLinearWCCNTrainerObject* self) {
   delete self->cxx;
   Py_TYPE(self)->tp_free((PyObject*)self);
-
 }
 
-static PyObject* PyBobLearnLinearWCCNTrainer_RichCompare
-(PyBobLearnLinearWCCNTrainerObject* self, PyObject* other, int op) {
-
+static PyObject* PyBobLearnLinearWCCNTrainer_RichCompare(PyBobLearnLinearWCCNTrainerObject* self, PyObject* other, int op) {
   if (!PyBobLearnLinearWCCNTrainer_Check(other)) {
     PyErr_Format(PyExc_TypeError, "cannot compare `%s' with `%s'",
         Py_TYPE(self)->tp_name, Py_TYPE(other)->tp_name);
@@ -162,82 +109,34 @@ static PyObject* PyBobLearnLinearWCCNTrainer_RichCompare
       Py_INCREF(Py_NotImplemented);
       return Py_NotImplemented;
   }
-
 }
 
-PyDoc_STRVAR(s_is_similar_to_str, "is_similar_to");
-PyDoc_STRVAR(s_is_similar_to_doc,
-"o.is_similar_to(other [, r_epsilon=1e-5 [, a_epsilon=1e-8]]) -> bool\n\
-\n\
-Compares this WCCNTrainer with the ``other`` one to be\n\
-approximately the same.\n\
-\n\
-The optional values ``r_epsilon`` and ``a_epsilon`` refer to the\n\
-relative and absolute precision for the ``weights``, ``biases``\n\
-and any other values internal to this machine.\n\
-\n\
-");
 
-static PyObject* PyBobLearnLinearWCCNTrainer_IsSimilarTo
-(PyBobLearnLinearWCCNTrainerObject* self, PyObject* args, PyObject* kwds) {
-
-  /* Parses input arguments in a single shot */
-  static const char* const_kwlist[] = {"other", "r_epsilon", "a_epsilon", 0};
-  static char** kwlist = const_cast<char**>(const_kwlist);
-
-  PyObject* other = 0;
-  double r_epsilon = 1.e-5;
-  double a_epsilon = 1.e-8;
-
-  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O!|dd", kwlist,
-        &PyBobLearnLinearWCCNTrainer_Type, &other,
-        &r_epsilon, &a_epsilon)) return 0;
-
-  auto other_ = reinterpret_cast<PyBobLearnLinearWCCNTrainerObject*>(other);
-
-  if (self->cxx->is_similar_to(*other_->cxx, r_epsilon, a_epsilon))
-    Py_RETURN_TRUE;
-  else
-    Py_RETURN_FALSE;
-
-}
-
-PyDoc_STRVAR(s_train_str, "train");
-PyDoc_STRVAR(s_train_doc,
-"o.train(X [, machine]) -> machine\n\
-\n\
-Trains a linear machine using WCCN.\n\
-\n\
-The resulting machine will have the same number of inputs\n\
-**and** outputs as columns in any of ``X``'s matrices.\n\
-\n\
-The user may provide or not an object of type\n\
-:py:class:`bob.learn.linear.Machine` that will be set by this\n\
-method. In such a case, the machine should have a shape that\n\
-matches ``(X.shape[1], X.shape[1])``. If the user does not\n\
-provide a machine to be set, then a new one will be allocated\n\
-internally. In both cases, the resulting machine is always\n\
-returned by this method.\n\
-\n\
-The value of ``X`` should be a sequence over as many 2D 64-bit\n\
-floating point number arrays as classes in the problem. All\n\
-arrays will be checked for conformance (identical number of\n\
-columns). To accomplish this, either prepare a list with all\n\
-your class observations organised in 2D arrays or pass a 3D\n\
-array in which the first dimension (depth) contains as many\n\
-elements as classes you want to train for.\n\
-\n\
-");
-
+static auto train = bob::extension::FunctionDoc(
+  "train",
+  "Trains a linear machine using WCCN",
+  "The value of ``X`` should be a sequence over as many 2D 64-bit floating point number arrays as classes in the problem. "
+  "All arrays will be checked for conformance (identical number of columns). "
+  "To accomplish this, either prepare a list with all your class observations organized in 2D arrays or pass a 3D array in which the first dimension (depth) contains as many elements as classes you want to train for.\n\n"
+  "The resulting machine will have the same number of inputs **and** outputs as columns in any of ``X``'s matrices.\n\n"
+  "The user may provide or not an object of type :py:class:`bob.learn.linear.Machine` that will be set by this method. "
+  "In such a case, the machine should have a shape that matches ``(X.shape[1], X.shape[1])``. "
+  "If the user does not provide a machine to be set, then a new one will be allocated internally. "
+  "In both cases, the resulting machine is always returned."
+)
+.add_prototype("X, [machine]", "machine")
+.add_parameter("X", "[array_like(2D,float)] or array_like(3D, float)", "The training data arranged by class")
+.add_parameter("machine", ":py:class:`bob.learn.linear.Machine`", "A pre-allocated machine to be trained; may be omitted")
+.add_return("machine", ":py:class:`bob.learn.linear.Machine`", "The trained machine; identical to the ``machine`` parameter, if specified")
+;
 static PyObject* PyBobLearnLinearWCCNTrainer_Train
 (PyBobLearnLinearWCCNTrainerObject* self, PyObject* args, PyObject* kwds) {
-
+BOB_TRY
   /* Parses input arguments in a single shot */
-  static const char* const_kwlist[] = {"X", "machine", 0};
-  static char** kwlist = const_cast<char**>(const_kwlist);
+  char** kwlist = train.kwlist();
 
   PyObject* X = 0;
-  PyObject* machine = 0;
+  PyBobLearnLinearMachineObject* machine = 0;
 
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "O|O!", kwlist,
         &X, &PyBobLearnLinearMachine_Type, &machine)) return 0;
@@ -295,88 +194,54 @@ static PyObject* PyBobLearnLinearWCCNTrainer_Train
   }
 
   // allocates a new machine if that was not given by the user
-  boost::shared_ptr<PyObject> machine_;
+  boost::shared_ptr<PyBobLearnLinearMachineObject> machine_;
   if (!machine) {
-    machine = PyBobLearnLinearMachine_NewFromSize(ncol, ncol);
+    machine = reinterpret_cast<PyBobLearnLinearMachineObject*>(PyBobLearnLinearMachine_NewFromSize(ncol, ncol));
     machine_ = make_safe(machine); ///< auto-delete in case of problems
   }
 
-  auto pymac = reinterpret_cast<PyBobLearnLinearMachineObject*>(machine);
+  self->cxx->train(*machine->cxx, Xseq);
 
-  try {
-    self->cxx->train(*pymac->cxx, Xseq);
-  }
-  catch (std::exception& e) {
-    PyErr_SetString(PyExc_RuntimeError, e.what());
-    return 0;
-  }
-  catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot train `%s' with this `%s': unknown exception caught", Py_TYPE(machine)->tp_name, Py_TYPE(self)->tp_name);
-    return 0;
-  }
-
-  Py_INCREF(machine);
-  return machine;
-
+  return Py_BuildValue("O", machine);
+BOB_CATCH_MEMBER("train", 0)
 }
 
 static PyMethodDef PyBobLearnLinearWCCNTrainer_methods[] = {
   {
-    s_is_similar_to_str,
-    (PyCFunction)PyBobLearnLinearWCCNTrainer_IsSimilarTo,
-    METH_VARARGS|METH_KEYWORDS,
-    s_is_similar_to_doc
-  },
-  {
-    s_train_str,
+    train.name(),
     (PyCFunction)PyBobLearnLinearWCCNTrainer_Train,
     METH_VARARGS|METH_KEYWORDS,
-    s_train_doc
+    train.doc()
   },
   {0} /* Sentinel */
 };
 
-static PyGetSetDef PyBobLearnLinearWCCNTrainer_getseters[] = {
-    {0}  /* Sentinel */
+
+// WCCN Trainer
+PyTypeObject PyBobLearnLinearWCCNTrainer_Type = {
+  PyVarObject_HEAD_INIT(0,0)
+  0
 };
 
-PyTypeObject PyBobLearnLinearWCCNTrainer_Type = {
-    PyVarObject_HEAD_INIT(0, 0)
-    s_wccntrainer_str,                                /* tp_name */
-    sizeof(PyBobLearnLinearWCCNTrainerObject),        /* tp_basicsize */
-    0,                                                /* tp_itemsize */
-    (destructor)PyBobLearnLinearWCCNTrainer_delete,   /* tp_dealloc */
-    0,                                                /* tp_print */
-    0,                                                /* tp_getattr */
-    0,                                                /* tp_setattr */
-    0,                                                /* tp_compare */
-    0,                                                /* tp_repr */
-    0,                                                /* tp_as_number */
-    0,                                                /* tp_as_sequence */
-    0,                                                /* tp_as_mapping */
-    0,                                                /* tp_hash */
-    0,                                                /* tp_call */
-    0,                                                /* tp_str */
-    0,                                                /* tp_getattro */
-    0,                                                /* tp_setattro */
-    0,                                                /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,         /* tp_flags */
-    s_wccntrainer_doc,                                /* tp_doc */
-    0,                                                /* tp_traverse */
-    0,                                                /* tp_clear */
-    (richcmpfunc)PyBobLearnLinearWCCNTrainer_RichCompare, /* tp_richcompare */
-    0,                                                /* tp_weaklistoffset */
-    0,                                                /* tp_iter */
-    0,                                                /* tp_iternext */
-    PyBobLearnLinearWCCNTrainer_methods,              /* tp_methods */
-    0,                                                /* tp_members */
-    PyBobLearnLinearWCCNTrainer_getseters,            /* tp_getset */
-    0,                                                /* tp_base */
-    0,                                                /* tp_dict */
-    0,                                                /* tp_descr_get */
-    0,                                                /* tp_descr_set */
-    0,                                                /* tp_dictoffset */
-    (initproc)PyBobLearnLinearWCCNTrainer_init,       /* tp_init */
-    0,                                                /* tp_alloc */
-    0,                                                /* tp_new */
-};
+bool init_BobLearnLinearWCCN(PyObject* module)
+{
+  // WCCN Trainer
+  PyBobLearnLinearWCCNTrainer_Type.tp_name = WCCN_doc.name();
+  PyBobLearnLinearWCCNTrainer_Type.tp_basicsize = sizeof(PyBobLearnLinearWCCNTrainerObject);
+  PyBobLearnLinearWCCNTrainer_Type.tp_flags = Py_TPFLAGS_DEFAULT;
+  PyBobLearnLinearWCCNTrainer_Type.tp_doc = WCCN_doc.doc();
+
+  // set the functions
+  PyBobLearnLinearWCCNTrainer_Type.tp_new = PyType_GenericNew;
+  PyBobLearnLinearWCCNTrainer_Type.tp_init = reinterpret_cast<initproc>(PyBobLearnLinearWCCNTrainer_init);
+  PyBobLearnLinearWCCNTrainer_Type.tp_dealloc = reinterpret_cast<destructor>(PyBobLearnLinearWCCNTrainer_delete);
+  PyBobLearnLinearWCCNTrainer_Type.tp_methods = PyBobLearnLinearWCCNTrainer_methods;
+  PyBobLearnLinearWCCNTrainer_Type.tp_richcompare = reinterpret_cast<richcmpfunc>(PyBobLearnLinearWCCNTrainer_RichCompare);
+
+  // check that everyting is fine
+  if (PyType_Ready(&PyBobLearnLinearWCCNTrainer_Type) < 0) return false;
+
+  // add the type to the module
+  Py_INCREF(&PyBobLearnLinearWCCNTrainer_Type);
+  return PyModule_AddObject(module, "WCCNTrainer", (PyObject*)&PyBobLearnLinearWCCNTrainer_Type) >= 0;
+}

@@ -61,11 +61,6 @@ namespace bob { namespace learn { namespace linear {
        * @brief Not equal to
        */
       bool operator!=(const WCCNTrainer& other) const;
-      /**
-       * @brief Similar to
-       */
-      bool is_similar_to(const WCCNTrainer& other, const double r_epsilon=1e-5,
-          const double a_epsilon=1e-8) const;
 
       /**
        * @brief Trains the LinearMachine to perform the WCCN

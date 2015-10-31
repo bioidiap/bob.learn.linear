@@ -657,11 +657,10 @@ def test_wccn_initialization():
   t3 = WCCNTrainer(t2)
   t4 = t3
   assert t1 == t2
-  assert t1.is_similar_to(t2)
   assert t1 == t3
-  assert t1.is_similar_to(t3)
   assert t1 == t4
-  assert t1.is_similar_to(t4)
+  assert t2 is not t3
+  assert t3 is t4
 
 def test_wccn_train():
 
