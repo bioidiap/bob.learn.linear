@@ -1,6 +1,5 @@
 """Auxiliary functions to be used for preparing the training data."""
 
-
 def bic_intra_extra_pairs(training_data):
   """bic_intra_extra_pairs(training_data) -> intra_pairs, extra_pairs
 
@@ -31,19 +30,18 @@ def bic_intra_extra_pairs(training_data):
     A list of tuples of data, where both data belong to different classes, where each data element is a reference to one element of the given ``training_data``.
   """
   # generate intra-class pairs
-  intra_pairs = [(training_data[clazz][c1], training_data[clazz][c2]) \
-                  for clazz in range(len(training_data)) \
-                  for c1 in range(len(training_data[clazz])-1) \
-                  for c2 in range (c1+1, len(training_data[clazz]))
+  intra_pairs = [(clazz[c1], clazz[c2]) \
+                  for clazz in training_data \
+                  for c1 in range(len(clazz)-1) \
+                  for c2 in range (c1+1, len(clazz))
                 ]
 
   # generate extra-class pairs
-  extra_pairs = [(training_data[clazz1][c1], training_data[clazz2][c2]) \
+  extra_pairs = [(c1, c2) \
                   for clazz1 in range(len(training_data)-1) \
-                  for c1 in range(len(training_data[clazz1])) \
+                  for c1 in training_data[clazz1] \
                   for clazz2 in range(clazz1+1, len(training_data)) \
-                  for c2 in range(len(training_data[clazz2])) \
-                  if clazz1 != clazz2
+                  for c2 in training_data[clazz2]
                 ]
 
   # return a tuple of pairs
