@@ -575,7 +575,8 @@ static auto forward = bob::extension::FunctionDoc(
   "If one provides a 1D array, the ``output`` array, if provided, should also be 1D, matching the output size of this machine. "
   "If one provides a 2D array, it is considered a set of vertically stacked 1D arrays (one input per row) and a 2D array is produced or expected in ``output``. "
   "The ``output`` array in this case shall have the same number of rows as the ``input`` array and as many columns as the output size for this machine.\n\n"
-  ".. note:: The :py:meth:`__call__` function is an alias for this method."
+  ".. note:: The :py:meth:`__call__` function is an alias for this method.",
+  true
 )
 .add_prototype("input, [output]", "output")
 .add_parameter("input", "array_like(1D or 2D, float)", "The array that should be projected; must be compatible with :py:attr:`shape` [0]")
@@ -725,7 +726,8 @@ BOB_CATCH_MEMBER("save", 0)
 static auto is_similar_to = bob::extension::FunctionDoc(
   "is_similar_to",
   "Compares this LinearMachine with the ``other`` one to be approximately the same",
-  "The optional values ``r_epsilon`` and ``a_epsilon`` refer to the relative and absolute precision for the :py:attr:`weights`, :py:attr:`biases` and any other values internal to this machine."
+  "The optional values ``r_epsilon`` and ``a_epsilon`` refer to the relative and absolute precision for the :py:attr:`weights`, :py:attr:`biases` and any other values internal to this machine.",
+  true
 )
 .add_prototype("other, [r_epsilon], [a_epsilon]", "similar")
 .add_parameter("other", ":py:class:`Machine`", "The other machine to compare with")
@@ -764,7 +766,8 @@ static auto resize = bob::extension::FunctionDoc(
   ".. note::\n\n"
   "   Use this method to force data compression.\n"
   "   All will work out given most relevant factors to be preserved are organized on the top of the weight matrix.\n"
-  "   In this way, reducing the system size will suppress less relevant projections."
+  "   In this way, reducing the system size will suppress less relevant projections.",
+  true
 )
 .add_prototype("input, output")
 .add_parameter("input", "int", "The input dimension to be set")

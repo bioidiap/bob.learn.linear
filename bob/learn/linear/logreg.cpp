@@ -143,7 +143,8 @@ static auto train = bob::extension::FunctionDoc(
   "train",
   "Trains a linear machine to perform linear logistic regression",
   "The resulting machine will have the same number of inputs as columns in ``negatives`` and ``positives`` and a single output. "
-  "This method always returns a machine, which will be identical to the one provided (if the user passed one) or a new one allocated internally."
+  "This method always returns a machine, which will be identical to the one provided (if the user passed one) or a new one allocated internally.",
+  true
 )
 .add_prototype("negatives, positives, [machine]", "machine")
 .add_parameter("negatives, positives", "array_like(2D, float)", "``negatives`` and ``positives`` should be arrays organized in such a way that every row corresponds to a new observation of the phenomena (i.e., a new sample) and every column corresponds to a different feature")

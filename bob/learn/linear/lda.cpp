@@ -188,7 +188,8 @@ static auto train = bob::extension::FunctionDoc(
   "To accomplish this, either prepare a list with all your class observations organized in 2D arrays or pass a 3D array in which the first dimension (depth) contains as many elements as classes you want to discriminate.\n\n"
   ".. note::\n\n"
   "   We set at most :py:meth:`output_size` eigen-values and vectors on the passed machine.\n"
-  "   You can compress the machine output further using :py:meth:`Machine.resize` if necessary."
+  "   You can compress the machine output further using :py:meth:`Machine.resize` if necessary.",
+  true
 )
 .add_prototype("X, [machine]", "machine, eigen_values")
 .add_parameter("X", "[array_like(2D, floats)] or array_like(3D, floats)", "The input data, separated to contain the training data per class in the first dimension")
@@ -282,7 +283,8 @@ static auto output_size = bob::extension::FunctionDoc(
   "This method should be used to setup linear machines and input vectors prior to feeding them into this trainer.\n\n"
   "The value of ``X`` should be a sequence over as many 2D 64-bit floating point number arrays as classes in the problem. "
   "All arrays will be checked for conformance (identical number of columns). "
-  "To accomplish this, either prepare a list with all your class observations organized in 2D arrays or pass a 3D array in which the first dimension (depth) contains as many elements as classes you want to discriminate."
+  "To accomplish this, either prepare a list with all your class observations organized in 2D arrays or pass a 3D array in which the first dimension (depth) contains as many elements as classes you want to discriminate.",
+  true
 )
 .add_prototype("X","size")
 .add_parameter("X", "[array_like(2D, floats)] or array_like(3D, floats)", "The input data, separated to contain the training data per class in the first dimension")

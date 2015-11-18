@@ -122,7 +122,8 @@ static auto train = bob::extension::FunctionDoc(
   "The user may provide or not an object of type :py:class:`bob.learn.linear.Machine` that will be set by this method. "
   "In such a case, the machine should have a shape that matches ``(X.shape[1], X.shape[1])``. "
   "If the user does not provide a machine to be set, then a new one will be allocated internally. "
-  "In both cases, the resulting machine is always returned."
+  "In both cases, the resulting machine is always returned.",
+  true
 )
 .add_prototype("X, [machine]", "machine")
 .add_parameter("X", "[array_like(2D,float)] or array_like(3D, float)", "The training data arranged by class")
