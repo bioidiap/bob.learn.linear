@@ -603,11 +603,8 @@ def test_whitening_initialization():
   t3 = WhiteningTrainer(t2)
   t4 = t3
   assert t1 == t2
-  assert t1.is_similar_to(t2)
   assert t1 == t3
-  assert t1.is_similar_to(t3)
   assert t1 == t4
-  assert t1.is_similar_to(t4)
 
 def test_whitening_train():
 

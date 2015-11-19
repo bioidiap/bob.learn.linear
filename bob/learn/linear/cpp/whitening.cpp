@@ -36,13 +36,7 @@ namespace bob { namespace learn { namespace linear {
 
   bool WhiteningTrainer::operator!= (const WhiteningTrainer& other) const
   {
-    return !(this->operator==(other));
-  }
-
-  bool WhiteningTrainer::is_similar_to (const WhiteningTrainer& other,
-      const double r_epsilon, const double a_epsilon) const
-  {
-    return true;
+    return false;
   }
 
   void WhiteningTrainer::train(Machine& machine, const blitz::Array<double,2>& ar) const {
