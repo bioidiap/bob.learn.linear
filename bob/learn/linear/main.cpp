@@ -46,25 +46,24 @@ extern bool init_BobLearnLinearBIC(PyObject* module);
 
 static PyObject* create_module (void) {
 
-  PyBobLearnLinearWhiteningTrainer_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnLinearWhiteningTrainer_Type) < 0) return 0;
-
 # if PY_VERSION_HEX >= 0x03000000
-  PyObject* m = PyModule_Create(&module_definition);
+  PyObject* module = PyModule_Create(&module_definition);
+  auto module_ = make_xsafe(module);
+  const char* ret = "O";
 # else
-  PyObject* m = Py_InitModule3(BOB_EXT_MODULE_NAME, module_methods, module_docstr);
+  PyObject* module = Py_InitModule3(BOB_EXT_MODULE_NAME, module_methods, module_docstr);
+  const char* ret = "N";
 # endif
-  if (!m) return 0;
-  auto m_ = make_safe(m);
+  if (!module) return 0;
 
   /* register the types to python */
-  if (!init_BobLearnLinearMachine(m)) return 0;
-  if (!init_BobLearnLinearPCA(m)) return 0;
-  if (!init_BobLearnLinearLDA(m)) return 0;
-  if (!init_BobLearnLinearCGLogReg(m)) return 0;
-  if (!init_BobLearnLinearWCCN(m)) return 0;
-  if (!init_BobLearnLinearWhitening(m)) return 0;
-  if (!init_BobLearnLinearBIC(m)) return 0;
+  if (!init_BobLearnLinearMachine(module)) return 0;
+  if (!init_BobLearnLinearPCA(module)) return 0;
+  if (!init_BobLearnLinearLDA(module)) return 0;
+  if (!init_BobLearnLinearCGLogReg(module)) return 0;
+  if (!init_BobLearnLinearWCCN(module)) return 0;
+  if (!init_BobLearnLinearWhitening(module)) return 0;
+  if (!init_BobLearnLinearBIC(module)) return 0;
   static void* PyBobLearnLinear_API[PyBobLearnLinear_API_pointers];
 
   /* exhaustive list of C APIs */
@@ -138,7 +137,7 @@ static PyObject* create_module (void) {
 
 #endif
 
-  if (c_api_object) PyModule_AddObject(m, "_C_API", c_api_object);
+  if (c_api_object) PyModule_AddObject(module, "_C_API", c_api_object);
 
   /* imports dependencies */
   if (import_bob_blitz() < 0) return 0;
@@ -146,7 +145,7 @@ static PyObject* create_module (void) {
   if (import_bob_io_base() < 0) return 0;
   if (import_bob_learn_activation() < 0) return 0;
 
-  return Py_BuildValue("O", m);
+  return Py_BuildValue(ret, module);
 }
 
 PyMODINIT_FUNC BOB_EXT_ENTRY_NAME (void) {
