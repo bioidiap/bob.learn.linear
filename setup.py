@@ -22,8 +22,8 @@ setup(
 
     name='bob.learn.linear',
     version=version,
-    description='Bob\'s Linear Machine and its Trainers',
-    url='http://github.com/bioidiap/bob.learn.linear',
+    description='Linear Machine and Trainers for Bob',
+    url='http://gitlab.idiap.ch/bob/bob.learn.linear',
     license='BSD',
     author='Andre Anjos',
     author_email='andre.anjos@idiap.ch',
