@@ -238,7 +238,7 @@ static auto forward_doc = bob::extension::FunctionDoc(
   "Computes the BIC or IEC score for the given input vector, which results of a comparison vector of two (facial) images",
   "The resulting value is returned as a single float value. "
   "The score itself is the log-likelihood score of the given input vector belonging to the intrapersonal class.\n\n"
-  ".. note:: the :py:meth:`__call__` function is an alias for this function",
+  ".. note:: the ``__call__`` method is an alias for this one",
   true
 )
 .add_prototype("input", "score")
