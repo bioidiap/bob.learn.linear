@@ -9,8 +9,12 @@
 This section includes information for using the pure Python API of ``bob.learn.linear``.
 
 
-Classes
+Summary
 -------
+
+
+Classes
+=======
 
 .. autosummary::
    bob.learn.linear.Machine
@@ -19,12 +23,11 @@ Classes
    bob.learn.linear.WCCNTrainer
    bob.learn.linear.WhiteningTrainer
    bob.learn.linear.CGLogRegTrainer
-
    bob.learn.linear.BICMachine
    bob.learn.linear.BICTrainer
 
 Functions
----------
+=========
 
 .. autosummary::
    bob.learn.linear.get_config
@@ -32,4 +35,8 @@ Functions
    bob.learn.linear.bic_intra_extra_pairs_between_factors
 
 
+Reference
+---------
+
 .. automodule:: bob.learn.linear
+

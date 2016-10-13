@@ -21,7 +21,7 @@
 
 static auto Whitening_doc = bob::extension::ClassDoc(
   BOB_EXT_MODULE_PREFIX ".WhiteningTrainer",
-  "Trains a linear :py:class:`Machine` to perform Cholesky whitening.",
+  "Trains a linear :py:class:`bob.learn.linear.Machine` to perform Cholesky whitening.",
   "The whitening transformation is a decorrelation method that converts the covariance matrix of a set of samples into the identity matrix :math:`I`. "
   "This effectively linearly transforms random variables such that the resulting variables are uncorrelated and have the same variances as the original random variables. "
   "This transformation is invertible. "
@@ -124,7 +124,7 @@ static PyObject* PyBobLearnLinearWhiteningTrainer_RichCompare
 static auto train = bob::extension::FunctionDoc(
   "train",
   "Trains a linear machine to perform Cholesky whitening",
-  "The user may provide or not an object of type :py:class:`Machine` that will be set by this method. "
+  "The user may provide or not an object of type :py:class:`bob.learn.linear.Machine` that will be set by this method. "
   "In such a case, the machine should have a shape that matches ``(X.shape[1], X.shape[1])``. "
   "If the user does not provide a machine to be set, then a new one will be allocated internally. "
   "In both cases, the resulting machine is always returned by this method.\n\n"

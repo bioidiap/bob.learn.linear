@@ -1,0 +1,2 @@
+# This is a c type confused as c++ type by Sphinx (not our fault)
+cpp:type PyObject

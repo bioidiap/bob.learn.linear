@@ -20,7 +20,7 @@
 
 static auto LDA_doc = bob::extension::ClassDoc(
   BOB_EXT_MODULE_PREFIX ".FisherLDATrainer",
-  "Trains a :py:class:`Machine` to perform Fisher's Linear Discriminant Analysis (LDA).",
+  "Trains a :py:class:`bob.learn.linear.Machine` to perform Fisher's Linear Discriminant Analysis (LDA).",
   "LDA finds the projection matrix W that allows us to linearly project the data matrix X to another (sub) space in which the between-class and within-class variances are jointly optimized: the between-class variance is maximized while the with-class is minimized. "
   "The (inverse) cost function for this criteria can be posed as the following:\n\n"
   ".. math::\n\n"

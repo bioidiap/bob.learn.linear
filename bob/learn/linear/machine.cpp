@@ -38,7 +38,7 @@ static auto Machine_doc = bob::extension::ClassDoc(
   "The machine is remains **uninitialized**. "
   "With the second form, the user passes a 2D array with 64-bit floats containing weight matrix to be used as the :py:attr:`weights` matrix by the new machine. "
   "In the third form the user passes a :py:class:`bob.io.base.HDF5File` opened for reading, which points to the machine information to be loaded in memory. "
-  "Finally, in the last form (copy constructor), the user passes another :py:class:`Machine` that will be deep copied."
+  "Finally, in the last form (copy constructor), the user passes another :py:class:`bob.learn.linear.Machine` that will be deep copied."
 )
 .add_prototype("[input_size], [output_size])", "")
 .add_prototype("weights", "")
@@ -48,7 +48,7 @@ static auto Machine_doc = bob::extension::ClassDoc(
 .add_parameter("output_size", "int", "[Default: 0] The dimensionality of the output data")
 .add_parameter("weights", "array_like(2D, float)", "A weight matrix to initialize the :py:attr:`weights`")
 .add_parameter("config", ":py:class:`bob.io.base.HDF5File`", "The HDF5 file open for reading")
-.add_parameter("other", ":py:class:`Machine`", "The machine to copy construct")
+.add_parameter("other", ":py:class:`bob.learn.linear.Machine`", "The machine to copy construct")
 );
 
 static int PyBobLearnLinearMachine_init_sizes
@@ -575,7 +575,7 @@ static auto forward = bob::extension::FunctionDoc(
   "If one provides a 1D array, the ``output`` array, if provided, should also be 1D, matching the output size of this machine. "
   "If one provides a 2D array, it is considered a set of vertically stacked 1D arrays (one input per row) and a 2D array is produced or expected in ``output``. "
   "The ``output`` array in this case shall have the same number of rows as the ``input`` array and as many columns as the output size for this machine.\n\n"
-  ".. note:: The :py:meth:`__call__` function is an alias for this method.",
+  ".. note:: The ``__call__`` method is an alias for this method.",
   true
 )
 .add_prototype("input, [output]", "output")
@@ -730,7 +730,7 @@ static auto is_similar_to = bob::extension::FunctionDoc(
   true
 )
 .add_prototype("other, [r_epsilon], [a_epsilon]", "similar")
-.add_parameter("other", ":py:class:`Machine`", "The other machine to compare with")
+.add_parameter("other", ":py:class:`bob.learn.linear.Machine`", "The other machine to compare with")
 .add_parameter("r_epsilon", "float", "[Default: ``1e-5``] The relative precision")
 .add_parameter("a_epsilon", "float", "[Default: ``1e-8``] The absolute precision")
 .add_return("similar", "bool", "``True`` if the ``other`` machine is similar to this one, otherwise ``False``")

@@ -46,7 +46,7 @@ static auto PCA_doc = bob::extension::ClassDoc(
   "   XX^T &= U S^2 U^*\n\n"
   "If :math:`X` has zero mean, we can conclude by inspection that the :math:`U` matrix obtained by SVD contains the eigen-vectors of the covariance matrix of :math:`X` (:math:`XX^T`) and :math:`S^2/(m-1)` corresponds to its eigen values.\n\n"
   ".. note:: Our implementation uses LAPACK's ``dgesdd`` to compute the solution to this linear equation.\n\n"
-  "The corresponding :py:class:`Machine` and returned eigen-values of :math:`\\Sigma`, are pre-sorted in descending order (the first eigen-vector - or column - of the weight matrix in the :py:class:`Machine` corresponds to the highest eigen-value obtained).\n\n"
+  "The corresponding :py:class:`bob.learn.linear.Machine` and returned eigen-values of :math:`\\Sigma`, are pre-sorted in descending order (the first eigen-vector - or column - of the weight matrix in the :py:class:`bob.learn.linear.Machine` corresponds to the highest eigen-value obtained).\n\n"
   ".. note::\n\n"
   "   One question you should pose yourself is which of the methods to choose.\n"
   "   Here is some advice: you should prefer the covariance method over SVD when the number of samples (rows of :math:`X`) is greater than the number of features (columns of :math:`X`).\n"
@@ -170,7 +170,7 @@ static auto train = bob::extension::FunctionDoc(
   "Trains a linear machine to perform the PCA (aka. KLT)",
   "The resulting machine will have the same number of inputs as columns in ``X`` and :math:`K` eigen-vectors, where :math:`K=\\min{(S-1,F)}`, with :math:`S` being the number of rows in ``X`` (samples) and :math:`F` the number of columns (or features). "
   "The vectors are arranged by decreasing eigen-value automatically -- there is no need to sort the results.\n\n"
-  "The user may provide or not an object of type :py:class:`Machine` that will be set by this method. "
+  "The user may provide or not an object of type :py:class:`bob.learn.linear.Machine` that will be set by this method. "
   "If provided, machine should have the correct number of inputs and outputs matching, respectively, the number of columns in the input data array ``X`` and the output of the method :py:meth:`output_size`.\n\n"
   "The input data matrix ``X`` should correspond to a 64-bit floating point array organized in such a way that every row corresponds to a new observation of the phenomena (i.e., a new sample) and every column corresponds to a different feature.\n\n"
   "This method returns a tuple consisting of the trained machine and a 1D 64-bit floating point array containing the eigen-values calculated while computing the KLT. "

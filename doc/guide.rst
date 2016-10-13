@@ -1,12 +1,5 @@
 .. vim: set fileencoding=utf-8 :
-.. Laurent El Shafey <Laurent.El-Shafey@idiap.ch>
-.. Wed Mar 14 12:31:35 2012 +0100
-.. modified by Elie Khoury <elie.khoury@idiap.ch>
-.. Mon May 06 15:50:20 2013 +0100
-.. consolidated by Andre Anjos <andre.anjos@idiap.ch>
-.. Wed 15 Jan 2014 12:20:47 CET
-..
-.. Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
+.. Thu 13 Oct 2016 16:01:27 CEST
 
 .. testsetup:: *
 
@@ -58,7 +51,8 @@ in double-precision. Here is how to use a
   array([ 0.55,  0.55])
 
 As was shown in the above example, the way to pass data through a machine is to
-call its :py:meth:`bob.learn.linear.Machine.forward` function, for which the :py:meth:`bob.learn.linear.Machine.__call__` funciton is an alias.
+call its :py:meth:`bob.learn.linear.Machine.forward` method, for which the
+``__call__`` method is an alias.
 
 The first thing to notice about machines is that they can be stored and
 retrieved in :py:class:`bob.io.base.HDF5File`. To save the before
@@ -93,7 +87,7 @@ produces, in a tuple format like ``(input_size, output_size)``:
   >>> machine.shape
   (2, 2)
 
-A :py:class:`bob.learn.linear.Machine`` also supports pre-setting
+A :py:class:`bob.learn.linear.Machine` also supports pre-setting
 normalization vectors that are applied to every input :math:`x`. You can set a
 subtraction factor and a division factor, so that the actual input :math:`x'`
 that is fed to the matrix :math:`W` is :math:`x' = (x - s) ./ d`. The variables

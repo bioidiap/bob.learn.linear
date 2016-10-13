@@ -39,7 +39,7 @@ static auto CGLogReg_doc = bob::extension::ClassDoc(
 .add_parameter("convergence_threshold", "float", "[Default: ``1e-5``] The convergence threshold for the conjugate gradient algorithm")
 .add_parameter("max_iterations", "int", "[Default: ``10000``] The maximum number of iterations for the conjugate gradient algorithm")
 .add_parameter("reg", "float", "[Default: ``0.``] The regularization factor lambda. If you set this to the value of ``0.``, then the algorithm will apply **no** regularization whatsoever")\
-.add_parameter("mean_std_norm", "bool", "[Default: ``False``] Performs mean and standard-deviation normalization (whitening) of the input data before training the (resulting) :py:class:`Machine`. Setting this to ``True`` is recommended for large data sets with significant amplitude variations between dimensions")
+.add_parameter("mean_std_norm", "bool", "[Default: ``False``] Performs mean and standard-deviation normalization (whitening) of the input data before training the (resulting) :py:class:`bob.learn.linear.Machine`. Setting this to ``True`` is recommended for large data sets with significant amplitude variations between dimensions")
 .add_parameter("other", ":py:class:`CGLogRegTrainer`", "If you decide to copy construct from another object of the same type, pass it using this parameter")
 );
 static int PyBobLearnLinearCGLogRegTrainer_init_parameters
