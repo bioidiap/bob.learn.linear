@@ -343,7 +343,6 @@ def test_pca_versus_matlab_princomp_2():
   # Train method 1
   T = PCATrainer()
   machine_svd, eig_vals_svd = T.train(data)
-
   assert numpy.allclose(eig_vals_svd, eig_val_correct)
   assert machine_svd.weights.shape == (5,3)
 
@@ -966,3 +965,29 @@ def test_cglogreg_norm_slow():
   # Note: lower values for epsilon and higher number of iterations improve the stability)
   assert abs(machine(test1) - res1) < 1e-3
   assert abs(machine(test2) - res2) < 1e-3
+
+
+def test_pca_signal():
+
+   data = numpy.array([[3,-3,100], [4,-4,50], [3.5,-3.5,-50], [3.8,-3.7,-100]], dtype='float64')
+   trainer = bob.learn.linear.PCATrainer()
+   [machine, eig_vals] = trainer.train(data)
+
+   weights_ref = numpy.array([[ 0.002, -0.706, -0.708],
+                              [-0.002,  0.708, -0.706],
+                              [-1.,    -0.003, -0.   ]])   
+   assert (abs(machine.weights - weights_ref) < 1e-3).all()
+
+
+def test_pca_signal_safe():
+
+   data = numpy.array([[3,-3,100], [4,-4,50], [3.5,-3.5,-50], [3.8,-3.7,-100]], dtype='float64')
+   trainer = bob.learn.linear.PCATrainer()
+   trainer.safe_svd = True
+   [machine, eig_vals] = trainer.train(data)
+
+   weights_ref = numpy.array([[ 0.002, -0.706, -0.708],
+                              [-0.002,  0.708, -0.706],
+                              [-1.,    -0.003, -0.   ]])   
+   assert (abs(machine.weights - weights_ref) < 1e-3).all()
+
