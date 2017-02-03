@@ -25,6 +25,8 @@ Classes
    bob.learn.linear.CGLogRegTrainer
    bob.learn.linear.BICMachine
    bob.learn.linear.BICTrainer
+   bob.learn.linear.GFKMachine
+   bob.learn.linear.GFKTrainer
 
 Functions
 =========
