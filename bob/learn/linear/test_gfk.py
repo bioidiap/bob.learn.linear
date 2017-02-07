@@ -91,6 +91,27 @@ def test_trainer():
     assert abs(gfk_machine.compute_binetcouchy_distance() - 0) < 0.00001
 
 
+def test_trainer_automatic_d():
+    """
+
+    Testing the training
+    """
+    import numpy
+    numpy.random.seed(10)
+
+    train_source_data = numpy.random.normal(0, 3, size=(100, 4))
+    train_target_data = numpy.random.normal(2, 1, size=(100, 4))
+
+    test_source_data = numpy.random.normal(0, 3, size=(10, 4))
+    test_target_data = numpy.random.normal(3, 1, size=(10, 4))
+
+    # Training in random data
+    gfk_trainer = GFKTrainer(-1,  subspace_dim_source=1.0, subspace_dim_target=1.0)
+    gfk_machine = gfk_trainer.train(train_source_data, train_target_data)
+
+    assert gfk_machine.shape() == (4,4)
+
+
 def test_trainer_no_norm():
     """
 
