@@ -203,7 +203,7 @@ class GFKTrainer(object):
         **Parameters**
 
           number_of_subspaces: `int`
-            Number of subspaces for the transfer learning
+            Number of subspaces for the transfer learning. If set to -1, this value will be estimated automatically. For more information check, Section 3.4.
 
           subspace_dim_source: `float`
             Energy kept in the source linear subspace
@@ -216,7 +216,7 @@ class GFKTrainer(object):
 
     """
 
-    def __init__(self, number_of_subspaces, subspace_dim_source=0.99, subspace_dim_target=0.99, eps=1e-20):
+    def __init__(self, number_of_subspaces=-1, subspace_dim_source=0.99, subspace_dim_target=0.99, eps=1e-20):
         """
         Constructor
 
@@ -239,6 +239,32 @@ class GFKTrainer(object):
         self.m_subspace_dim_target = subspace_dim_target
         self.eps = eps
 
+
+    def get_best_d(self, Ps, Pt, Pst):
+        """
+        Get the best value for the number of subspaces
+        
+        For more details, read section 3.4 of the paper.
+        
+        **Parameters**
+          Ps: Source subspace
+          
+          Pt: Target subspace
+          
+          Pst: Source + Target subspace        
+        """
+        def compute_angles(A, B):
+            _, S, _ = numpy.linalg.svd(numpy.dot(A.T, B))
+            return numpy.arccos(S)
+
+        max_d = min(Ps.shape[1], Pt.shape[1], Pst.shape[1] )
+        alpha_d = compute_angles(Ps, Pst)
+        beta_d = compute_angles(Pt, Pst)
+        
+        d = 0.5 * ( numpy.sin(alpha_d) + numpy.sin(beta_d))
+
+        return numpy.argmax(d)
+
     def train(self, source_data, target_data, norm_inputs=True):
         """
         Trains the GFK (:py:class:`bob.learn.linear.GFKMachine`)
@@ -259,6 +285,12 @@ class GFKTrainer(object):
         source_data = source_data.astype("float64")
         target_data = target_data.astype("float64")
 
+        if(self.m_number_of_subspaces == -1):
+            source_target = numpy.vstack((source_data, target_data))
+            norm_inputs = True
+            logger.info("  -> Automatic search for d. We set norm_inputs=True")
+            
+
         logger.info("  -> Normalizing data per modality")
         if norm_inputs:
             source, mu_source, std_source = self._znorm(source_data)
@@ -276,6 +308,16 @@ class GFKTrainer(object):
         logger.info("  -> Computing PCA for the target modality")
         Pt = self._train_pca(target, mu_target, std_target, self.m_subspace_dim_target)
         # self.m_machine                = bob.io.base.load("/idiap/user/tpereira/gitlab/workspace_HTFace/GFK.hdf5")
+
+        # If -1, let's compute the optimal value for d
+        if(self.m_number_of_subspaces == -1):
+            logger.info("  -> Computing the best value for m_number_of_subspaces")
+            
+            source_target, mu_source_target, std_source_target = self._znorm(source_target)
+            Pst = self._train_pca(source_target, mu_source_target, std_source_target, min(self.m_subspace_dim_target, self.m_subspace_dim_source))
+            
+            self.m_number_of_subspaces = self.get_best_d(Pst.weights, Ps.weights, Pt.weights)
+            logger.info("  -> Best m_number_of_subspaces is {0}".format(self.m_number_of_subspaces))
 
         G = self._train_gfk(numpy.hstack((Ps.weights, null_space(Ps.weights.T))),
                             Pt.weights[:, 0:self.m_number_of_subspaces])
