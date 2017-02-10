@@ -73,10 +73,10 @@ class GFKMachine(object):
         assert isinstance(hdf5, bob.io.base.HDF5File)
 
         # read PCA projector
-        hdf5.cd("/source_machine")
+        hdf5.cd("source_machine")
         self.source_machine = bob.learn.linear.Machine(hdf5)
         hdf5.cd("..")
-        hdf5.cd("/target_machine")
+        hdf5.cd("target_machine")
         self.target_machine = bob.learn.linear.Machine(hdf5)
         hdf5.cd("..")
         self.G = hdf5.get("G")
@@ -92,11 +92,11 @@ class GFKMachine(object):
         """
 
         hdf5.create_group("source_machine")
-        hdf5.cd("/source_machine")
+        hdf5.cd("source_machine")
         self.source_machine.save(hdf5)
         hdf5.cd("..")
         hdf5.create_group("target_machine")
-        hdf5.cd("/target_machine")
+        hdf5.cd("target_machine")
         self.target_machine.save(hdf5)
         hdf5.cd("..")
         hdf5.set("G", self.G)
@@ -255,6 +255,7 @@ class GFKTrainer(object):
         """
         def compute_angles(A, B):
             _, S, _ = numpy.linalg.svd(numpy.dot(A.T, B))
+            S[numpy.where(numpy.isclose(S ,1, atol=self.eps)==True)[0]] = 1
             return numpy.arccos(S)
 
         max_d = min(Ps.shape[1], Pt.shape[1], Pst.shape[1] )
