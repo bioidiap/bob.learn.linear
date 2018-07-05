@@ -39,16 +39,15 @@ in double-precision. Here is how to use a
 .. doctest::
 
   >>> W = numpy.array([[0.5, 0.5], [1.0, 1.0]], 'float64')
-  >>> W
-  array([[ 0.5,  0.5],
-         [ 1. ,  1. ]])
+  >>> numpy.allclose(W, [[ 0.5,  0.5], [ 1. ,  1. ]])
+  True
   >>> machine = bob.learn.linear.Machine(W)
   >>> machine.shape
   (2, 2)
   >>> x = numpy.array([0.3, 0.4], 'float64')
   >>> y = machine(x)
-  >>> y
-  array([ 0.55,  0.55])
+  >>> numpy.allclose(y, [ 0.55,  0.55])
+  True
 
 As was shown in the above example, the way to pass data through a machine is to
 call its :py:meth:`bob.learn.linear.Machine.forward` method, for which the
@@ -97,10 +96,10 @@ division. By default, :math:`s := 0.0` and :math:`d := 1.0`.
 
 .. doctest::
 
-  >>> machine.input_subtract
-  array([ 0.,  0.])
-  >>> machine.input_divide
-  array([ 1.,  1.])
+  >>> numpy.allclose(machine.input_subtract, [ 0.,  0.])
+  True
+  >>> numpy.allclose(machine.input_divide, [ 1.,  1.])
+  True
 
 To set a new value for :math:`s` or :math:`d` just assign the desired machine
 property:
@@ -171,7 +170,7 @@ Next, input data can be projected using this learned projection matrix
 
    >>> e = numpy.array([3.2,-3.3,-10], 'float64')
    >>> print(machine(e))
-   [ 9.999 0.47 0.092]
+   [9.999 0.47  0.092]
 
 
 Linear discriminant analysis
@@ -204,11 +203,12 @@ for **PCA**. This is shown below.
    >>> print(eig_vals)  # doctest: +SKIP
    [ 13.10097786 0. ]
    >>> machine.resize(3,1)  # Make the output space of dimension 1
-   >>> print(machine.weights)  # The new weights after the training procedure
-   [[ 0.609]
-    [ 0.785]
-    [ 0.111]]
+   >>> print(machine.weights) # The new weights after the training procedure
+   [[0.609]
+   [0.785]
+   [0.111]]
 
+   
 Whitening
 ==========
 
