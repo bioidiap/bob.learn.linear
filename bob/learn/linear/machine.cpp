@@ -857,7 +857,7 @@ bool init_BobLearnLinearMachine(PyObject* module)
   // Linear Machine
   PyBobLearnLinearMachine_Type.tp_name = Machine_doc.name();
   PyBobLearnLinearMachine_Type.tp_basicsize = sizeof(PyBobLearnLinearMachineObject);
-  PyBobLearnLinearMachine_Type.tp_flags = Py_TPFLAGS_DEFAULT;
+  PyBobLearnLinearMachine_Type.tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE;
   PyBobLearnLinearMachine_Type.tp_doc = Machine_doc.doc();
 
   // set the functions
