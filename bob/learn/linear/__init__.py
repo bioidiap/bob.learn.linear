@@ -30,8 +30,8 @@ class Machine(_Machine_C):
     __doc__ = _Machine_C.__doc__
 
     def update_dict(self, d):
-        self.input_sub = numpy.array([d["input_sub"]])
-        self.input_div = numpy.array([d["input_div"]])
+        self.input_subtract = numpy.array(d["input_subtract"], dtype="float64")
+        self.input_divide = numpy.array(d["input_divide"], dtype="float64")
 
     @classmethod
     def create_from_dict(cls, d):        
@@ -40,10 +40,10 @@ class Machine(_Machine_C):
         return machine
 
     @staticmethod
-    def to_dict(machine):
+    def to_dict(machine):        
         machine_data = dict()
-        machine_data["input_sub"] = machine.input_sub
-        machine_data["input_div"] = machine.input_div
+        machine_data["input_subtract"] = machine.input_subtract
+        machine_data["input_divide"] = machine.input_divide
         machine_data["weights"] = machine.weights
         return machine_data
 
