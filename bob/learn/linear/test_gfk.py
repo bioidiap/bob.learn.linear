@@ -9,7 +9,6 @@
 """
 
 import bob.learn.linear
-import bob.io.matlab
 from bob.io.base.test_utils import datafile
 from bob.learn.linear import GFKTrainer, GFKMachine
 import os
@@ -47,11 +46,11 @@ def test_matlab_baseline():
     import numpy
     numpy.random.seed(10)
 
-    source_webcam = bob.io.matlab.read_matrix(datafile("webcam.mat", __name__))
-    webcam_labels = bob.io.matlab.read_matrix(datafile("webcam_labels.mat", __name__))
+    source_webcam = bob.io.base.load(datafile("webcam.mat.hdf5", __name__))
+    webcam_labels = bob.io.base.load(datafile("webcam_labels.mat.hdf5", __name__))
 
-    target_dslr = bob.io.matlab.read_matrix(datafile("dslr.mat", __name__))
-    dslr_labels = bob.io.matlab.read_matrix(datafile("dslr_labels.mat", __name__))
+    target_dslr = bob.io.base.load(datafile("dslr.mat.hdf5", __name__))
+    dslr_labels = bob.io.base.load(datafile("dslr_labels.mat.hdf5", __name__))
 
     gfk_trainer = GFKTrainer(10, subspace_dim_source=140, subspace_dim_target=140)
     gfk_machine = gfk_trainer.train(source_webcam, target_dslr)

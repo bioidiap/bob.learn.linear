@@ -31,8 +31,6 @@ requirements:
     - bob.io.base
     - bob.math
     - bob.learn.activation
-    # bob.io.matlab may be removed from dependencies in future
-    - bob.io.matlab
     - scipy {{ scipy }}
     - libblitz {{ libblitz }}
     - boost {{ boost }}
