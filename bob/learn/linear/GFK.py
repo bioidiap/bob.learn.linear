@@ -15,7 +15,6 @@ http://www-scf.usc.edu/~boqinggo/domainadaptation.html#gfk_section
 
 import bob.io.base
 import numpy
-import numpy.matlib
 import scipy.linalg
 
 import logging
@@ -243,15 +242,15 @@ class GFKTrainer(object):
     def get_best_d(self, Ps, Pt, Pst):
         """
         Get the best value for the number of subspaces
-        
+
         For more details, read section 3.4 of the paper.
-        
+
         **Parameters**
           Ps: Source subspace
-          
+
           Pt: Target subspace
-          
-          Pst: Source + Target subspace        
+
+          Pst: Source + Target subspace
         """
         def compute_angles(A, B):
             _, S, _ = numpy.linalg.svd(numpy.dot(A.T, B))
@@ -261,7 +260,7 @@ class GFKTrainer(object):
         max_d = min(Ps.shape[1], Pt.shape[1], Pst.shape[1] )
         alpha_d = compute_angles(Ps, Pst)
         beta_d = compute_angles(Pt, Pst)
-        
+
         d = 0.5 * ( numpy.sin(alpha_d) + numpy.sin(beta_d))
 
         return numpy.argmax(d)
@@ -290,7 +289,7 @@ class GFKTrainer(object):
             source_target = numpy.vstack((source_data, target_data))
             norm_inputs = True
             logger.info("  -> Automatic search for d. We set norm_inputs=True")
-            
+
 
         logger.info("  -> Normalizing data per modality")
         if norm_inputs:
@@ -313,10 +312,10 @@ class GFKTrainer(object):
         # If -1, let's compute the optimal value for d
         if(self.m_number_of_subspaces == -1):
             logger.info("  -> Computing the best value for m_number_of_subspaces")
-            
+
             source_target, mu_source_target, std_source_target = self._znorm(source_target)
             Pst = self._train_pca(source_target, mu_source_target, std_source_target, min(self.m_subspace_dim_target, self.m_subspace_dim_source))
-            
+
             self.m_number_of_subspaces = self.get_best_d(Pst.weights, Ps.weights, Pt.weights)
             logger.info("  -> Best m_number_of_subspaces is {0}".format(self.m_number_of_subspaces))
 
