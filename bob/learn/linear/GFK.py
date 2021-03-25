@@ -110,7 +110,7 @@ class GFKMachine(object):
         return self.G.shape
 
     def compute_principal_angles(self):
-        """
+        r"""
         Compute the principal angles between source (:math:`P_s`) and target (:math:`P_t`) subspaces in a Grassman which is defined as the following:
 
         :math:`d^{2}(P_s, P_t) = \sum_{i}( \theta_i^{2} )`,
@@ -164,7 +164,7 @@ class GFKMachine(object):
 
 
 class GFKTrainer(object):
-    """
+    r"""
     Trains the Geodesic Flow Kernel (GFK) that models the domain shift from a certain source linear subspace :math:`P_S` to
     a certain target linear subspaces :math:`P_T`.
 
