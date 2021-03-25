@@ -20,11 +20,11 @@ def compute_accuracy(K, Xs, Ys, Xt, Yt):
 
     source = numpy.diag(numpy.dot(numpy.dot(Xs, K), Xs.T))
     source = numpy.reshape(source, (Xs.shape[0], 1))
-    source = numpy.matlib.repmat(source, 1, Yt.shape[0])
+    source = numpy.tile(source, (1, Yt.shape[0]))
 
     target = numpy.diag(numpy.dot(numpy.dot(Xt, K), Xt.T))
     target = numpy.reshape(target, (Xt.shape[0], 1))
-    target = numpy.matlib.repmat(target, 1, Ys.shape[0]).T
+    target = numpy.tile(target, (1, Ys.shape[0])).T
 
     dist = source + target - 2 * numpy.dot(numpy.dot(Xs, K), Xt.T)
 
