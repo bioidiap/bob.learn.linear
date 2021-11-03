@@ -1,12 +1,12 @@
 .. vim: set fileencoding=utf-8 :
 .. Mon 15 Aug 2016 09:40:51 CEST
 
-.. image:: https://img.shields.io/badge/docs-available-orange.svg
-   :target: https://www.idiap.ch/software/bob/docs/bob/bob.learn.linear/master/index.html
-.. image:: https://gitlab.idiap.ch/bob/bob.learn.linear/badges/master/pipeline.svg
-   :target: https://gitlab.idiap.ch/bob/bob.learn.linear/commits/master
-.. image:: https://gitlab.idiap.ch/bob/bob.learn.linear/badges/master/coverage.svg
-   :target: https://gitlab.idiap.ch/bob/bob.learn.linear/commits/master
+.. image:: https://img.shields.io/badge/docs-v2.1.10-orange.svg
+   :target: https://www.idiap.ch/software/bob/docs/bob/bob.learn.linear/v2.1.10/index.html
+.. image:: https://gitlab.idiap.ch/bob/bob.learn.linear/badges/v2.1.10/pipeline.svg
+   :target: https://gitlab.idiap.ch/bob/bob.learn.linear/commits/v2.1.10
+.. image:: https://gitlab.idiap.ch/bob/bob.learn.linear/badges/v2.1.10/coverage.svg
+   :target: https://gitlab.idiap.ch/bob/bob.learn.linear/commits/v2.1.10
 .. image:: https://img.shields.io/badge/gitlab-project-0000c0.svg
    :target: https://gitlab.idiap.ch/bob/bob.learn.linear
 
